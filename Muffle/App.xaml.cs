@@ -1,4 +1,4 @@
-﻿namespace Muffle
+﻿namespace Muffle.Views
 {
     public partial class App : Application
     {

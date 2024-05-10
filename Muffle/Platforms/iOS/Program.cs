@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Muffle
+namespace Muffle.Views
 {
     public class Program
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Muffle.Data.Models;
+using Muffle.Views.Data.Models;
 
 namespace Muffle.ViewModels
 {

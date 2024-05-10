@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Muffle
+namespace Muffle.Views
 {
     public static class MauiProgram
     {

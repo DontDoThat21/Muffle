@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Muffle.Data.Data
+namespace Muffle.Views.Data.Data
 {
     //public DbSet<example> example { get; set; }
 
