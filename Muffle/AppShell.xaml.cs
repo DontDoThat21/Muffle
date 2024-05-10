@@ -1,4 +1,4 @@
-﻿namespace Muffle.Views
+﻿namespace Muffle
 {
     public partial class AppShell : Shell
     {

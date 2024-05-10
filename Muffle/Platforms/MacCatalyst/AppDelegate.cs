@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Muffle.Views
+namespace Muffle
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

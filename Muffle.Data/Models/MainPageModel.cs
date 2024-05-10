@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Muffle.Views.Data.Models
+namespace Muffle.Data.Models
 {
     public class MainPageModel
     {

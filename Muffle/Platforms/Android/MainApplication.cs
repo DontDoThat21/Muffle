@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Muffle.Views
+namespace Muffle
 {
     [Application]
     public class MainApplication : MauiApplication
