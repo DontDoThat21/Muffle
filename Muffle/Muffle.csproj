@@ -68,4 +68,8 @@
 	  <Folder Include="Views\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Muffle.Data\Muffle.Data.csproj" />
+	</ItemGroup>
+
 </Project>
