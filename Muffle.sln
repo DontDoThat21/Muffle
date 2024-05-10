@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muffle", "Muffle\Muffle.csproj", "{D3CE730B-4F9A-4F2A-A315-9C1EE142A6AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muffle.Data", "Muffle.Data\Muffle.Data.csproj", "{82F31591-CFAC-407A-92C7-EA3CAA2C5C66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{D3CE730B-4F9A-4F2A-A315-9C1EE142A6AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3CE730B-4F9A-4F2A-A315-9C1EE142A6AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3CE730B-4F9A-4F2A-A315-9C1EE142A6AF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{82F31591-CFAC-407A-92C7-EA3CAA2C5C66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F31591-CFAC-407A-92C7-EA3CAA2C5C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F31591-CFAC-407A-92C7-EA3CAA2C5C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F31591-CFAC-407A-92C7-EA3CAA2C5C66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
