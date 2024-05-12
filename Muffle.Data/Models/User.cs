@@ -31,5 +31,15 @@ namespace Muffle.Data.Models
                 new Server(name: "Test name 6", description: "Test server 5", ipAddress: "127.0.0.1", port: 8097)
             };
         }
+
+        public ObservableCollection<Friend>? GetUsersFriends()
+        {
+            return new ObservableCollection<Friend>()
+            {
+                new Friend() {
+                    Name = "Mike"
+                }
+            };
+        }
     }
 }

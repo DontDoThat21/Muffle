@@ -15,8 +15,10 @@ namespace Muffle.ViewModels
     {
         //private readonly MainPageModel MainPage;
         public ObservableCollection<Server> Servers { get; set; }
+        public ObservableCollection<Friend> Friends { get; set; }
 
         private Server _selectedServer;
+        private Friend _selectedFriend;
         public Server SelectedServer
         {
             get => _selectedServer;
@@ -31,7 +33,36 @@ namespace Muffle.ViewModels
             }
         }
 
+        public Friend SelectedFriend
+        {
+            get => _selectedFriend;
+            set
+            {
+                if (_selectedFriend != value)
+                {
+                    _selectedFriend = value;
+                    OnPropertyChanged(nameof(SelectedFriend));
+                    PopulateDynamicContentForSelectedFriend();
+                }
+            }
+        }
+
         private ContentView _dynamicServerServerContent;
+        private ContentView _dynamicFriendServerContent;
+
+        public ContentView DynamicFriendContent
+        {
+            get => _dynamicFriendServerContent;
+            set
+            {
+                if (_dynamicFriendServerContent != value)
+                {
+                    _dynamicFriendServerContent = value;
+                    OnPropertyChanged(nameof(DynamicFriendContent));
+                }
+            }
+        }
+
         public ContentView DynamicServerContent
         {
             get => _dynamicServerServerContent;
@@ -66,6 +97,25 @@ namespace Muffle.ViewModels
             }
         }
 
+        private void PopulateDynamicContentForSelectedFriend()
+        {
+            // Clear existing content
+            DynamicFriendContent.Content = null;
+
+            // Populate dynamic content based on the selected server
+            if (SelectedFriend != null)
+            {
+                var label = new Label
+                {
+                    Text = $"Content for {SelectedFriend.Name}",
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+
+                DynamicFriendContent.Content = label;
+            }
+        }
+
         public ICommand SelectServerCommand { get; }
 
         public MainPageViewModel()
@@ -74,6 +124,7 @@ namespace Muffle.ViewModels
             User = User.GetUser();
             SelectServerCommand = new Command<Server>(ExecuteSelectServerCommand);
             Servers = User.GetUsersServers();
+            Friends = User.GetUsersFriends();
         }
 
         private void ExecuteSelectServerCommand(Server server)

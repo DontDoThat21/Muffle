@@ -29,6 +29,15 @@ namespace Muffle
             //var webrtc = new WebRtcMiddleware(_webRtc);
 
         }
+
+        private void FriendButton_OnClicked(object? sender, EventArgs e)
+        {
+            // Clear existing content
+            DynamicFriendContent.Content = null;
+            //Populate
+            //var webrtc = new WebRtcMiddleware(_webRtc);
+
+        }
     }
 
 }

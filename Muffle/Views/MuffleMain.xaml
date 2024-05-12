@@ -8,23 +8,45 @@
             Padding="30,0"
             Spacing="25">
 
-            <Grid ColumnDefinitions="1*,8*" VerticalOptions="FillAndExpand" BackgroundColor="Blue" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
-                <CollectionView ItemsSource="{Binding Servers}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Grid.Column="0">
-                                <StackLayout>
-                                    <Button Text="{Binding Name}" Command="{Binding SelectServerCommand}" CommandParameter="{Binding Servers[0]}" Clicked="ServerButton_OnClicked">
+            <Grid RowDefinitions="*" ColumnDefinitions="1*,2*,8*">
+                <Grid Grid.Column="0" VerticalOptions="FillAndExpand" BackgroundColor="Blue" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
+                    <CollectionView ItemsSource="{Binding Servers}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Grid.Column="0">
+                                    <StackLayout>
+                                        <Button Text="{Binding Name}" Command="{Binding SelectServerCommand}" CommandParameter="{Binding Servers[0]}" Clicked="ServerButton_OnClicked"/>
+                                    </StackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                                    </Button>
-                                </StackLayout>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                </Grid>
+                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Beige" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
+                    <CollectionView ItemsSource="{Binding Friends}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Grid.Column="0">
+                                    <StackLayout>
+                                        <Button Text="{Binding Name}" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
+                                    </StackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
+                </Grid>
+                <Grid Grid.Column="2" VerticalOptions="FillAndExpand" BackgroundColor="Cyan">
+                    <Frame BackgroundColor="Green">
+                        <StackLayout BackgroundColor="Orange">
+                            <Label Text="Welcome to your Muffle server." BackgroundColor="Red"/>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
             </Grid>
             <ContentView x:Name="DynamicServerContent"/>
+            <ContentView x:Name="DynamicFriendContent"/>
 
         </VerticalStackLayout>
     </ScrollView>
