@@ -10,6 +10,7 @@ namespace Muffle
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                //.UseMauiCommunityToolkit() // see https://github.com/CommunityToolkit/Maui/issues/501
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

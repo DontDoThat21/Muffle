@@ -23,11 +23,27 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Beige" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
-                    <CollectionView ItemsSource="{Binding Friends}">
+                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions="1*,1*,1*,1*,1*,1*">
+                    <Frame>
+                        <StackLayout>
+                            <Entry Text="Find or start a discussion" BackgroundColor="CadetBlue"></Entry>
+                        </StackLayout>
+                    </Frame>
+                    <Frame Grid.Row="1">
+                        <Label Text="Friends"></Label>
+                    </Frame>
+                    <Frame Grid.Row="2">
+                        <StackLayout>
+                            <Grid ColumnDefinitions="8*,Auto">
+                                <Label Text="Direct Messages" Grid.Column="0"></Label>
+                                <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="28"></Button>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+                    <CollectionView ItemsSource="{Binding Friends}" Grid.Row="3">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Grid.Column="0">
+                                <Frame>
                                     <StackLayout>
                                         <Button Text="{Binding Name}" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
                                     </StackLayout>
