@@ -23,7 +23,7 @@ namespace Muffle
             //var peerConnection = webrtc.New
 
             //_webRtc = webRtc;
-       }
+        }
 
         private void ServerButton_OnClicked(object? sender, EventArgs e)
         {

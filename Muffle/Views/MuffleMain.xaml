@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Muffle.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
+    <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
 
             <Grid RowDefinitions="*" ColumnDefinitions="1*,2*,8*">
                 <Grid Grid.Column="0" VerticalOptions="FillAndExpand" BackgroundColor="Blue" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
@@ -23,7 +23,7 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions="1*,1*,.25*,1*,1*,1*">
+                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,.8*,.8*,.8*">
                     <Frame>
                         <StackLayout>
                             <Entry Text="Find or start a discussion" BackgroundColor="CadetBlue"></Entry>
@@ -43,14 +43,16 @@
                     <CollectionView ItemsSource="{Binding Friends}" Grid.Row="3">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame>
-                                    <StackLayout>
-                                        <Grid ColumnDefinitions="2*,7*">
-                                            <ImageButton Grid.Column="0" Source="C:\Users\tylort\source\repos\Muffle\Muffle\Resources\Images\tom.jpg" Width="40" Height="40"/>
-                                            <Button Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
-                                        </Grid>
-                                    </StackLayout>
-                                </Frame>
+                                <StackLayout>
+                                    <Frame>
+                                        <StackLayout>
+                                            <Grid ColumnDefinitions="2*,7*">
+                                                <ImageButton Grid.Column="0" Source="{Binding Image}" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
+                                                <Button Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
+                                            </Grid>
+                                        </StackLayout>
+                                    </Frame>
+                                </StackLayout>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
@@ -70,7 +72,7 @@
                 </Grid>
             </Grid>
 
-        </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 
 </ContentPage>
