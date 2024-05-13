@@ -36,15 +36,10 @@ namespace Muffle.Data.Models
         {
             return new ObservableCollection<Friend>()
             {
-                new Friend() {
-                    Name = "Gabe"
-                },
-                new Friend() {
-                    Name = "Tylor"
-                },
-                new Friend() {
-                Name = "Nick"
-            }
+                new Friend("Gabe", "Starcraft 2 Bro"),
+                new Friend("Tylor", "Best Programmer NA"),
+                new Friend("Nick", "Army Motorcycling Bro"),
+                new Friend("Tyler", "Best 1DGer in da land"),
             };
         }
     }

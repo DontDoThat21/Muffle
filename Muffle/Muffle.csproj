@@ -57,6 +57,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\gabe.png" />
+	  <None Remove="Resources\Images\murky.png" />
+	  <None Remove="Resources\Images\nick.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.4" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
@@ -71,9 +77,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\FriendDetailsContentView.xaml.cs">
+	    <DependentUpon>FriendDetailsContentView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\MuffleMain.xaml.cs">
 	    <DependentUpon>MuffleMain.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\ServerDetailsContentView.xaml.cs">
+	    <DependentUpon>ServerDetailsContentView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\ServerDetailsContentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

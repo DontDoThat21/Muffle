@@ -8,19 +8,11 @@ namespace Muffle.Data.Models
 {
     public class Friend
     {
-        private string ipAddress;
-        private int port;
 
-        public Friend()
-        {
-        }
-
-        public Friend(string Name, string description, string ipAddress, int port)
+        public Friend(string Name, string description)
         {
             this.Name = Name;
             Description = description;
-            this.ipAddress = ipAddress;
-            this.port = port;
         }
 
         public int Id { get; set; }

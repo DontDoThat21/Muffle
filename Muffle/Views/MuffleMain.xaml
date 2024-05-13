@@ -23,7 +23,7 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions="1*,1*,1*,1*,1*,1*">
+                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions="1*,1*,.25*,1*,1*,1*">
                     <Frame>
                         <StackLayout>
                             <Entry Text="Find or start a discussion" BackgroundColor="CadetBlue"></Entry>
@@ -34,8 +34,8 @@
                     </Frame>
                     <Frame Grid.Row="2">
                         <StackLayout>
-                            <Grid ColumnDefinitions="8*,Auto">
-                                <Label Text="Direct Messages" Grid.Column="0"></Label>
+                            <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="Orange">
+                                <Label HorizontalOptions="Center" VerticalOptions="Center" Text="Direct Messages" Grid.Column="0"></Label>
                                 <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="28"></Button>
                             </Grid>
                         </StackLayout>
@@ -45,7 +45,10 @@
                             <DataTemplate>
                                 <Frame>
                                     <StackLayout>
-                                        <Button Text="{Binding Name}" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
+                                        <Grid ColumnDefinitions="2*,7*">
+                                            <ImageButton Grid.Column="0" Source="C:\Users\tylort\source\repos\Muffle\Muffle\Resources\Images\tom.jpg" Width="40" Height="40"/>
+                                            <Button Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
+                                        </Grid>
                                     </StackLayout>
                                 </Frame>
                             </DataTemplate>
@@ -54,15 +57,18 @@
 
                 </Grid>
                 <Grid Grid.Column="2" VerticalOptions="FillAndExpand" BackgroundColor="Cyan">
-                    <Frame BackgroundColor="Green">
-                        <StackLayout BackgroundColor="Orange">
-                            <Label Text="Welcome to your Muffle server." BackgroundColor="Red"/>
-                        </StackLayout>
+                    <Frame BackgroundColor="Green" x:Name="MainContentFrame">
+                        <Label Text="Testing" BackgroundColor="DeepPink"/>
                     </Frame>
+                    <!--<Frame BackgroundColor="Green" x:Name="MainContentFrame">
+                        <StackLayout BackgroundColor="Orange">
+                            <Label Text="Welcome to your Muffle server's friend informatio." BackgroundColor="Red"/>
+                            <Label Text="Friends name: ?" BackgroundColor="Red"/>
+                            <Label Text="Friends description: ?" BackgroundColor="Red"/>
+                        </StackLayout>
+                    </Frame>-->
                 </Grid>
             </Grid>
-            <ContentView x:Name="DynamicServerContent"/>
-            <ContentView x:Name="DynamicFriendContent"/>
 
         </VerticalStackLayout>
     </ScrollView>
