@@ -6,7 +6,7 @@
 			 x:Name="DynamicFriendContent">
 	<StackLayout>
 		<Grid RowDefinitions="*,*,*,Auto" ColumnDefinitions="1*,2*,6*,3*">
-            <ImageButton Grid.Column="0" Grid.Row="0" Source="{Binding Image}" Width="40" Height="40"/>
+            <ImageButton Grid.Column="0" Grid.Row="0" Source="{Binding Image}" MaximumHeightRequest="30" MaximumWidthRequest="30"/>
             <Label HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Grid.Row="0" Text="{Binding Name}"/>
 
             <Grid Grid.Column="2" Grid.RowSpan="4" RowDefinitions="1*,4*,Auto" ColumnDefinitions="*">

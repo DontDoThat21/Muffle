@@ -23,7 +23,7 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,.8*,.8*,.8*">
+                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,8*,.8*,.8*">
                     <Frame>
                         <StackLayout>
                             <Entry Text="Find or start a discussion" BackgroundColor="CadetBlue"></Entry>
@@ -59,8 +59,8 @@
 
                 </Grid>
                 <Grid Grid.Column="2" VerticalOptions="FillAndExpand" BackgroundColor="Cyan">
-                    <Frame BackgroundColor="Green" x:Name="MainContentFrame">
-                        <Label Text="Testing" BackgroundColor="DeepPink"/>
+                    <Frame BackgroundColor="Black" x:Name="MainContentFrame">
+                        <Label Text="Testing" BackgroundColor="Black"/>
                     </Frame>
                     <!--<Frame BackgroundColor="Green" x:Name="MainContentFrame">
                         <StackLayout BackgroundColor="Orange">
