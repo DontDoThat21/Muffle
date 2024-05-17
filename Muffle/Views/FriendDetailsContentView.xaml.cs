@@ -14,4 +14,9 @@ public partial class FriendDetailsContentView : ContentView
         InitializeComponent();
         BindingContext = friend;
     }
+
+    private void FriendButton_OnClicked(object sender, EventArgs e)
+    {
+
+    }
 }

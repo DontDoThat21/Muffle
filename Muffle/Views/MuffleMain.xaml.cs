@@ -18,7 +18,6 @@ namespace Muffle
             BindingContext = new ViewModels.MainPageViewModel();
             _webRtc = CrossWebRtc.Current;
             WebRtcMiddleware webrtc = new WebRtcMiddleware(_webRtc);
-
             //var config = new RTCConfiguration();
             //var peerConnection = webrtc.New
 

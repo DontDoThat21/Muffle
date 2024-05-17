@@ -9,7 +9,7 @@
             VerticalOptions="FillAndExpand">
 
             <Grid RowDefinitions="*" ColumnDefinitions="1*,2*,8*">
-                <Grid Grid.Column="0" VerticalOptions="FillAndExpand" BackgroundColor="Blue" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
+                <Grid Grid.Column="0" BackgroundColor="#252525" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
                     <CollectionView ItemsSource="{Binding Servers}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -23,20 +23,20 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="Black" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,8*,.8*,.8*">
+                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="#303030" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,8*,.8*,.8*">
                     <Frame>
                         <StackLayout>
                             <Entry Text="Find or start a discussion" BackgroundColor="CadetBlue"></Entry>
                         </StackLayout>
                     </Frame>
-                    <Frame Grid.Row="1">
+                    <Frame Grid.Row="1" BackgroundColor="LightSlateGray">
                         <Label Text="Friends"></Label>
                     </Frame>
                     <Frame Grid.Row="2">
-                        <StackLayout>
-                            <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="Orange">
+                        <StackLayout Padding="5,0,0,0">
+                            <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="LightSlateGray" Padding="0,2,5,2">
                                 <Label HorizontalOptions="Center" VerticalOptions="Center" Text="Direct Messages" Grid.Column="0"></Label>
-                                <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="28"></Button>
+                                <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="24"></Button>
                             </Grid>
                         </StackLayout>
                     </Frame>
@@ -58,8 +58,8 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="2" VerticalOptions="FillAndExpand" BackgroundColor="Cyan">
-                    <Frame BackgroundColor="Black" x:Name="MainContentFrame">
+                <Grid Grid.Column="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Cyan">
+                    <Frame BackgroundColor="Black" x:Name="MainContentFrame" Padding="0" Margin="0">
                         <Label Text="Testing" BackgroundColor="Black"/>
                     </Frame>
                     <!--<Frame BackgroundColor="Green" x:Name="MainContentFrame">
