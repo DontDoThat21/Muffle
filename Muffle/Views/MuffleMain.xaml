@@ -6,16 +6,30 @@
     <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <Grid
             HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand">
+            VerticalOptions="FillAndExpand"
+            RowDefinitions="95,9*"
+            ColumnDefinitions="1*,2*,8*"
+            BackgroundColor="#303030">
 
-            <Grid RowDefinitions="*" ColumnDefinitions="1*,2*,8*">
+            <Label Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="Muffle"></Label>
+            <Frame Grid.Column="1" BackgroundColor="#303030" BorderColor="#303030" VerticalOptions="Start" >
+                <StackLayout VerticalOptions="Start">
+                    <Entry Text="Find or start a discussion" BackgroundColor="#252525"></Entry>
+                </StackLayout>
+            </Frame>
+            <Frame Grid.Column="2" BackgroundColor="Olive" x:Name="SharedTopBarUI">
+                
+            </Frame>
+            
+            
+            <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" RowDefinitions="*" ColumnDefinitions="1*,2*,8*">
                 <Grid Grid.Column="0" BackgroundColor="#252525" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
                     <CollectionView ItemsSource="{Binding Servers}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Grid.Column="0">
+                                <Frame Grid.Column="0" BackgroundColor="#252525" BorderColor="#252525">
                                     <StackLayout>
-                                        <Button Text="{Binding Name}" Command="{Binding SelectServerCommand}" CommandParameter="{Binding Servers[0]}" Clicked="ServerButton_OnClicked"/>
+                                        <Button BackgroundColor="#252525" TextColor="GhostWhite" Text="{Binding Name}" Command="{Binding SelectServerCommand}" CommandParameter="{Binding Servers[0]}" Clicked="ServerButton_OnClicked"/>
                                     </StackLayout>
                                 </Frame>
                             </DataTemplate>
@@ -24,17 +38,13 @@
 
                 </Grid>
                 <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="#303030" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,8*,.8*,.8*">
-                    <Frame>
-                        <StackLayout>
-                            <Entry Text="Find or start a discussion" BackgroundColor="CadetBlue"></Entry>
-                        </StackLayout>
+                    
+                    <Frame Grid.Row="1" BackgroundColor="#303030" BorderColor="#303030">
+                        <Label HorizontalTextAlignment="Center" Text="Friends"></Label>
                     </Frame>
-                    <Frame Grid.Row="1" BackgroundColor="LightSlateGray">
-                        <Label Text="Friends"></Label>
-                    </Frame>
-                    <Frame Grid.Row="2">
+                    <Frame Grid.Row="2" BackgroundColor="#303030" BorderColor="#303030">
                         <StackLayout Padding="5,0,0,0">
-                            <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="LightSlateGray" Padding="0,2,5,2">
+                            <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="#303030" Padding="0,2,5,2">
                                 <Label HorizontalOptions="Center" VerticalOptions="Center" Text="Direct Messages" Grid.Column="0"></Label>
                                 <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="24"></Button>
                             </Grid>
@@ -43,12 +53,12 @@
                     <CollectionView ItemsSource="{Binding Friends}" Grid.Row="3">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <StackLayout>
-                                    <Frame>
+                                <StackLayout Padding="5">
+                                    <Frame BackgroundColor="#303030">
                                         <StackLayout>
                                             <Grid ColumnDefinitions="2*,7*">
-                                                <ImageButton Grid.Column="0" Source="{Binding Image}" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
-                                                <Button Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
+                                                <ImageButton CornerRadius="15" Grid.Column="0" Source="{Binding Image}" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
+                                                <Button BackgroundColor="#303030"  HorizontalOptions="StartAndExpand" TextColor="GhostWhite" Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
                                             </Grid>
                                         </StackLayout>
                                     </Frame>
@@ -58,13 +68,14 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Cyan">
+                <Grid Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Cyan">
                     <Frame BackgroundColor="Black" x:Name="MainContentFrame" Padding="0" Margin="0">
-                        <Label Text="Testing" BackgroundColor="Black"/>
+                        <Label Text="Testing" BackgroundColor="Orange"/>
                     </Frame>
+
                     <!--<Frame BackgroundColor="Green" x:Name="MainContentFrame">
                         <StackLayout BackgroundColor="Orange">
-                            <Label Text="Welcome to your Muffle server's friend informatio." BackgroundColor="Red"/>
+                            <Label Text="Welcome to your Muffle server's friend informatiom." BackgroundColor="Red"/>
                             <Label Text="Friends name: ?" BackgroundColor="Red"/>
                             <Label Text="Friends description: ?" BackgroundColor="Red"/>
                         </StackLayout>

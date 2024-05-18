@@ -5,14 +5,8 @@
              x:Class="Muffle.Views.FriendDetailsContentView"
 			 x:Name="DynamicFriendContent">
     <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="#353535">
-        <Grid RowDefinitions=".15*,*,*,*,Auto" ColumnDefinitions=".5*,.5*,2*,6*,3*" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-            <BoxView Color="CornflowerBlue" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
-
-            <ImageButton Grid.Column="0" Grid.Row="0" Source="{Binding Image}" MaximumHeightRequest="30" MaximumWidthRequest="30"/>
-            <Label HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Grid.Row="0" Text="{Binding Name}"/>
-            <Button Clicked="FriendButton_OnClicked" BackgroundColor="AliceBlue" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="3" Grid.Row="0" FontSize="36" TextColor="Green" Text="✆"/>
-            <Label HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="4" Grid.Row="0" FontSize="36" TextColor="Green" Text="🎦"/>
-
+        <Grid Grid.Column="2" Grid.ColumnSpan="4" RowDefinitions=".15*,*,*,*,Auto" ColumnDefinitions=".5*,.5*,2*,6*,3*" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            
             <BoxView Color="LightSlateGray" Grid.Row="1" Grid.RowSpan="5" Grid.Column="4" Grid.ColumnSpan="5" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
             <Frame Grid.Column="4" Grid.Row="1" BackgroundColor="Gray">
                 <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

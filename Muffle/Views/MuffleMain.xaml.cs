@@ -1,5 +1,6 @@
 ﻿using Muffle.Data.Models;
 using Muffle.Views;
+using System.Drawing;
 using WebRTCme;
 using WebRTCme.Connection;
 using WebRTCme.Middleware;
@@ -29,6 +30,7 @@ namespace Muffle
             // Clear existing content
             MainContentFrame.Content = null;
             // Get the selected item from the command parameter
+
             var selectedItem = (sender as Button)?.BindingContext;
             if (selectedItem != null)
             {
@@ -37,6 +39,7 @@ namespace Muffle
 
                 // Update MainContentFrame with details of the selected item
                 UpdateMainContentFrame();
+                UpdateSharedUIFrame();
             }
             //Populate
             //var webrtc = new WebRtcMiddleware(_webRtc);
@@ -56,8 +59,23 @@ namespace Muffle
 
                 // Update MainContentFrame with details of the selected item
                 UpdateMainContentFrame();
+                UpdateSharedUIFrame();
             }
 
+        }
+
+        private void UpdateSharedUIFrame()
+        {
+            if (selectedObject is Friend friend)
+            {
+                SharedTopBarUI.Content = new FriendTopBarUIView(friend);
+            }
+            else if (selectedObject is Server server)
+            {
+                SharedTopBarUI.Content = null;//  new ServerTopBarUIView(server);
+                SharedTopBarUI.BackgroundColor = Microsoft.Maui.Graphics.Color.FromHex("#303030");
+                SharedTopBarUI.HeightRequest = 0;
+            }
         }
 
         private void UpdateMainContentFrame()

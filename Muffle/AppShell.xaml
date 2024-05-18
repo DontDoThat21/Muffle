@@ -5,11 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:muffle="using:Muffle"
     Shell.FlyoutBehavior="Disabled"
-    Title="Muffle">
+    Title="Muffle gon give it to ya">
 
     <ShellContent
-        Title="Home"
+        Shell.NavBarIsVisible="False"
         ContentTemplate="{DataTemplate muffle:MainPage}"
-        Route="MainPage" />
+        Route="MainPage"/>
 
 </Shell>
