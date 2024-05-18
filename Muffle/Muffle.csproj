@@ -58,6 +58,7 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\gabe.png" />
+	  <None Remove="Resources\Images\mufflelogo.png" />
 	  <None Remove="Resources\Images\murky.png" />
 	  <None Remove="Resources\Images\nick.png" />
 	</ItemGroup>

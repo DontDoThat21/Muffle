@@ -2,14 +2,10 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Muffle.Views.FriendTopBarUIView">
-    <VerticalStackLayout>
-        <HorizontalStackLayout>
-            <BoxView Color="CornflowerBlue" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
-
-            <ImageButton Grid.Column="0" Grid.Row="0" Source="{Binding Image}" MaximumHeightRequest="30" MaximumWidthRequest="30"/>
-            <Label HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Grid.Row="0" Text="{Binding Name}"/>
-            <Button BackgroundColor="AliceBlue" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="3" Grid.Row="0" FontSize="36" TextColor="Green" Text="✆"/>
-            <Label HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="4" Grid.Row="0" FontSize="36" TextColor="Green" Text="🎦"/>
-        </HorizontalStackLayout>
-    </VerticalStackLayout>
+    <Grid ColumnDefinitions="1*,1*,10*,10*,2*,2*">
+        <ImageButton Grid.Column="0" VerticalOptions="Start" CornerRadius="20" Source="{Binding Image}" MinimumHeightRequest="30" MinimumWidthRequest="30"/>
+        <Label Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Start" Text="{Binding Name}"/>
+        <Button Grid.Column="4" BackgroundColor="#303030" HorizontalOptions="Center" VerticalOptions="Center" FontSize="36" TextColor="Green" Text="✆"/>
+        <Label Grid.Column="5" HorizontalOptions="Center" VerticalOptions="Center" FontSize="36" TextColor="Green" Text="🎦"/>
+    </Grid>            
 </ContentView>

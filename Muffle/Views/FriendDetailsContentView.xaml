@@ -11,17 +11,66 @@
             <Frame Grid.Column="4" Grid.Row="1" BackgroundColor="Gray">
                 <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                     <Grid RowDefinitions="1*,2*,1*,1*,1*,1*,1*,1*,6*" ColumnDefinitions="6*,*,2*">
-                        <ImageButton Grid.Column="0" Grid.Row="0" Source="{Binding Image}" MinimumHeightRequest="28" MinimumWidthRequest="28" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
+                        <ImageButton CornerRadius="20" Grid.Column="0" Grid.Row="0" Source="{Binding Image}" MinimumHeightRequest="28" MinimumWidthRequest="28" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
                         <Label Grid.Column="0" Grid.Row="0" Text="{Binding Name}"/>
                         <Label Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Description}"/>
                         <Label Grid.Column="0" Grid.Row="2" Text="Shared Friends"/>
-                        <ImageButton Source="tom.jpg" Grid.Column="0" Grid.Row="3" MinimumHeightRequest="24" MinimumWidthRequest="24" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
+                        <ImageButton CornerRadius="20" Source="tom.jpg" Grid.Column="0" Grid.Row="3" MinimumHeightRequest="24" MinimumWidthRequest="24" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
                         <Label Grid.Column="0" Grid.Row="4" Text="Account Created"/>
                         <Label Grid.Column="0" Grid.Row="5" Text="{Binding CreationDate}"/>
                         <Label Grid.Column="0" Grid.Row="6" Text="Memo"/>
                         <Entry Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="7" Text="Click to add a memo"/>
                     </Grid>
                 </StackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#303030" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" VerticalOptions="FillAndExpand" Grid.RowSpan="5">
+                <Grid RowDefinitions="20*,1*" VerticalOptions="FillAndExpand">
+                    <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2">
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Label Text="Lorem ipsum"/>
+                        <Entry Text="Message your friend." />
+                    </VerticalStackLayout>
+                </Grid>                
             </Frame>
         </Grid>
 	</StackLayout>

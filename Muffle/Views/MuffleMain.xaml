@@ -11,17 +11,15 @@
             ColumnDefinitions="1*,2*,8*"
             BackgroundColor="#303030">
 
-            <Label Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="Muffle"></Label>
+            <ImageButton Source="mufflelogo.png" Grid.Column="0" BackgroundColor="#252525" Padding="20"/>
             <Frame Grid.Column="1" BackgroundColor="#303030" BorderColor="#303030" VerticalOptions="Start" >
                 <StackLayout VerticalOptions="Start">
                     <Entry Text="Find or start a discussion" BackgroundColor="#252525"></Entry>
                 </StackLayout>
             </Frame>
-            <Frame Grid.Column="2" BackgroundColor="Olive" x:Name="SharedTopBarUI">
-                
-            </Frame>
-            
-            
+            <Frame Grid.Column="2" BackgroundColor="#303030" BorderColor="#303030" x:Name="SharedTopBarUI"/>
+
+
             <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" RowDefinitions="*" ColumnDefinitions="1*,2*,8*">
                 <Grid Grid.Column="0" BackgroundColor="#252525" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
                     <CollectionView ItemsSource="{Binding Servers}">
@@ -68,7 +66,7 @@
                     </CollectionView>
 
                 </Grid>
-                <Grid Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Cyan">
+                <Grid Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*" BackgroundColor="Cyan">
                     <Frame BackgroundColor="Black" x:Name="MainContentFrame" Padding="0" Margin="0">
                         <Label Text="Testing" BackgroundColor="Orange"/>
                     </Frame>
