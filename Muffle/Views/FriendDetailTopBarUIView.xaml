@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Muffle.Views.FriendTopBarUIView">
+             x:Class="Muffle.Views.FriendDetailTopBarUIView">
     <Grid ColumnDefinitions="1*,1*,10*,10*,2*,2*">
         <ImageButton Grid.Column="0" VerticalOptions="Start" CornerRadius="20" Source="{Binding Image}" MinimumHeightRequest="30" MinimumWidthRequest="30"/>
         <Label Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Start" Text="{Binding Name}"/>

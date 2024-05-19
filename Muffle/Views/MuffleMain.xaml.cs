@@ -68,13 +68,13 @@ namespace Muffle
         {
             if (selectedObject is Friend friend)
             {
-                SharedTopBarUI.Content = new FriendTopBarUIView(friend);
+                SharedTopBarUI.Content = new FriendDetailTopBarUIView(friend);
             }
             else if (selectedObject is Server server)
             {
                 SharedTopBarUI.Content = null;//  new ServerTopBarUIView(server);
                 SharedTopBarUI.BackgroundColor = Microsoft.Maui.Graphics.Color.FromHex("#303030");
-                SharedTopBarUI.HeightRequest = 0;
+                //SharedTopBarUI.HeightRequest = 0;
             }
         }
 

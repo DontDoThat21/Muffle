@@ -84,6 +84,9 @@
 	  <Compile Update="Views\FriendDetailsContentView.xaml.cs">
 	    <DependentUpon>FriendDetailsContentView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\FriendDetailTopBarUIView.xaml.cs">
+	    <DependentUpon>FriendDetailTopBarUIView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\MuffleMain.xaml.cs">
 	    <DependentUpon>MuffleMain.xaml</DependentUpon>
 	  </Compile>
@@ -93,7 +96,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\FriendTopBarUIView.xaml">
+	  <MauiXaml Update="Views\FriendDetailTopBarUIView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ServerDetailsContentView.xaml">
