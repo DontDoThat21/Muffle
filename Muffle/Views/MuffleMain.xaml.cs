@@ -1,4 +1,6 @@
-﻿using Muffle.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Muffle.Data.Data;
+using Muffle.Data.Models;
 using Muffle.Views;
 using System.Drawing;
 using WebRTCme;
@@ -11,14 +13,24 @@ namespace Muffle
     public partial class MainPage : ContentPage
     {
         IWebRtc _webRtc;
-        private object selectedObject;
+        private object selectedObject = "friendcategory";
 
-        public MainPage() // IWebRtc webRtc
+        private readonly SqlServerDbContext _contextSqlServer;
+        private readonly SqlLiteDbContext _contextSqlLite;
+
+        public MainPage(SqlServerDbContext sqlServerContext, SqlLiteDbContext sqlLiteContext) // IWebRtc webRtc
         {
             InitializeComponent();
+
+            _contextSqlServer = sqlServerContext;
+            _contextSqlLite = sqlLiteContext;
+
             BindingContext = new ViewModels.MainPageViewModel();
             _webRtc = CrossWebRtc.Current;
             WebRtcMiddleware webrtc = new WebRtcMiddleware(_webRtc);
+
+            UpdateSharedUIFrame();
+
             //var config = new RTCConfiguration();
             //var peerConnection = webrtc.New
 
@@ -50,6 +62,25 @@ namespace Muffle
         {
             // Clear existing content
             MainContentFrame.Content = null;
+            selectedObject = "friendcategory";
+            // Get the selected item from the command parameter
+            //var selectedItem = (sender as Button)?.BindingContext;
+            //if (selectedItem != null)
+            //{
+            // Set the selected item
+            //selectedObject = selectedItem;
+
+            // Update MainContentFrame with details of the selected item
+            UpdateMainContentFrame();
+            UpdateSharedUIFrame();
+            //}
+
+        }
+
+        private void FriendIndividualButton_OnClicked(object? sender, EventArgs e)
+        {
+            // Clear existing content
+            MainContentFrame.Content = null;
             // Get the selected item from the command parameter
             var selectedItem = (sender as Button)?.BindingContext;
             if (selectedItem != null)
@@ -76,6 +107,12 @@ namespace Muffle
                 SharedTopBarUI.BackgroundColor = Microsoft.Maui.Graphics.Color.FromHex("#303030");
                 //SharedTopBarUI.HeightRequest = 0;
             }
+            else if(selectedObject.ToString() == "friendcategory")
+            {
+                var friendsTopBarUIView = new FriendsTopBarUIView();
+                friendsTopBarUIView.FriendAddButtonClicked += FriendsTopBarUIView_FriendAddButtonClicked;
+                SharedTopBarUI.Content = friendsTopBarUIView;
+            }
         }
 
         private void UpdateMainContentFrame()
@@ -89,6 +126,13 @@ namespace Muffle
             {
                 MainContentFrame.Content = new ServerDetailsContentView(server);
             }
+        }
+
+        private void FriendsTopBarUIView_FriendAddButtonClicked(object sender, EventArgs e)
+        {
+            // Update the MainContentFrame here
+            MainContentFrame.BackgroundColor = Colors.Red; // Example action
+            MainContentFrame.Content = new Label { Text = "Friend Added", TextColor = Colors.White };
         }
 
     }

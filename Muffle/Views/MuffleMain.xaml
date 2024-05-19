@@ -38,7 +38,7 @@
                 <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="#303030" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,8*,.8*,.8*">
                     
                     <Frame Grid.Row="1" BackgroundColor="#303030" BorderColor="#303030">
-                        <Label HorizontalTextAlignment="Center" Text="Friends"></Label>
+                        <Button Clicked="FriendButton_OnClicked" TextColor="GhostWhite" BackgroundColor="#303030" Text="Friends"/>
                     </Frame>
                     <Frame Grid.Row="2" BackgroundColor="#303030" BorderColor="#303030">
                         <StackLayout Padding="5,0,0,0">
@@ -56,7 +56,7 @@
                                         <StackLayout>
                                             <Grid ColumnDefinitions="2*,7*">
                                                 <ImageButton CornerRadius="15" Grid.Column="0" Source="{Binding Image}" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
-                                                <Button BackgroundColor="#303030"  HorizontalOptions="StartAndExpand" TextColor="GhostWhite" Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendButton_OnClicked"/>
+                                                <Button BackgroundColor="#303030"  HorizontalOptions="StartAndExpand" TextColor="GhostWhite" Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendIndividualButton_OnClicked"/>
                                             </Grid>
                                         </StackLayout>
                                     </Frame>
@@ -67,9 +67,7 @@
 
                 </Grid>
                 <Grid Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*" BackgroundColor="Cyan">
-                    <Frame BackgroundColor="Black" x:Name="MainContentFrame" Padding="0" Margin="0">
-                        <Label Text="Testing" BackgroundColor="Orange"/>
-                    </Frame>
+                    <Frame BackgroundColor="Black" x:Name="MainContentFrame" Padding="0" Margin="0"/>
 
                     <!--<Frame BackgroundColor="Green" x:Name="MainContentFrame">
                         <StackLayout BackgroundColor="Orange">
