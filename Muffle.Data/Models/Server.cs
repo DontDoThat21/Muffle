@@ -8,7 +8,11 @@ namespace Muffle.Data.Models
 {
     public class Server
     {
-        public Server(double id, string name, string? description, string ipAddress, int port)
+        public Server() 
+        {
+
+        }
+        public Server(double id, string name, string? description, string ipAddress, double port)
         {
             Id = Id;
             Name = name;
@@ -21,6 +25,6 @@ namespace Muffle.Data.Models
         public string Name { get; set; }
         public string? Description { get; set; }
         public string IpAddress { get; set; }
-        public int Port { get; set; }
+        public double Port { get; set; }
     }
 }

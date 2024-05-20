@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Muffle.Data.Data;
+using Muffle.Data.Services;
 using System.Reflection;
 using WebRTCme;
 
@@ -21,27 +22,34 @@ namespace Muffle
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            var connectionStringNameSqlServer = "SqlServerConnection";
-            var connectionStringNameSqlLite = "SqliteConnection";
+            //var connectionStringNameSqlServer = "SqlServerConnection";
+            //var connectionStringNameSqlLite = "SqliteConnection";
 
-            var connectionStringSqlServer = ConfigurationLoader.GetConnectionString(connectionStringNameSqlServer);
-            var connectionStringSqlLite = ConfigurationLoader.GetConnectionString(connectionStringNameSqlLite);
+            //var connectionStringSqlServer = ConfigurationLoader.GetConnectionString(connectionStringNameSqlServer);
+            //var connectionStringSqlLite = ConfigurationLoader.GetConnectionString(connectionStringNameSqlLite);
 
-            builder.Services.AddDbContext<SqlServerDbContext>(options =>
-            {
-                options.UseSqlite(connectionStringSqlServer);
-            });
+            //builder.Services.AddDbContext<SqlServerDbContext>(options =>
+            //{
+            //    options.UseSqlite(connectionStringSqlServer);
+            //});
 
-            builder.Services.AddDbContext<SqlLiteDbContext>(options =>
-            {
-                options.UseSqlite(connectionStringNameSqlLite);
-            });            
+            //builder.Services.AddDbContext<SqlLiteDbContext>(options =>
+            //{
+            //    options.UseSqlite(connectionStringSqlLite);
+            //});            
+
+            SqliteDbService.InitializeDatabase();
 
 #if DEBUG
+            SqliteDbService.DisposeDatabase();
+            SqliteDbService.InitializeDatabase();
             builder.Logging.AddDebug();
+#else
+            SqliteDbService.InitializeDatabase();
 #endif
 
             return builder.Build();
+            
         }
     }
 }

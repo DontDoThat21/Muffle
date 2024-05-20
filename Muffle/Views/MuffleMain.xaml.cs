@@ -18,12 +18,12 @@ namespace Muffle
         private readonly SqlServerDbContext _contextSqlServer;
         private readonly SqlLiteDbContext _contextSqlLite;
 
-        public MainPage(SqlServerDbContext sqlServerContext, SqlLiteDbContext sqlLiteContext) // IWebRtc webRtc
+        public MainPage() // IWebRtc webRtc
         {
             InitializeComponent();
 
-            _contextSqlServer = sqlServerContext;
-            _contextSqlLite = sqlLiteContext;
+            //_contextSqlServer = sqlServerContext;
+            //_contextSqlLite = sqlLiteContext;
 
             BindingContext = new ViewModels.MainPageViewModel();
             _webRtc = CrossWebRtc.Current;

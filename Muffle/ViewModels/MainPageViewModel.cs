@@ -14,7 +14,7 @@ namespace Muffle.ViewModels
     public class MainPageViewModel : BindableObject
     {
         //private readonly MainPageModel MainPage;
-        public ObservableCollection<Server> Servers { get; set; }
+        public List<Server> Servers { get; set; }
         public ObservableCollection<Friend> Friends { get; set; }
 
         private Server _selectedServer;
