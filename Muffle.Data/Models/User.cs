@@ -35,15 +35,16 @@ namespace Muffle.Data.Models
             return servers;
         }
 
-        public ObservableCollection<Friend>? GetUsersFriends()
+        public List<Friend>? GetUsersFriends()
         {
-            return new ObservableCollection<Friend>()
-            {
-                new Friend("Gabe", "Starcraft 2 Bro", "gabe.png"),
-                new Friend("Tylor", "Best Programmer NA", "tom.jpg"),
-                new Friend("Nick", "Army Motorcycling Bro", "nick.png"),
-                new Friend("Tyler", "Best 1DGer in da land", "murky.png"),
-            };
+            using var connection = SqliteDbService.CreateConnection();
+            connection.Open();
+
+            // Get Friends table
+            var selectUsersFriendsSql = @"Select * from Friends;";
+
+            var friends = connection.Query<Friend>(selectUsersFriendsSql).ToList();
+            return friends;
         }
     }
 }

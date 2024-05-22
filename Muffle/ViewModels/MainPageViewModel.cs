@@ -15,7 +15,7 @@ namespace Muffle.ViewModels
     {
         //private readonly MainPageModel MainPage;
         public List<Server> Servers { get; set; }
-        public ObservableCollection<Friend> Friends { get; set; }
+        public List<Friend> Friends { get; set; }
 
         private Server _selectedServer;
         private Friend _selectedFriend;

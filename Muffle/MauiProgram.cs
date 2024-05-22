@@ -36,9 +36,8 @@ namespace Muffle
             //builder.Services.AddDbContext<SqlLiteDbContext>(options =>
             //{
             //    options.UseSqlite(connectionStringSqlLite);
-            //});            
-
-            SqliteDbService.InitializeDatabase();
+            //});
+            
 
 #if DEBUG
             SqliteDbService.DisposeDatabase();
