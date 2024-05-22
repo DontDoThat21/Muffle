@@ -15,9 +15,6 @@ namespace Muffle
         IWebRtc _webRtc;
         private object selectedObject = "friendcategory";
 
-        private readonly SqlServerDbContext _contextSqlServer;
-        private readonly SqlLiteDbContext _contextSqlLite;
-
         public MainPage() // IWebRtc webRtc
         {
             InitializeComponent();

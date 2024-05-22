@@ -37,10 +37,12 @@ namespace Muffle
             //{
             //    options.UseSqlite(connectionStringSqlLite);
             //});
-            
+
 
 #if DEBUG
+            SqlServerDbService.DisposeDatabase();
             SqliteDbService.DisposeDatabase();
+            SqlServerDbService.InitializeDatabase();
             SqliteDbService.InitializeDatabase();
             builder.Logging.AddDebug();
 #else
