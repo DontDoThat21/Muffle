@@ -1,10 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Muffle.Data.Data;
+﻿using Microsoft.Extensions.Logging;
 using Muffle.Data.Services;
-using System.Reflection;
-using WebRTCme;
 
 namespace Muffle
 {
@@ -41,9 +36,9 @@ namespace Muffle
 
 #if DEBUG
             SqlServerDbService.DisposeDatabase();
-            SqliteDbService.DisposeDatabase();
+            SQLiteDbService.DisposeDatabase();
             SqlServerDbService.InitializeDatabase();
-            SqliteDbService.InitializeDatabase();
+            SQLiteDbService.InitializeDatabase();
             builder.Logging.AddDebug();
 #else
             SqliteDbService.InitializeDatabase();

@@ -1,13 +1,5 @@
 ﻿using Dapper;
 using Muffle.Data.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Muffle.Data.Models
 {
@@ -25,7 +17,7 @@ namespace Muffle.Data.Models
 
         public List<Server> GetUsersServers()
         {
-            using var connection = SqliteDbService.CreateConnection();
+            using var connection = SQLiteDbService.CreateConnection();
             connection.Open();
 
             // Create Servers table
@@ -37,7 +29,7 @@ namespace Muffle.Data.Models
 
         public List<Friend>? GetUsersFriends()
         {
-            using var connection = SqliteDbService.CreateConnection();
+            using var connection = SQLiteDbService.CreateConnection();
             connection.Open();
 
             // Get Friends table

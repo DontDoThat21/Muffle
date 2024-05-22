@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Muffle.Data.Models
+﻿namespace Muffle.Data.Models
 {
     public class Friend
     {
@@ -12,13 +6,15 @@ namespace Muffle.Data.Models
         {
 
         }
-        public Friend(int id, string name, string description, string image, string memo)
+        public Friend(int id, string name, string description, string image, string memo, DateTime friendshipDate, DateTime creationDate)
         {
             this.Id = id;
             this.Name = name;
             this.Description = description;
             this.Image = image;
             this.Memo = memo;
+            this.FriendshipDate = friendshipDate;
+            this.CreationDate = creationDate;
         }
         public int UserId { get; set; }
         public int Id { get; set; }

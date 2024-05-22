@@ -1,11 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Muffle;
-using Muffle.Data.Data;
 using System.Data;
 using Dapper;
 using Muffle.Data.Models;
@@ -13,11 +6,11 @@ using System.Collections.ObjectModel;
 
 namespace Muffle.Data.Services
 {
-    public class SqliteDbService
+    public class SQLiteDbService
     {
         private static readonly string _connectionString = ConfigurationLoader.GetConnectionString("SqliteConnection");
 
-        public SqliteDbService()
+        public SQLiteDbService()
         {
 
         }
@@ -66,7 +59,7 @@ namespace Muffle.Data.Services
                 VALUES 
                 (0, 'Dynamic database test', 'Description for Server1', '192.168.1.1', 8080),
                 (1, 'Example 2', 'Description for Server2', '192.168.1.2', 8081),
-                (2, 'Tyler is dummbb', 'Description for Server3', '192.168.1.3', 8082);";
+                (2, 'Tyler', 'Description for Server3', '192.168.1.3', 8082);";
 
             try
             {
@@ -77,10 +70,10 @@ namespace Muffle.Data.Services
             // Insert default friends
             var friends = new ObservableCollection<Friend>()
             {
-                new Friend(0, "Gabe", "Starcraft 2 Bro test", "gabe.png", ""),
-                new Friend(1, "Tylor", "Best Programmer NA C#", "tom.jpg", ""),
-                new Friend(2, "Nick", "Army Motorcycling Bro test", "nick.png", ""),
-                new Friend(3, "Tyler", "Best 1DGer in da land test", "murky.png", ""),
+                new Friend(0, "Gabe", "Starcraft 2 Bro test", "gabe.png", "", DateTime.Now, DateTime.Now),
+                new Friend(1, "Tylor", "Best Programmer NA C#", "tom.jpg", "", DateTime.Now, DateTime.Now),
+                new Friend(2, "Nick", "Army Motorcycling Bro test", "nick.png", "", DateTime.Now, DateTime.Now),
+                new Friend(3, "Tyler", "Best 1DGer in da land test", "murky.png", "", DateTime.Now, DateTime.Now),
             };
 
             // Seed data
