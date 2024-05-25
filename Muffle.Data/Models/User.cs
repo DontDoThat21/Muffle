@@ -21,7 +21,7 @@ namespace Muffle.Data.Models
             connection.Open();
 
             // Create Servers table
-            var selectUsersServersSql = @"Select * from Servers;";
+            var selectUsersServersSql = @"Select * FROM Servers;";
 
             var servers = connection.Query<Server>(selectUsersServersSql).ToList();
             return servers;
