@@ -13,16 +13,16 @@ namespace Muffle.ViewModels
     public class FriendDetailsContentViewModel : BindableObject
     {
         public ObservableCollection<ChatMessage> ChatMessages { get; } = new ObservableCollection<ChatMessage>();
-        private WebSocketService _webSocketService;
+        private readonly ISignalingService _signalingService;
         private UsersService _userService;
         private string _messageToSend;
 
+        //private readonly WebRTCManager _webRTCManager;
+        public Command StartCallCommand { get; }
+        public Command ReceiveCallCommand { get; }
 
         public Friend _friendSelected;
         public User _userSelected;
-
-        public ICommand SendMessageCommand { get; }
-
         public string MessageToSend
         {
             get => _messageToSend;
@@ -32,12 +32,16 @@ namespace Muffle.ViewModels
                 OnPropertyChanged();
             }
         }
+        public ICommand SendMessageCommand { get; }
 
         public FriendDetailsContentViewModel()
         {
-            _webSocketService = new WebSocketService();
+            _signalingService = new SignalingService();
             _userService = new UsersService();
             SendMessageCommand = new Command<string>(SendMessage);
+            //_webRTCManager = new WebRTCManager(new SignalingService());
+            //StartCallCommand = new Command(async () => await _webRTCManager.StartCall());
+            //ReceiveCallCommand = new Command<string>(async (sdp) => await _webRTCManager.ReceiveCall(sdp));
 
             Task.Run(async () => await InitializeAsync());
         }
@@ -47,7 +51,7 @@ namespace Muffle.ViewModels
         {
             try
             {
-                await _webSocketService.ConnectAsync(new Uri("ws://localhost:8080"));
+                await _signalingService.ConnectAsync(new Uri("ws://localhost:8080"));
                 // Connection successful
                 StartReceivingMessages();
             }
@@ -62,7 +66,7 @@ namespace Muffle.ViewModels
         {
             while (true)
             {
-                string message = await _webSocketService.ReceiveMessageAsync(); // Receive message from WebSocket server
+                string message = await _signalingService.ReceiveMessageAsync(); // Receive message from WebSocket server
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     ChatMessages.Add(new ChatMessage { Content = message, Sender = _userSelected, Timestamp = DateTime.Now });
@@ -75,7 +79,7 @@ namespace Muffle.ViewModels
             // Send message to WebSocket server
             if (!string.IsNullOrEmpty(MessageToSend))
             {
-                await _webSocketService.SendMessageAsync(MessageToSend);
+                await _signalingService.SendMessageAsync(MessageToSend);
                 ChatMessages.Add(new ChatMessage { Content = MessageToSend, Sender = _userSelected, Timestamp = DateTime.Now });
                 MessageToSend = string.Empty; // Clear the message input after sending
             }

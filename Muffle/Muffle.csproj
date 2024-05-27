@@ -73,7 +73,6 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.8" />
 		<PackageReference Include="WebRTCme" Version="2.0.0" />
-		<PackageReference Include="WebRTCme.SignallingServerProxy" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

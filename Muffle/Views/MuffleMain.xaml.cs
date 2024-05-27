@@ -2,13 +2,12 @@
 using Muffle.ViewModels;
 using Muffle.Views;
 using WebRTCme;
-using WebRTCme.Middleware;
 
 namespace Muffle
 {
     public partial class MainPage : ContentPage
     {
-        IWebRtc _webRtc;
+        //IWebRtc _webRtc;
         private object selectedObject = "friendcategory";
 
         public MainPage() // IWebRtc webRtc
@@ -19,8 +18,7 @@ namespace Muffle
             //_contextSqlLite = sqlLiteContext;
 
             BindingContext = new ViewModels.MainPageViewModel();
-            _webRtc = CrossWebRtc.Current;
-            WebRtcMiddleware webrtc = new WebRtcMiddleware(_webRtc);
+            //_webRtc = CrossWebRtc.Current;
 
             UpdateSharedUIFrame();
 

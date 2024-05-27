@@ -28,16 +28,13 @@
             <Frame BackgroundColor="#303030" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" VerticalOptions="FillAndExpand" Grid.RowSpan="5">
                 <Grid RowDefinitions="20*,1*" VerticalOptions="FillAndExpand">
                     <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2">
-                        <CollectionView ItemsSource="{Binding ChatMessages}">
-                            <CollectionView.ItemTemplate>
+                        <ListView ItemsSource="{Binding ChatMessages}">
+                            <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackLayout Padding="5">
-                                        <Label Text="{Binding Content}" />
-                                        <Label Text="{Binding Timestamp}" FontSize="Small" TextColor="Gray" />
-                                    </StackLayout>
+                                    <TextCell Text="{Binding Content}" Detail="{Binding Timestamp}" />
                                 </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
                         <Entry Text="{Binding MessageToSend}" Placeholder="Message your friend."
                             Completed="Entry_Completed" />

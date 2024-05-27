@@ -11,8 +11,6 @@ namespace Muffle.Views;
 
 public partial class FriendDetailsContentView : ContentView
 {
-    private WebSocketService _webSocketService;
-
     public FriendDetailsContentView(FriendDetailsContentViewModel friendDetailsModel)
     {
         InitializeComponent();
@@ -29,6 +27,7 @@ public partial class FriendDetailsContentView : ContentView
         if (sender is Entry entry && BindingContext is FriendDetailsContentViewModel viewModel)
         {
             viewModel.SendMessage(entry.Text);
+            entry.Text = string.Empty; // Clear the entry after sending
         }
     }
 }
