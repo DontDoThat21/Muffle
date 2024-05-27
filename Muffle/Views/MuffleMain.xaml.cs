@@ -1,4 +1,5 @@
 ﻿using Muffle.Data.Models;
+using Muffle.ViewModels;
 using Muffle.Views;
 using WebRTCme;
 using WebRTCme.Middleware;
@@ -48,26 +49,7 @@ namespace Muffle
             //Populate
             //var webrtc = new WebRtcMiddleware(_webRtc);
 
-        }
-
-        private void FriendButton_OnClicked(object? sender, EventArgs e)
-        {
-            // Clear existing content
-            MainContentFrame.Content = null;
-            selectedObject = "friendcategory";
-            // Get the selected item from the command parameter
-            //var selectedItem = (sender as Button)?.BindingContext;
-            //if (selectedItem != null)
-            //{
-            // Set the selected item
-            //selectedObject = selectedItem;
-
-            // Update MainContentFrame with details of the selected item
-            UpdateMainContentFrame();
-            UpdateSharedUIFrame();
-            //}
-
-        }
+        }        
 
         private void FriendIndividualButton_OnClicked(object? sender, EventArgs e)
         {
@@ -86,17 +68,35 @@ namespace Muffle
             }
 
         }
+        private void FriendButton_OnClicked(object? sender, EventArgs e)
+        {
+            // Clear existing content
+            MainContentFrame.Content = null;
+            selectedObject = "friendcategory";
+            // Get the selected item from the command parameter
+            //var selectedItem = (sender as Button)?.BindingContext;
+            //if (selectedItem != null)
+            //{
+            // Set the selected item
+            //selectedObject = selectedItem;
+
+            // Update MainContentFrame with details of the selected item
+            UpdateMainContentFrame();
+            UpdateSharedUIFrame();
+            //}
+
+        }  
 
         private void UpdateSharedUIFrame()
         {
             if (selectedObject is Friend friend)
             {
-                SharedTopBarUI.Content = new FriendDetailTopBarUIView(friend);
+                SharedTopBarUI.Content = new FriendDetailTopBarUIView(friend);                
             }
             else if (selectedObject is Server server)
             {
                 SharedTopBarUI.Content = null;//  new ServerTopBarUIView(server);
-                SharedTopBarUI.BackgroundColor = Microsoft.Maui.Graphics.Color.FromHex("#303030");
+                SharedTopBarUI.BackgroundColor = Color.FromHex("#303030");
                 //SharedTopBarUI.HeightRequest = 0;
             }
             else if(selectedObject.ToString() == "friendcategory")
@@ -104,6 +104,8 @@ namespace Muffle
                 var friendsTopBarUIView = new FriendsTopBarUIView();
                 friendsTopBarUIView.FriendAddButtonClicked += FriendsTopBarUIView_FriendAddButtonClicked;
                 SharedTopBarUI.Content = friendsTopBarUIView;
+
+                //SharedLeftPanelUI.Content = new FriendDetailLeftPanelUIView();
             }
         }
 
@@ -112,7 +114,9 @@ namespace Muffle
             // Dynamically switch content based on the type of selected item
             if (selectedObject is Friend friend)
             {
-                MainContentFrame.Content = new FriendDetailsContentView(friend);
+                FriendDetailsContentViewModel friendDetailsModel = new FriendDetailsContentViewModel();
+                friendDetailsModel._friendSelected = friend;
+                MainContentFrame.Content = new FriendDetailsContentView(friendDetailsModel);
             }
             else if (selectedObject is Server server)
             {

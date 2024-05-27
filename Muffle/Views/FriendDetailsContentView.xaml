@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Muffle.Views.FriendDetailsContentView"
 			 x:Name="DynamicFriendContent">
+
     <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="#353535">
         <Grid Grid.Column="2" Grid.ColumnSpan="4" RowDefinitions=".15*,*,*,*,Auto" ColumnDefinitions=".5*,.5*,2*,6*,3*" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             
@@ -27,48 +28,20 @@
             <Frame BackgroundColor="#303030" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" VerticalOptions="FillAndExpand" Grid.RowSpan="5">
                 <Grid RowDefinitions="20*,1*" VerticalOptions="FillAndExpand">
                     <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2">
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Label Text="Lorem ipsum"/>
-                        <Entry Text="Message your friend." />
+                        <CollectionView ItemsSource="{Binding ChatMessages}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Padding="5">
+                                        <Label Text="{Binding Content}" />
+                                        <Label Text="{Binding Timestamp}" FontSize="Small" TextColor="Gray" />
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Entry Text="{Binding MessageToSend}" Placeholder="Message your friend."
+                            Completed="Entry_Completed" />
+
                     </VerticalStackLayout>
                 </Grid>                
             </Frame>

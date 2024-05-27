@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Muffle.Data.Models;
+using Muffle.Data.Services;
 
 namespace Muffle.ViewModels
 {
@@ -113,10 +114,10 @@ namespace Muffle.ViewModels
         public MainPageViewModel()
         {
             User = new User();
-            User = User.GetUser();
+            User = UsersService.GetUser();
             SelectServerCommand = new Command<Server>(ExecuteSelectServerCommand);
-            Servers = User.GetUsersServers();
-            Friends = User.GetUsersFriends();
+            Servers = UsersService.GetUsersServers();
+            Friends = UsersService.GetUsersFriends();
         }
 
         private void ExecuteSelectServerCommand(Server server)

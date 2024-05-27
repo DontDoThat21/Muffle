@@ -39,6 +39,7 @@
 
 	<PropertyGroup>
 	  <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+	  <DefaultLanguage>en</DefaultLanguage>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -68,7 +69,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.21" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.40" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.8" />
 		<PackageReference Include="WebRTCme" Version="2.0.0" />
@@ -98,13 +99,13 @@
 	  <MauiXaml Update="Views\FriendDetailTopBarUIView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\FriendsTopBarUIView.xaml">
+	  <MauiXaml Update="Views\FriendsUIComponents\FriendsTopBarUIView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ServerDetailsContentView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ServerTopBarUIView.xaml">
+	  <MauiXaml Update="Views\ServersUIComponents\ServerTopBarUIView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

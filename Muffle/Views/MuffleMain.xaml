@@ -16,66 +16,67 @@
                 <StackLayout VerticalOptions="Start">
                     <Entry Text="Find or start a discussion" BackgroundColor="#252525"></Entry>
                 </StackLayout>
-            </Frame>
-            <Frame Grid.Column="2" BackgroundColor="#303030" BorderColor="#303030" x:Name="SharedTopBarUI"/>
+            </Frame>            
 
-
-            <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" RowDefinitions="*" ColumnDefinitions="1*,2*,8*">
-                <Grid Grid.Column="0" BackgroundColor="#252525" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
-                    <CollectionView ItemsSource="{Binding Servers}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Grid.Column="0" BackgroundColor="#252525" BorderColor="#252525">
-                                    <StackLayout>
-                                        <Button BackgroundColor="#252525" TextColor="GhostWhite" Text="{Binding Name}" Command="{Binding SelectServerCommand}" CommandParameter="{Binding Servers[0]}" Clicked="ServerButton_OnClicked"/>
-                                    </StackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                </Grid>
-                <Grid Grid.Column="1" VerticalOptions="FillAndExpand" BackgroundColor="#303030" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,8*,.8*,.8*">
-                    
-                    <Frame Grid.Row="1" BackgroundColor="#303030" BorderColor="#303030">
-                        <Button Clicked="FriendButton_OnClicked" TextColor="GhostWhite" BackgroundColor="#303030" Text="Friends"/>
-                    </Frame>
-                    <Frame Grid.Row="2" BackgroundColor="#303030" BorderColor="#303030">
-                        <StackLayout Padding="5,0,0,0">
-                            <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="#303030" Padding="0,2,5,2">
-                                <Label HorizontalOptions="Center" VerticalOptions="Center" Text="Direct Messages" Grid.Column="0"></Label>
-                                <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="24"></Button>
-                            </Grid>
-                        </StackLayout>
-                    </Frame>
-                    <CollectionView ItemsSource="{Binding Friends}" Grid.Row="3">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout Padding="5">
-                                    <Frame BackgroundColor="#303030">
-                                        <StackLayout>
-                                            <Grid ColumnDefinitions="2*,7*">
-                                                <ImageButton CornerRadius="15" Grid.Column="0" Source="{Binding Image}" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
-                                                <Button BackgroundColor="#303030"  HorizontalOptions="StartAndExpand" TextColor="GhostWhite" Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendIndividualButton_OnClicked"/>
-                                            </Grid>
-                                        </StackLayout>
-                                    </Frame>
+            <Grid Grid.Column="0" Grid.Row="1" BackgroundColor="#252525" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
+                <CollectionView ItemsSource="{Binding Servers}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Grid.Column="0" BackgroundColor="#252525" BorderColor="#252525">
+                                <StackLayout>
+                                    <Button BackgroundColor="#252525" TextColor="GhostWhite" Text="{Binding Name}" Command="{Binding SelectServerCommand}" CommandParameter="{Binding Servers[0]}" Clicked="ServerButton_OnClicked"/>
                                 </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
+            </Grid>
+
+            <Grid BackgroundColor="Yellow" Padding="5" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2" RowDefinitions=".5*,6*" ColumnDefinitions="1*,6*">
+
+                <Frame Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#303030" BorderColor="#303030" x:Name="SharedTopBarUI"/>
+                
+                <Grid Grid.Column="1" Grid.Row="1" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*" BackgroundColor="#303030">
+                    <Frame BackgroundColor="Blue" x:Name="MainContentFrame" Padding="0" Margin="0"/>
                 </Grid>
-                <Grid Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*" BackgroundColor="#303030">
-                    <Frame BackgroundColor="Black" x:Name="MainContentFrame" Padding="0" Margin="0"/>
 
-                    <!--<Frame BackgroundColor="Green" x:Name="MainContentFrame">
-                        <StackLayout BackgroundColor="Orange">
-                            <Label Text="Welcome to your Muffle server's friend informatiom." BackgroundColor="Red"/>
-                            <Label Text="Friends name: ?" BackgroundColor="Red"/>
-                            <Label Text="Friends description: ?" BackgroundColor="Red"/>
-                        </StackLayout>
-                    </Frame>-->
+                <Grid Grid.Column="0" Grid.Row="1" VerticalOptions="FillAndExpand" BackgroundColor="Purple" HorizontalOptions="FillAndExpand" RowSpacing="10">
+
+                    <Frame BackgroundColor="Blue" x:Name="SharedLeftPanelUI">
+                        <Grid Grid.Column="0" Grid.Row="1" VerticalOptions="FillAndExpand" BackgroundColor="Orange" HorizontalOptions="FillAndExpand" RowSpacing="10" RowDefinitions=".8*,.8*,.25*,8*,.8*,.8*">
+                            <Frame Grid.Row="1" BackgroundColor="#303030" BorderColor="#303030">
+                                <Button Clicked="FriendButton_OnClicked" TextColor="GhostWhite" BackgroundColor="#303030" Text="Friends"/>
+                            </Frame>
+                            <Frame Grid.Row="2" BackgroundColor="#303030" BorderColor="#303030">
+                                <StackLayout Padding="5,0,0,0">
+                                    <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="#303030" Padding="0,2,5,2">
+                                        <Label HorizontalOptions="Center" VerticalOptions="Center" Text="Direct Messages" Grid.Column="0"></Label>
+                                        <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="24"></Button>
+                                    </Grid>
+                                </StackLayout>
+                            </Frame>
+                            <CollectionView ItemsSource="{Binding Friends}" Grid.Row="3">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Padding="5">
+                                            <Frame BackgroundColor="#303030">
+                                                <StackLayout>
+                                                    <Grid ColumnDefinitions="2*,7*">
+                                                        <ImageButton CornerRadius="15" Grid.Column="0" Source="{Binding Image}" MaximumWidthRequest="40" MaximumHeightRequest="40"/>
+                                                        <Button BackgroundColor="#303030"  HorizontalOptions="StartAndExpand" TextColor="GhostWhite" Text="{Binding Name}" Grid.Column="1" Command="{Binding SelectFriendCommand}" CommandParameter="{Binding Friends[0]}" Clicked="FriendIndividualButton_OnClicked"/>
+                                                    </Grid>
+                                                </StackLayout>
+                                            </Frame>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
+                    </Frame>
+                    
+                    
+
                 </Grid>
             </Grid>
 
