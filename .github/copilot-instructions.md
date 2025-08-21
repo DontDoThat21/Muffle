@@ -29,7 +29,7 @@ Muffle is a .NET MAUI cross-platform communication application similar to Discor
   - Database is automatically created and seeded on first application startup
   - No manual setup required for SQLite
 - **Production**: Configured for SQL Server with connection string in `appsettings.json`
-  - Connection string: `Server=TY\\SQLEXPRESS;Database=Muffle;Trusted_Connection=True;TrustServerCertificate=True;`
+  - Connection string: `Server=YOUR_SERVER_NAME;Database=Muffle;Trusted_Connection=True;TrustServerCertificate=True;`
   - Update connection string for your SQL Server instance
 
 ### Running the Application
