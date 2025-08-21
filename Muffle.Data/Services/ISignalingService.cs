@@ -10,6 +10,7 @@ namespace Muffle.Data.Services
     {
         Task ConnectAsync(Uri serverUri);
         Task SendMessageAsync(string message);
+        Task SendImageAsync(byte[] imageData, string fileName);
         Task<string> ReceiveMessageAsync();
         event Action<string> OnMessageReceived;
 

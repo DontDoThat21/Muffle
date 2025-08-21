@@ -1,5 +1,6 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 
 namespace Muffle.Data.Services
 {
@@ -19,14 +20,35 @@ namespace Muffle.Data.Services
 
         public async Task SendMessageAsync(string message)
         {
-            var bytes = Encoding.UTF8.GetBytes(message);
+            var messageData = new
+            {
+                type = "text",
+                content = message
+            };
+            var json = JsonSerializer.Serialize(messageData);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            var buffer = new ArraySegment<byte>(bytes);
+            await _webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        public async Task SendImageAsync(byte[] imageData, string fileName)
+        {
+            var base64Image = Convert.ToBase64String(imageData);
+            var messageData = new
+            {
+                type = "image",
+                content = base64Image,
+                fileName = fileName
+            };
+            var json = JsonSerializer.Serialize(messageData);
+            var bytes = Encoding.UTF8.GetBytes(json);
             var buffer = new ArraySegment<byte>(bytes);
             await _webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         public async Task<string> ReceiveMessageAsync()
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[4096]; // Increased buffer size for images
             var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             return Encoding.UTF8.GetString(buffer, 0, result.Count);
         }
@@ -35,7 +57,7 @@ namespace Muffle.Data.Services
 
         private async Task ReceiveMessagesAsync()
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[4096]; // Increased buffer size for images
             while (_webSocket.State == WebSocketState.Open)
             {
                 var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
