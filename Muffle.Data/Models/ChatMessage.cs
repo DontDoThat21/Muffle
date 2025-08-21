@@ -14,12 +14,12 @@ namespace Muffle.Data.Models
 
     public class ChatMessage
     {
-        public string Content { get; set; }
-        public User Sender { get; set; }
+        public string? Content { get; set; }
+        public User? Sender { get; set; }
         public DateTime Timestamp { get; set; }
         public MessageType Type { get; set; } = MessageType.Text;
-        public byte[] ImageData { get; set; }
-        public string ImageFileName { get; set; }
+        public byte[]? ImageData { get; set; }
+        public string? ImageFileName { get; set; }
         // Add other properties as needed
     }
 }
