@@ -47,14 +47,18 @@ namespace Muffle.Converters
             {
                 try
                 {
-                    // For placeholder data, return null to hide the image
-                    if (base64String == System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("PLACEHOLDER_IMAGE_DATA")))
+                    // Check if this is placeholder data (starts with our placeholder prefix)
+                    var decodedBytes = System.Convert.FromBase64String(base64String);
+                    var decodedString = System.Text.Encoding.UTF8.GetString(decodedBytes);
+                    
+                    if (decodedString.StartsWith("IMAGE_DATA_FOR_"))
                     {
+                        // This is placeholder data, don't try to display as image
                         return null;
                     }
                     
-                    byte[] imageBytes = System.Convert.FromBase64String(base64String);
-                    return ImageSource.FromStream(() => new MemoryStream(imageBytes));
+                    // Try to create ImageSource from actual image data
+                    return ImageSource.FromStream(() => new MemoryStream(decodedBytes));
                 }
                 catch
                 {
@@ -74,9 +78,22 @@ namespace Muffle.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string str)
+            if (value is string str && !string.IsNullOrEmpty(str))
             {
-                return !string.IsNullOrEmpty(str) && str != System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("PLACEHOLDER_IMAGE_DATA"));
+                try
+                {
+                    // Check if this is placeholder data
+                    var decodedBytes = System.Convert.FromBase64String(str);
+                    var decodedString = System.Text.Encoding.UTF8.GetString(decodedBytes);
+                    
+                    // Don't show placeholder data as images
+                    return !decodedString.StartsWith("IMAGE_DATA_FOR_");
+                }
+                catch
+                {
+                    // If base64 decode fails, it's not our data format
+                    return false;
+                }
             }
             return false;
         }

@@ -1,8 +1,10 @@
 ﻿using Muffle.Data.Models;
 using Muffle.Data.Services;
+using Muffle.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +17,7 @@ namespace Muffle.ViewModels
     {
         public ObservableCollection<ChatMessage> ChatMessages { get; } = new ObservableCollection<ChatMessage>();
         private readonly ISignalingService _signalingService;
+        private readonly IImagePickerService _imagePickerService;
         private UsersService _userService;
         private string _messageToSend;
 
@@ -39,6 +42,7 @@ namespace Muffle.ViewModels
         public FriendDetailsContentViewModel()
         {
             _signalingService = new SignalingService();
+            _imagePickerService = new ImagePickerService();
             _userService = new UsersService();
             SendMessageCommand = new Command<string>(SendMessage);
             SendImageCommand = new Command(async () => await SendImageAsync());
@@ -151,15 +155,29 @@ namespace Muffle.ViewModels
         {
             try
             {
-                // For now, we'll simulate image selection and use a placeholder
-                // In a real implementation, this would use FilePicker from Microsoft.Maui.Essentials
-                string imagePath = "placeholder_image.jpg";
-                string imageData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("PLACEHOLDER_IMAGE_DATA"));
+                // Pick an image using the image picker service
+                string? imagePath = await _imagePickerService.PickImageAsync();
+                if (imagePath == null)
+                {
+                    Console.WriteLine("No image selected");
+                    return;
+                }
+
+                // Convert image to byte array
+                byte[]? imageBytes = await _imagePickerService.ConvertImageToByteArrayAsync(imagePath);
+                if (imageBytes == null)
+                {
+                    Console.WriteLine("Failed to convert image to byte array");
+                    return;
+                }
+
+                // Convert to base64 for transmission
+                string imageData = _imagePickerService.ConvertByteArrayToBase64(imageBytes);
                 
                 var messageWrapper = new MessageWrapper
                 {
                     Type = MessageType.Image,
-                    Content = "📷 Image",
+                    Content = $"📷 Image: {Path.GetFileName(imagePath)}",
                     ImageData = imageData,
                     Timestamp = DateTime.Now,
                     SenderName = _userSelected?.Name ?? "Unknown",
@@ -170,13 +188,15 @@ namespace Muffle.ViewModels
                 
                 ChatMessages.Add(new ChatMessage 
                 { 
-                    Content = "📷 Image", 
+                    Content = $"📷 Image: {Path.GetFileName(imagePath)}", 
                     Sender = _userSelected, 
                     Timestamp = DateTime.Now,
                     Type = MessageType.Image,
                     ImageData = imageData,
                     ImagePath = imagePath
                 });
+                
+                Console.WriteLine($"Image sent successfully: {imagePath}");
             }
             catch (Exception ex)
             {
