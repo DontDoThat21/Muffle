@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Text.Json;
 
 namespace Muffle.ViewModels
 {
@@ -20,6 +21,7 @@ namespace Muffle.ViewModels
         //private readonly WebRTCManager _webRTCManager;
         public Command StartCallCommand { get; }
         public Command ReceiveCallCommand { get; }
+        public ICommand SendImageCommand { get; }
 
         public Friend _friendSelected;
         public User _userSelected;
@@ -39,6 +41,7 @@ namespace Muffle.ViewModels
             _signalingService = new SignalingService();
             _userService = new UsersService();
             SendMessageCommand = new Command<string>(SendMessage);
+            SendImageCommand = new Command(async () => await SendImageAsync());
             //_webRTCManager = new WebRTCManager(new SignalingService());
             //StartCallCommand = new Command(async () => await _webRTCManager.StartCall());
             //ReceiveCallCommand = new Command<string>(async (sdp) => await _webRTCManager.ReceiveCall(sdp));
@@ -66,11 +69,54 @@ namespace Muffle.ViewModels
         {
             while (true)
             {
-                string message = await _signalingService.ReceiveMessageAsync(); // Receive message from WebSocket server
-                Device.BeginInvokeOnMainThread(() =>
+                try
                 {
-                    ChatMessages.Add(new ChatMessage { Content = message, Sender = _userSelected, Timestamp = DateTime.Now });
-                });
+                    string messageJson = await _signalingService.ReceiveMessageAsync();
+                    
+                    // Try to deserialize as MessageWrapper first
+                    MessageWrapper? messageWrapper = null;
+                    try
+                    {
+                        messageWrapper = JsonSerializer.Deserialize<MessageWrapper>(messageJson);
+                    }
+                    catch
+                    {
+                        // If deserialization fails, treat as legacy text message
+                    }
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (messageWrapper != null)
+                        {
+                            // Handle structured message
+                            var chatMessage = new ChatMessage 
+                            { 
+                                Content = messageWrapper.Content,
+                                Sender = _userSelected, 
+                                Timestamp = messageWrapper.Timestamp,
+                                Type = messageWrapper.Type,
+                                ImageData = messageWrapper.ImageData
+                            };
+                            ChatMessages.Add(chatMessage);
+                        }
+                        else
+                        {
+                            // Handle legacy text message
+                            ChatMessages.Add(new ChatMessage 
+                            { 
+                                Content = messageJson, 
+                                Sender = _userSelected, 
+                                Timestamp = DateTime.Now,
+                                Type = MessageType.Text
+                            });
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error receiving message: {ex.Message}");
+                    break;
+                }
             }
         }
 
@@ -79,9 +125,62 @@ namespace Muffle.ViewModels
             // Send message to WebSocket server
             if (!string.IsNullOrEmpty(MessageToSend))
             {
-                await _signalingService.SendMessageAsync(MessageToSend);
-                ChatMessages.Add(new ChatMessage { Content = MessageToSend, Sender = _userSelected, Timestamp = DateTime.Now });
+                var messageWrapper = new MessageWrapper
+                {
+                    Type = MessageType.Text,
+                    Content = MessageToSend,
+                    Timestamp = DateTime.Now,
+                    SenderName = _userSelected?.Name ?? "Unknown",
+                    SenderId = _userSelected?.Id ?? 0
+                };
+
+                await _signalingService.SendMessageWrapperAsync(messageWrapper);
+                
+                ChatMessages.Add(new ChatMessage 
+                { 
+                    Content = MessageToSend, 
+                    Sender = _userSelected, 
+                    Timestamp = DateTime.Now,
+                    Type = MessageType.Text
+                });
                 MessageToSend = string.Empty; // Clear the message input after sending
+            }
+        }
+
+        public async Task SendImageAsync()
+        {
+            try
+            {
+                // For now, we'll simulate image selection and use a placeholder
+                // In a real implementation, this would use FilePicker from Microsoft.Maui.Essentials
+                string imagePath = "placeholder_image.jpg";
+                string imageData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("PLACEHOLDER_IMAGE_DATA"));
+                
+                var messageWrapper = new MessageWrapper
+                {
+                    Type = MessageType.Image,
+                    Content = "📷 Image",
+                    ImageData = imageData,
+                    Timestamp = DateTime.Now,
+                    SenderName = _userSelected?.Name ?? "Unknown",
+                    SenderId = _userSelected?.Id ?? 0
+                };
+
+                await _signalingService.SendMessageWrapperAsync(messageWrapper);
+                
+                ChatMessages.Add(new ChatMessage 
+                { 
+                    Content = "📷 Image", 
+                    Sender = _userSelected, 
+                    Timestamp = DateTime.Now,
+                    Type = MessageType.Image,
+                    ImageData = imageData,
+                    ImagePath = imagePath
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending image: {ex.Message}");
             }
         }
 

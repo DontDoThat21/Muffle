@@ -2,8 +2,18 @@
 
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Muffle.Converters"
              x:Class="Muffle.Views.FriendDetailsContentView"
 			 x:Name="DynamicFriendContent">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:MessageTypeToTextVisibilityConverter x:Key="MessageTypeToTextVisibilityConverter" />
+            <converters:MessageTypeToImageVisibilityConverter x:Key="MessageTypeToImageVisibilityConverter" />
+            <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
 
     <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="#353535">
         <Grid Grid.Column="2" Grid.ColumnSpan="4" RowDefinitions=".15*,*,*,*,Auto" ColumnDefinitions=".5*,.5*,2*,6*,3*" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -31,13 +41,48 @@
                         <ListView ItemsSource="{Binding ChatMessages}">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextCell Text="{Binding Content}" Detail="{Binding Timestamp}" />
+                                    <ViewCell>
+                                        <StackLayout Padding="10,5">
+                                            <!-- Display for Text Messages -->
+                                            <Label Text="{Binding Content}" 
+                                                   IsVisible="{Binding Type, Converter={StaticResource MessageTypeToTextVisibilityConverter}}"
+                                                   FontSize="14"
+                                                   TextColor="White"/>
+                                            
+                                            <!-- Display for Image Messages -->
+                                            <StackLayout IsVisible="{Binding Type, Converter={StaticResource MessageTypeToImageVisibilityConverter}}">
+                                                <Label Text="📷 Image" 
+                                                       FontSize="14"
+                                                       TextColor="LightBlue"/>
+                                                <Image Source="{Binding ImageData, Converter={StaticResource Base64ToImageConverter}}"
+                                                       HeightRequest="150"
+                                                       WidthRequest="200"
+                                                       Aspect="AspectFit"
+                                                       IsVisible="{Binding ImageData, Converter={StaticResource StringNotEmptyConverter}}"/>
+                                            </StackLayout>
+                                            
+                                            <!-- Timestamp for all messages -->
+                                            <Label Text="{Binding Timestamp, StringFormat='{0:HH:mm}'}"
+                                                   FontSize="10"
+                                                   TextColor="Gray"
+                                                   HorizontalOptions="End"/>
+                                        </StackLayout>
+                                    </ViewCell>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
 
-                        <Entry Text="{Binding MessageToSend}" Placeholder="Message your friend."
-                            Completed="Entry_Completed" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Entry Grid.Column="0" 
+                                   Text="{Binding MessageToSend}" 
+                                   Placeholder="Message your friend."
+                                   Completed="Entry_Completed" />
+                            <Button Grid.Column="1" 
+                                    Text="📷"
+                                    Command="{Binding SendImageCommand}"
+                                    BackgroundColor="Transparent"
+                                    FontSize="18"/>
+                        </Grid>
 
                     </VerticalStackLayout>
                 </Grid>                

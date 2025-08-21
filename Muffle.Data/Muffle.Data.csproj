@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" />
     <PackageReference Include="WebRTCme" Version="2.0.0" />
   </ItemGroup>
 
