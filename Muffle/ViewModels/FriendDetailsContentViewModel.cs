@@ -204,5 +204,49 @@ namespace Muffle.ViewModels
             }
         }
 
+        public async Task StartVoiceCallAsync()
+        {
+            try
+            {
+                Console.WriteLine("Starting voice call...");
+                // TODO: Implement WebRTC voice call functionality
+                // For now, this is a placeholder implementation
+                
+                // When WebRTC is enabled, this would:
+                // 1. Initialize WebRTC connection with audio only
+                // 2. Send call invitation through signaling service
+                // 3. Handle the call setup process
+                
+                await Task.Delay(100); // Simulate async operation
+                Console.WriteLine("Voice call initiated");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error starting voice call: {ex.Message}");
+            }
+        }
+
+        public async Task StartVideoCallAsync()
+        {
+            try
+            {
+                Console.WriteLine("Starting video call...");
+                // TODO: Implement WebRTC video call functionality
+                // For now, this is a placeholder implementation
+                
+                // When WebRTC is enabled, this would:
+                // 1. Initialize WebRTC connection with audio and video
+                // 2. Send call invitation through signaling service
+                // 3. Handle the call setup process
+                
+                await Task.Delay(100); // Simulate async operation
+                Console.WriteLine("Video call initiated");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error starting video call: {ex.Message}");
+            }
+        }
+
     }
 }
