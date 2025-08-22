@@ -1,5 +1,7 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
+using Muffle.Data.Models;
 
 namespace Muffle.Data.Services
 {
@@ -24,18 +26,40 @@ namespace Muffle.Data.Services
             await _webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
+        public async Task SendMessageWrapperAsync(MessageWrapper messageWrapper)
+        {
+            var json = JsonSerializer.Serialize(messageWrapper);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            var buffer = new ArraySegment<byte>(bytes);
+            await _webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
         public async Task<string> ReceiveMessageAsync()
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[4096]; // Increased buffer size for images
             var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             return Encoding.UTF8.GetString(buffer, 0, result.Count);
+        }
+
+        public async Task<MessageWrapper?> ReceiveMessageWrapperAsync()
+        {
+            try
+            {
+                var messageJson = await ReceiveMessageAsync();
+                return JsonSerializer.Deserialize<MessageWrapper>(messageJson);
+            }
+            catch
+            {
+                // If deserialization fails, treat as legacy text message
+                return null;
+            }
         }
 
         public event Action<string> OnMessageReceived;
 
         private async Task ReceiveMessagesAsync()
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[4096]; // Increased buffer size for images
             while (_webSocket.State == WebSocketState.Open)
             {
                 var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
