@@ -5,7 +5,7 @@
     <Grid ColumnDefinitions="1*,1*,10*,10*,2*,2*">
         <ImageButton Grid.Column="0" VerticalOptions="Start" CornerRadius="20" Source="{Binding Image}" MinimumHeightRequest="30" MinimumWidthRequest="30"/>
         <Label Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Start" Text="{Binding Name}"/>
-        <Button Grid.Column="4" BackgroundColor="#303030" HorizontalOptions="Center" VerticalOptions="Center" FontSize="36" TextColor="Green" Text="✆"/>
-        <Label Grid.Column="5" HorizontalOptions="Center" VerticalOptions="Center" FontSize="36" TextColor="Green" Text="🎦"/>
+        <Button Grid.Column="4" BackgroundColor="#303030" HorizontalOptions="Center" VerticalOptions="Center" FontSize="36" TextColor="Green" Text="✆" Clicked="TopBar_VoiceCallRequested"/>
+        <Button Grid.Column="5" BackgroundColor="#303030" HorizontalOptions="Center" VerticalOptions="Center" FontSize="36" TextColor="Green" Text="🎦" Clicked="TopBar_VideoCallRequested"/>
     </Grid>            
 </ContentView>

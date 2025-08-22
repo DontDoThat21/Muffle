@@ -9,6 +9,7 @@ namespace Muffle
     {
         //IWebRtc _webRtc;
         private object selectedObject = "friendcategory";
+        private FriendDetailsContentViewModel _currentFriendViewModel;
 
         public MainPage() // IWebRtc webRtc
         {
@@ -89,7 +90,10 @@ namespace Muffle
         {
             if (selectedObject is Friend friend)
             {
-                SharedTopBarUI.Content = new FriendDetailTopBarUIView(friend);                
+                var friendDetailTopBarUIView = new FriendDetailTopBarUIView(friend);
+                friendDetailTopBarUIView.VoiceCallRequested += FriendDetailTopBarUIView_VoiceCallRequested;
+                friendDetailTopBarUIView.VideoCallRequested += FriendDetailTopBarUIView_VideoCallRequested;
+                SharedTopBarUI.Content = friendDetailTopBarUIView;                
             }
             else if (selectedObject is Server server)
             {
@@ -112,12 +116,13 @@ namespace Muffle
             // Dynamically switch content based on the type of selected item
             if (selectedObject is Friend friend)
             {
-                FriendDetailsContentViewModel friendDetailsModel = new FriendDetailsContentViewModel();
-                friendDetailsModel._friendSelected = friend;
-                MainContentFrame.Content = new FriendDetailsContentView(friendDetailsModel);
+                _currentFriendViewModel = new FriendDetailsContentViewModel();
+                _currentFriendViewModel._friendSelected = friend;
+                MainContentFrame.Content = new FriendDetailsContentView(_currentFriendViewModel);
             }
             else if (selectedObject is Server server)
             {
+                _currentFriendViewModel = null; // Clear friend view model when switching to server
                 MainContentFrame.Content = new ServerDetailsContentView(server);
             }
         }
@@ -127,6 +132,22 @@ namespace Muffle
             // Update the MainContentFrame here
             MainContentFrame.BackgroundColor = Colors.Red; // Example action
             MainContentFrame.Content = new Label { Text = "Friend Added", TextColor = Colors.White };
+        }
+
+        private async void FriendDetailTopBarUIView_VoiceCallRequested(object sender, EventArgs e)
+        {
+            if (_currentFriendViewModel != null)
+            {
+                await _currentFriendViewModel.StartVoiceCallAsync();
+            }
+        }
+
+        private async void FriendDetailTopBarUIView_VideoCallRequested(object sender, EventArgs e)
+        {
+            if (_currentFriendViewModel != null)
+            {
+                await _currentFriendViewModel.StartVideoCallAsync();
+            }
         }
 
     }
