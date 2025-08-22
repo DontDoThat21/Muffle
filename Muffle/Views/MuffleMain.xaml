@@ -18,8 +18,17 @@
                 </StackLayout>
             </Frame>            
 
-            <Grid Grid.Column="0" Grid.Row="1" BackgroundColor="#252525" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="1*,1*,1*,1*,1*,1*">
-                <CollectionView ItemsSource="{Binding Servers}">
+            <Grid Grid.Column="0" Grid.Row="1" BackgroundColor="#252525" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" RowSpacing="15" RowDefinitions="Auto,*">
+                <!-- Create Server Button -->
+                <Frame Grid.Row="0" BackgroundColor="#303030" BorderColor="#303030" Padding="5" Margin="5,5,5,0">
+                    <Grid ColumnDefinitions="8*,Auto" RowDefinitions="*" BackgroundColor="#303030" Padding="0,2,5,2">
+                        <Label HorizontalOptions="Center" VerticalOptions="Center" Text="Servers" Grid.Column="0" TextColor="GhostWhite"></Label>
+                        <Button Text="+" Grid.Column="1" BackgroundColor="Black" TextColor="White" FontSize="24" Clicked="CreateServerButton_OnClicked"></Button>
+                    </Grid>
+                </Frame>
+                
+                <!-- Server List -->
+                <CollectionView ItemsSource="{Binding Servers}" Grid.Row="1">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Grid.Column="0" BackgroundColor="#252525" BorderColor="#252525">

@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Muffle.Data.Models;
 using Muffle.Data.Services;
 
@@ -7,7 +8,7 @@ namespace Muffle.ViewModels
     public class MainPageViewModel : BindableObject
     {
         //private readonly MainPageModel MainPage;
-        public List<Server> Servers { get; set; }
+        public ObservableCollection<Server> Servers { get; set; }
         public List<Friend> Friends { get; set; }
 
         private Server _selectedServer;
@@ -116,13 +117,23 @@ namespace Muffle.ViewModels
             User = new User();
             User = UsersService.GetUser();
             SelectServerCommand = new Command<Server>(ExecuteSelectServerCommand);
-            Servers = UsersService.GetUsersServers();
+            Servers = new ObservableCollection<Server>(UsersService.GetUsersServers() ?? new List<Server>());
             Friends = UsersService.GetUsersFriends();
         }
 
         private void ExecuteSelectServerCommand(Server server)
         {
             SelectedServer = server;
+        }
+
+        public void RefreshServers()
+        {
+            var updatedServers = UsersService.GetUsersServers() ?? new List<Server>();
+            Servers.Clear();
+            foreach (var server in updatedServers)
+            {
+                Servers.Add(server);
+            }
         }
 
     }
