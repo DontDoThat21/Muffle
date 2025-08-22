@@ -217,7 +217,6 @@ namespace Muffle.ViewModels
                 // 2. Send call invitation through signaling service
                 // 3. Handle the call setup process
                 
-                await Task.Delay(100); // Simulate async operation
                 Console.WriteLine("Voice call initiated");
             }
             catch (Exception ex)
