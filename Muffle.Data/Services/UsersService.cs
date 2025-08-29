@@ -39,7 +39,7 @@ namespace Muffle.Data.Services
             return friends;
         }
 
-        public static Server? CreateServer(string name, string description, string ipAddress, double port, int userId = 1)
+        public static Server? CreateServer(string name, string description, string ipAddress, double port, int userId)
         {
             using var connection = SQLiteDbService.CreateConnection();
             connection.Open();
