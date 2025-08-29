@@ -116,7 +116,10 @@ namespace Muffle.Data.Services
             {
                 connection.Execute(seedServerOwnersQuery);
             }
-            catch (Exception){}
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception while seeding ServerOwners: {ex}");
+            }
 
             // Insert default friends
             var friends = new ObservableCollection<Friend>()
