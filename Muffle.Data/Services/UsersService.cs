@@ -39,5 +39,29 @@ namespace Muffle.Data.Services
             return friends;
         }
 
+        public static Server? CreateServer(string name, string description, string ipAddress, double port, int userId)
+        {
+            using var connection = SQLiteDbService.CreateConnection();
+            connection.Open();
+
+            // Insert new server
+            var insertServerSql = @"
+                INSERT INTO Servers (Name, Description, IpAddress, Port)
+                VALUES (@Name, @Description, @IpAddress, @Port);
+                SELECT last_insert_rowid();";
+
+            var serverId = connection.QuerySingle<long>(insertServerSql, new { Name = name, Description = description, IpAddress = ipAddress, Port = port });
+
+            // Insert server ownership
+            var insertServerOwnerSql = @"
+                INSERT INTO ServerOwners (ServerId, UserId)
+                VALUES (@ServerId, @UserId);";
+
+            connection.Execute(insertServerOwnerSql, new { ServerId = serverId, UserId = userId });
+
+            // Return the created server
+            return new Server(serverId, name, description, ipAddress, port);
+        }
+
     }
 }

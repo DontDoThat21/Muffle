@@ -1,4 +1,5 @@
 ﻿using Muffle.Data.Models;
+using Muffle.Data.Services;
 using Muffle.ViewModels;
 using Muffle.Views;
 using WebRTCme;
@@ -147,6 +148,53 @@ namespace Muffle
             if (_currentFriendViewModel != null)
             {
                 await _currentFriendViewModel.StartVideoCallAsync();
+            }
+        }
+
+        private async void CreateServerButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show a simple server creation dialog
+            string serverName = await DisplayPromptAsync("Create Server", "Enter server name:");
+            if (!string.IsNullOrWhiteSpace(serverName))
+            {
+                string description = await DisplayPromptAsync("Create Server", "Enter server description (optional):", placeholder: "Optional description");
+                
+                // Create the server with default values
+                var createdServer = UsersService.CreateServer(
+                    name: serverName,
+                    description: description ?? "",
+                    ipAddress: "127.0.0.1", // Default local address
+                // Retrieve the current user's ID
+                int userId = 1;
+                var viewModel = BindingContext as MainPageViewModel;
+                if (viewModel != null && viewModel.CurrentUser != null)
+                {
+                    userId = viewModel.CurrentUser.Id;
+                }
+
+                var createdServer = UsersService.CreateServer(
+                    name: serverName,
+                    description: description ?? "",
+                    ipAddress: "127.0.0.1", // Default local address
+                    port: 8080, // Default port
+                    userId: userId
+                );
+
+                if (createdServer != null)
+                {
+                    // Refresh the server list in the view model
+                    var viewModel = BindingContext as MainPageViewModel;
+                    if (viewModel != null)
+                    {
+                        viewModel.RefreshServers();
+                    }
+
+                    await DisplayAlert("Success", $"Server '{serverName}' created successfully!", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Failed to create server. Please try again.", "OK");
+                }
             }
         }
 

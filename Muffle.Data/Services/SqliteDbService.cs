@@ -25,6 +25,17 @@ namespace Muffle.Data.Services
             using var connection = CreateConnection();
             connection.Open();
 
+            // Create Users table
+            var createUsersTableQuery = @"
+            CREATE TABLE IF NOT EXISTS Users (
+                UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+                Name TEXT NOT NULL,
+                Description TEXT,
+                CreationDate DATETIME NOT NULL
+            );";
+
+            connection.Execute(createUsersTableQuery);
+
             // Create Servers table
             var createServersTableQuery = @"
             CREATE TABLE IF NOT EXISTS Servers (
@@ -36,6 +47,17 @@ namespace Muffle.Data.Services
             );";
 
             connection.Execute(createServersTableQuery);
+
+            // Create ServerOwners table
+            var createServerOwnersTableQuery = @"
+            CREATE TABLE IF NOT EXISTS ServerOwners (
+                ServerId INTEGER,
+                UserId INTEGER,
+                FOREIGN KEY (ServerId) REFERENCES Servers(Id),
+                PRIMARY KEY (ServerId, UserId)
+            );";
+
+            connection.Execute(createServerOwnersTableQuery);
 
             // Create Friends table
             var createFriendsTableQuery = @"
@@ -53,6 +75,24 @@ namespace Muffle.Data.Services
 
             // need to manually handle auto increments for composite primary keys
             connection.Execute(createFriendsTableQuery);
+
+            // Seed Users data
+            var seedUsersQuery = @"
+                INSERT INTO Users (UserId, Name, Description, CreationDate)
+                VALUES 
+                (1, 'Alice', 'First user', datetime('now')),
+                (2, 'Bob', 'Second user', datetime('now')),
+                (3, 'Charlie', 'Third user', datetime('now'));";
+
+            try
+            {
+                connection.Execute(seedUsersQuery);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error seeding Users data: {ex.Message}\n{ex.StackTrace}");
+            }
+
                 // Seed data
             var seedDataQueryServers = @"
                 INSERT INTO Servers (Id, Name, Description, IpAddress, Port)
@@ -66,6 +106,23 @@ namespace Muffle.Data.Services
                 connection.Execute(seedDataQueryServers);
             }
             catch (Exception){}
+
+            // Seed ServerOwners data
+            var seedServerOwnersQuery = @"
+                INSERT INTO ServerOwners (ServerId, UserId)
+                VALUES 
+                (0, 1),
+                (1, 2),
+                (2, 3);";
+
+            try
+            {
+                connection.Execute(seedServerOwnersQuery);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception while seeding ServerOwners: {ex}");
+            }
 
             // Insert default friends
             var friends = new ObservableCollection<Friend>()
@@ -103,8 +160,28 @@ namespace Muffle.Data.Services
                 connection.Open();
                 try
                 {
+                    var dropServerOwnersTable = "DROP TABLE IF EXISTS ServerOwners";
+                    connection.Execute(dropServerOwnersTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
                     var dropServersTable = "DROP TABLE IF EXISTS Servers";
                     connection.Execute(dropServersTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropUsersTable = "DROP TABLE IF EXISTS Users";
+                    connection.Execute(dropUsersTable);
                 }
                 catch (Exception)
                 {

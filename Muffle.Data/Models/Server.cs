@@ -8,7 +8,7 @@
         }
         public Server(double id, string name, string? description, string ipAddress, double port)
         {
-            Id = Id;
+            Id = id;
             Name = name;
             Description = description;
             IpAddress = ipAddress;
