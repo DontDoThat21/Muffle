@@ -164,7 +164,20 @@ namespace Muffle
                     name: serverName,
                     description: description ?? "",
                     ipAddress: "127.0.0.1", // Default local address
-                    port: 8080 // Default port
+                // Retrieve the current user's ID
+                int userId = 1;
+                var viewModel = BindingContext as MainPageViewModel;
+                if (viewModel != null && viewModel.CurrentUser != null)
+                {
+                    userId = viewModel.CurrentUser.Id;
+                }
+
+                var createdServer = UsersService.CreateServer(
+                    name: serverName,
+                    description: description ?? "",
+                    ipAddress: "127.0.0.1", // Default local address
+                    port: 8080, // Default port
+                    userId: userId
                 );
 
                 if (createdServer != null)
