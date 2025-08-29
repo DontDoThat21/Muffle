@@ -88,7 +88,10 @@ namespace Muffle.Data.Services
             {
                 connection.Execute(seedUsersQuery);
             }
-            catch (Exception){}
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error seeding Users data: {ex.Message}\n{ex.StackTrace}");
+            }
 
                 // Seed data
             var seedDataQueryServers = @"
