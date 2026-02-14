@@ -158,18 +158,13 @@ namespace Muffle
             if (!string.IsNullOrWhiteSpace(serverName))
             {
                 string description = await DisplayPromptAsync("Create Server", "Enter server description (optional):", placeholder: "Optional description");
-                
-                // Create the server with default values
-                var createdServer = UsersService.CreateServer(
-                    name: serverName,
-                    description: description ?? "",
-                    ipAddress: "127.0.0.1", // Default local address
+
                 // Retrieve the current user's ID
                 int userId = 1;
                 var viewModel = BindingContext as MainPageViewModel;
-                if (viewModel != null && viewModel.CurrentUser != null)
+                if (viewModel?.User != null)
                 {
-                    userId = viewModel.CurrentUser.Id;
+                    userId = viewModel.User.Id;
                 }
 
                 var createdServer = UsersService.CreateServer(
@@ -182,13 +177,7 @@ namespace Muffle
 
                 if (createdServer != null)
                 {
-                    // Refresh the server list in the view model
-                    var viewModel = BindingContext as MainPageViewModel;
-                    if (viewModel != null)
-                    {
-                        viewModel.RefreshServers();
-                    }
-
+                    viewModel?.RefreshServers();
                     await DisplayAlert("Success", $"Server '{serverName}' created successfully!", "OK");
                 }
                 else
