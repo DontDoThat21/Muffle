@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             xmlns:models="clr-namespace:Muffle.Data.Models;assembly=Muffle.Data"
+             x:Class="Muffle.Views.BlockedUsersView"
+             x:DataType="viewmodels:BlockedUsersViewModel"
+             BackgroundColor="#303030">
+    
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="15">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Blocked Users" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="White"/>
+            <Label Text="Manage your blocked users list" 
+                   FontSize="14" 
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Status Message -->
+        <Label Grid.Row="1"
+               Text="{Binding StatusMessage}" 
+               IsVisible="{Binding HasStatusMessage}"
+               HorizontalOptions="Center"
+               TextColor="LightGray"
+               FontSize="14"/>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Spacing="10">
+                
+                <!-- Loading Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsLoading}" 
+                                 IsRunning="{Binding IsLoading}"
+                                 Color="White"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Margin="0,40,0,0"/>
+
+                <!-- No Blocked Users Message -->
+                <Label Text="You haven't blocked anyone yet." 
+                       IsVisible="{Binding HasBlockedUsers, Converter={StaticResource InverseBoolConverter}}"
+                       HorizontalOptions="Center"
+                       TextColor="Gray"
+                       FontSize="14"
+                       Margin="0,40,0,0"/>
+
+                <!-- Blocked Users List -->
+                <CollectionView ItemsSource="{Binding BlockedUsers}"
+                              IsVisible="{Binding HasBlockedUsers}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:BlockedUser">
+                            <Frame Padding="15" 
+                                   Margin="0,5,0,5" 
+                                   BorderColor="#424242"
+                                   BackgroundColor="#252525"
+                                   CornerRadius="8"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+                                    
+                                    <!-- Avatar Placeholder -->
+                                    <Frame Grid.Column="0" 
+                                           WidthRequest="50" 
+                                           HeightRequest="50" 
+                                           CornerRadius="25"
+                                           Padding="0"
+                                           HasShadow="False"
+                                           BackgroundColor="#F04747">
+                                        <Label Text="{Binding BlockedUserName, StringFormat='{0:C1}'}" 
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               TextColor="White"/>
+                                    </Frame>
+
+                                    <!-- User Info -->
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                        <Label Text="{Binding BlockedUserFullUsername}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="White"/>
+                                        <Label Text="{Binding BlockedUserEmail}" 
+                                               FontSize="12" 
+                                               TextColor="LightGray"/>
+                                        <Label Text="{Binding BlockedAt, StringFormat='Blocked: {0:g}'}" 
+                                               FontSize="10" 
+                                               TextColor="Gray"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Unblock Button -->
+                                    <Button Grid.Column="2" 
+                                            Text="Unblock" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:BlockedUsersViewModel}}, Path=UnblockUserCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#43B581"
+                                            TextColor="White"
+                                            CornerRadius="4"
+                                            Padding="20,8"
+                                            VerticalOptions="Center"/>
+                                    
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Refresh Button -->
+                <Button Text="Refresh" 
+                        Command="{Binding RefreshCommand}"
+                        BackgroundColor="#7289DA"
+                        TextColor="White"
+                        CornerRadius="4"
+                        Padding="0,12"
+                        Margin="0,20,0,0"/>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </Grid>
+</ContentView>

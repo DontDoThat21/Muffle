@@ -115,6 +115,20 @@ namespace Muffle.Data.Services
 
             connection.Execute(createFriendRequestsTableQuery);
 
+            // Create BlockedUsers table
+            var createBlockedUsersTableQuery = @"
+            CREATE TABLE IF NOT EXISTS BlockedUsers (
+                BlockId INTEGER PRIMARY KEY AUTOINCREMENT,
+                BlockerId INTEGER NOT NULL,
+                BlockedUserId INTEGER NOT NULL,
+                BlockedAt DATETIME NOT NULL,
+                FOREIGN KEY (BlockerId) REFERENCES Users(UserId),
+                FOREIGN KEY (BlockedUserId) REFERENCES Users(UserId),
+                UNIQUE (BlockerId, BlockedUserId)
+            );";
+
+            connection.Execute(createBlockedUsersTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator)
@@ -251,6 +265,16 @@ namespace Muffle.Data.Services
                 {
                     var dropFriendRequestsTable = "DROP TABLE IF EXISTS FriendRequests";
                     connection.Execute(dropFriendRequestsTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropBlockedUsersTable = "DROP TABLE IF EXISTS BlockedUsers";
+                    connection.Execute(dropBlockedUsersTable);
                 }
                 catch (Exception)
                 {

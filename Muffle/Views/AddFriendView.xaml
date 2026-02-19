@@ -120,16 +120,23 @@
                                                IsVisible="{Binding Description, Converter={StaticResource StringNotEmptyConverter}}"/>
                                     </VerticalStackLayout>
 
-                                    <!-- Add Button -->
-                                    <Button Grid.Column="2" 
-                                            Text="Add Friend" 
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddFriendViewModel}}, Path=SendFriendRequestCommand}"
-                                            CommandParameter="{Binding .}"
-                                            BackgroundColor="#43B581"
-                                            TextColor="White"
-                                            CornerRadius="4"
-                                            Padding="15,8"
-                                            VerticalOptions="Center"/>
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Grid.Column="2" Spacing="5" VerticalOptions="Center">
+                                        <Button Text="Add" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddFriendViewModel}}, Path=SendFriendRequestCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#43B581"
+                                                TextColor="White"
+                                                CornerRadius="4"
+                                                Padding="15,8"/>
+                                        <Button Text="Block" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddFriendViewModel}}, Path=BlockUserCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#F04747"
+                                                TextColor="White"
+                                                CornerRadius="4"
+                                                Padding="15,8"/>
+                                    </HorizontalStackLayout>
                                     
                                 </Grid>
                             </Frame>

@@ -107,6 +107,7 @@ namespace Muffle
                 var friendsTopBarUIView = new FriendsTopBarUIView();
                 friendsTopBarUIView.FriendAddButtonClicked += FriendsTopBarUIView_FriendAddButtonClicked;
                 friendsTopBarUIView.PendingButtonClicked += FriendsTopBarUIView_PendingButtonClicked;
+                friendsTopBarUIView.BlockedButtonClicked += FriendsTopBarUIView_BlockedButtonClicked;
                 SharedTopBarUI.Content = friendsTopBarUIView;
 
                 //SharedLeftPanelUI.Content = new FriendDetailLeftPanelUIView();
@@ -149,6 +150,17 @@ namespace Muffle
             // Update the main content frame
             MainContentFrame.BackgroundColor = Colors.Transparent;
             MainContentFrame.Content = friendRequestsView;
+        }
+
+        private void FriendsTopBarUIView_BlockedButtonClicked(object sender, EventArgs e)
+        {
+            // Show the Blocked Users view
+            var blockedUsersViewModel = new BlockedUsersViewModel();
+            var blockedUsersView = new BlockedUsersView(blockedUsersViewModel);
+            
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = blockedUsersView;
         }
 
         private async void FriendDetailTopBarUIView_VoiceCallRequested(object sender, EventArgs e)

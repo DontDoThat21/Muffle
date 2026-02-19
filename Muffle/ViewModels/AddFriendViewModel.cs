@@ -77,14 +77,17 @@ namespace Muffle.ViewModels
 
         public ICommand SearchCommand { get; }
         public ICommand SendFriendRequestCommand { get; }
+        public ICommand BlockUserCommand { get; }
         public ICommand ClearSearchCommand { get; }
 
         public event EventHandler? FriendRequestSent;
+        public event EventHandler? UserBlocked;
 
         public AddFriendViewModel()
         {
             SearchCommand = new Command(async () => await SearchUsersAsync());
             SendFriendRequestCommand = new Command<User>(async (user) => await SendFriendRequestAsync(user));
+            BlockUserCommand = new Command<User>(async (user) => await BlockUserAsync(user));
             ClearSearchCommand = new Command(ClearSearch);
         }
 
@@ -177,6 +180,51 @@ namespace Muffle.ViewModels
                         else
                         {
                             StatusMessage = $"Failed to send friend request to {user.Name}. A request may already exist.";
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        StatusMessage = $"Error: {ex.Message}";
+                    });
+                }
+            });
+        }
+
+        /// <summary>
+        /// Block a user
+        /// </summary>
+        private async Task BlockUserAsync(User? user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var currentUserId = CurrentUserService.GetCurrentUserId();
+                    var success = BlockService.BlockUser(currentUserId, user.UserId);
+
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        if (success)
+                        {
+                            StatusMessage = $"Blocked {user.FullUsername}";
+                            
+                            // Remove the user from search results
+                            SearchResults.Remove(user);
+                            
+                            // Notify listeners
+                            UserBlocked?.Invoke(this, EventArgs.Empty);
+                        }
+                        else
+                        {
+                            StatusMessage = $"Failed to block {user.FullUsername}. User may already be blocked.";
                         }
                     });
                 }
