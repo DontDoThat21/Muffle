@@ -290,9 +290,35 @@ namespace Muffle.Data.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error cleaning up expired tokens: {ex.Message}");
+                Console.WriteLine($"Error cleaning up expired tokens: {ex.message}");
                 return 0;
             }
+        }
+
+        /// <summary>
+        /// Retrieves all valid stored accounts for a list of tokens
+        /// </summary>
+        /// <param name="accounts">List of stored accounts with tokens</param>
+        /// <returns>List of stored accounts with valid tokens only</returns>
+        public static List<StoredAccount> ValidateStoredAccounts(List<StoredAccount> accounts)
+        {
+            var validAccounts = new List<StoredAccount>();
+
+            foreach (var account in accounts)
+            {
+                // Validate token and get fresh user data
+                var user = GetUserByToken(account.Token);
+                
+                if (user != null)
+                {
+                    // Token is still valid - update account info with latest data
+                    account.Username = user.Name;
+                    account.Email = user.Email;
+                    validAccounts.Add(account);
+                }
+            }
+
+            return validAccounts;
         }
     }
 }

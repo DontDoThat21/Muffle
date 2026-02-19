@@ -101,8 +101,8 @@ namespace Muffle.ViewModels
 
                     if (token != null)
                     {
-                        // Save token to secure storage
-                        await TokenStorageService.SaveTokenAsync(token);
+                        // Save account to secure storage (multiple account support)
+                        await TokenStorageService.SaveAccountAsync(user.UserId, user.Name, user.Email, token);
                         
                         // Store token in current session
                         CurrentUserService.CurrentAuthToken = token;

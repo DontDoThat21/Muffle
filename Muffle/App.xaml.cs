@@ -19,35 +19,60 @@ namespace Muffle
         {
             try
             {
-                // Check if we have a stored authentication token
-                var storedToken = await TokenStorageService.GetTokenAsync();
-
-                if (!string.IsNullOrEmpty(storedToken))
+                // Check if we have stored accounts
+                var storedAccounts = await TokenStorageService.GetAllStoredAccountsAsync();
+                
+                // Clean up and validate stored accounts
+                if (storedAccounts.Count > 0)
                 {
-                    // Validate the token and get the user
-                    var user = AuthenticationService.GetUserByToken(storedToken);
-
-                    if (user != null)
+                    var validAccounts = AuthenticationService.ValidateStoredAccounts(storedAccounts);
+                    
+                    // If we have valid accounts, try to restore the last used one
+                    if (validAccounts.Count > 0)
                     {
-                        // Token is valid - restore session
-                        CurrentUserService.CurrentUser = user;
-                        CurrentUserService.CurrentAuthToken = storedToken;
-
-                        // Navigate to main app
-                        MainThread.BeginInvokeOnMainThread(() =>
+                        var lastUsedToken = await TokenStorageService.GetLastUsedTokenAsync();
+                        
+                        // Try to use the last used token first
+                        if (!string.IsNullOrEmpty(lastUsedToken))
                         {
-                            MainPage = new AppShell();
-                        });
-                        return;
-                    }
-                    else
-                    {
-                        // Token is invalid or expired - remove it
-                        TokenStorageService.RemoveToken();
+                            var user = AuthenticationService.GetUserByToken(lastUsedToken);
+                            
+                            if (user != null)
+                            {
+                                // Last used token is valid - restore session
+                                CurrentUserService.CurrentUser = user;
+                                CurrentUserService.CurrentAuthToken = lastUsedToken;
+
+                                // Navigate to main app
+                                MainThread.BeginInvokeOnMainThread(() =>
+                                {
+                                    MainPage = new AppShell();
+                                });
+                                return;
+                            }
+                        }
+                        
+                        // If no last used token or it's invalid, show account selector
+                        // For now, just use the first valid account
+                        var firstAccount = validAccounts.First();
+                        var firstUser = AuthenticationService.GetUserByToken(firstAccount.Token);
+                        
+                        if (firstUser != null)
+                        {
+                            CurrentUserService.CurrentUser = firstUser;
+                            CurrentUserService.CurrentAuthToken = firstAccount.Token;
+                            await TokenStorageService.SetLastUsedTokenAsync(firstAccount.Token);
+
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                MainPage = new AppShell();
+                            });
+                            return;
+                        }
                     }
                 }
 
-                // No valid token found - show authentication page
+                // No valid accounts found - show authentication page
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     var authPage = new AuthenticationPage();

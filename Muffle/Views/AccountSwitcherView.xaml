@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             xmlns:models="clr-namespace:Muffle.Data.Models;assembly=Muffle.Data"
+             x:Class="Muffle.Views.AccountSwitcherView"
+             x:DataType="viewmodels:AccountSwitcherViewModel">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Switch Account" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"/>
+            <Label Text="Select an account to switch to, or add a new account" 
+                   FontSize="14" 
+                   HorizontalOptions="Center"
+                   TextColor="Gray"/>
+        </VerticalStackLayout>
+
+        <!-- Accounts List -->
+        <ScrollView Grid.Row="1" Margin="0,20,0,0">
+            <VerticalStackLayout Spacing="10">
+                
+                <!-- Loading Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsLoading}" 
+                                 IsRunning="{Binding IsLoading}"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Margin="0,20,0,20"/>
+
+                <!-- No Accounts Message -->
+                <Label Text="No accounts stored. Add an account to get started." 
+                       IsVisible="{Binding HasAccounts, Converter={StaticResource InverseBoolConverter}}"
+                       HorizontalOptions="Center"
+                       TextColor="Gray"
+                       Margin="0,40,0,0"/>
+
+                <!-- Accounts Collection -->
+                <CollectionView ItemsSource="{Binding Accounts}"
+                              IsVisible="{Binding HasAccounts}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:StoredAccount">
+                            <Frame Padding="15" 
+                                   Margin="0,5,0,5" 
+                                   BorderColor="LightGray"
+                                   CornerRadius="8"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+                                    
+                                    <!-- Avatar Placeholder -->
+                                    <Frame Grid.Column="0" 
+                                           WidthRequest="50" 
+                                           HeightRequest="50" 
+                                           CornerRadius="25"
+                                           Padding="0"
+                                           HasShadow="False"
+                                           BackgroundColor="LightBlue">
+                                        <Label Text="{Binding Username, StringFormat='{0:C1}'}" 
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               TextColor="White"/>
+                                    </Frame>
+
+                                    <!-- Account Info -->
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                        <Label Text="{Binding Username}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Email}" 
+                                               FontSize="12" 
+                                               TextColor="Gray"/>
+                                        <Label Text="{Binding LastUsed, StringFormat='Last used: {0:g}'}" 
+                                               FontSize="10" 
+                                               TextColor="DarkGray"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Grid.Column="2" Spacing="5" VerticalOptions="Center">
+                                        <Button Text="Switch" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AccountSwitcherViewModel}}, Path=SwitchAccountCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#7289DA"
+                                                TextColor="White"
+                                                CornerRadius="4"
+                                                Padding="15,8"/>
+                                        <Button Text="✕" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AccountSwitcherViewModel}}, Path=RemoveAccountCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="Red"
+                                                TextColor="White"
+                                                CornerRadius="4"
+                                                WidthRequest="40"
+                                                Padding="0"/>
+                                    </HorizontalStackLayout>
+                                    
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Bottom Actions -->
+        <VerticalStackLayout Grid.Row="2" Spacing="10" Margin="0,20,0,0">
+            <Button Text="Add Another Account" 
+                    Command="{Binding AddAccountCommand}"
+                    BackgroundColor="#43B581"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="0,12"/>
+            <Button Text="Refresh" 
+                    Command="{Binding RefreshCommand}"
+                    BackgroundColor="Gray"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="0,12"/>
+        </VerticalStackLayout>
+        
+    </Grid>
+</ContentView>

@@ -114,6 +114,7 @@ namespace Muffle.ViewModels
 
         public ICommand SelectServerCommand { get; }
         public ICommand LogoutCommand { get; }
+        public ICommand SwitchAccountCommand { get; }
 
         public MainPageViewModel()
         {
@@ -121,6 +122,7 @@ namespace Muffle.ViewModels
             User = UsersService.GetUser();
             SelectServerCommand = new Command<Server>(ExecuteSelectServerCommand);
             LogoutCommand = new Command(async () => await ExecuteLogoutCommandAsync());
+            SwitchAccountCommand = new Command(async () => await ExecuteSwitchAccountCommandAsync());
             Servers = new ObservableCollection<Server>(UsersService.GetUsersServers() ?? new List<Server>());
             Friends = UsersService.GetUsersFriends();
         }
@@ -165,6 +167,70 @@ namespace Muffle.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"Error during logout: {ex.Message}");
+            }
+        }
+
+        private async Task ExecuteSwitchAccountCommandAsync()
+        {
+            try
+            {
+                var accounts = await TokenStorageService.GetAllStoredAccountsAsync();
+                
+                // If there are multiple accounts or we want to add a new one, show the account switcher
+                if (accounts.Count > 0)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        var accountSwitcherViewModel = new AccountSwitcherViewModel();
+                        
+                        // Handle account switched event
+                        accountSwitcherViewModel.AccountSwitched += (sender, user) =>
+                        {
+                            // Reload main app with new user
+                            Application.Current!.MainPage = new AppShell();
+                        };
+                        
+                        // Handle add account event
+                        accountSwitcherViewModel.AddAccountRequested += (sender, args) =>
+                        {
+                            var authPage = new AuthenticationPage();
+                            authPage.AuthenticationSucceeded += (s, user) =>
+                            {
+                                CurrentUserService.CurrentUser = user;
+                                Application.Current!.MainPage = new AppShell();
+                            };
+                            Application.Current!.MainPage = authPage;
+                        };
+                        
+                        // Create and show account switcher page
+                        var accountSwitcherView = new AccountSwitcherView(accountSwitcherViewModel);
+                        var accountSwitcherPage = new ContentPage
+                        {
+                            Content = accountSwitcherView,
+                            Title = "Switch Account"
+                        };
+                        
+                        Application.Current!.MainPage = accountSwitcherPage;
+                    });
+                }
+                else
+                {
+                    // No stored accounts, just show login page
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        var authPage = new AuthenticationPage();
+                        authPage.AuthenticationSucceeded += (sender, user) =>
+                        {
+                            CurrentUserService.CurrentUser = user;
+                            Application.Current!.MainPage = new AppShell();
+                        };
+                        Application.Current!.MainPage = authPage;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during account switch: {ex.Message}");
             }
         }
 
