@@ -33,10 +33,18 @@ namespace Muffle.Data.Services
                 Email TEXT UNIQUE NOT NULL,
                 PasswordHash TEXT NOT NULL,
                 Description TEXT,
-                CreationDate DATETIME NOT NULL
+                CreationDate DATETIME NOT NULL,
+                Discriminator INTEGER NOT NULL DEFAULT 0
             );";
 
             connection.Execute(createUsersTableQuery);
+
+            // Create index for username + discriminator lookups
+            var createUsernameDiscriminatorIndexQuery = @"
+            CREATE INDEX IF NOT EXISTS idx_users_name_discriminator 
+            ON Users(Name, Discriminator);";
+
+            connection.Execute(createUsernameDiscriminatorIndexQuery);
 
             // Create Servers table
             var createServersTableQuery = @"
@@ -109,11 +117,11 @@ namespace Muffle.Data.Services
 
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
-                INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate)
+                INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator)
                 VALUES 
-                (1, 'Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', datetime('now')),
-                (2, 'Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', datetime('now')),
-                (3, 'Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', datetime('now'));";
+                (1, 'Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', datetime('now'), 1001),
+                (2, 'Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', datetime('now'), 1002),
+                (3, 'Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', datetime('now'), 1003);";
 
             try
             {

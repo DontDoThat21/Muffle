@@ -11,5 +11,11 @@ namespace Muffle.Data.Models
         public string PasswordHash { get; set; } = string.Empty;
         public string? Description { get; set; }
         public DateTime CreationDate { get; set; }
+        public int Discriminator { get; set; }
+
+        /// <summary>
+        /// Gets the full username with discriminator (e.g., "John#1234")
+        /// </summary>
+        public string FullUsername => $"{Name}#{Discriminator:D4}";
     }
 }

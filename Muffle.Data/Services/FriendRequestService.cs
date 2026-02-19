@@ -9,9 +9,9 @@ namespace Muffle.Data.Services
     public static class FriendRequestService
     {
         /// <summary>
-        /// Search for users by email or username
+        /// Search for users by email, username, or full username (name#discriminator)
         /// </summary>
-        /// <param name="searchTerm">Email or username to search for</param>
+        /// <param name="searchTerm">Email, username, or full username to search for</param>
         /// <param name="currentUserId">ID of the current user (to exclude from results)</param>
         /// <returns>List of matching users</returns>
         public static List<User> SearchUsers(string searchTerm, int currentUserId)
@@ -23,6 +23,17 @@ namespace Muffle.Data.Services
 
             try
             {
+                // Check if search term is in full username format (name#discriminator)
+                if (searchTerm.Contains('#'))
+                {
+                    var user = AuthenticationService.GetUserByFullUsername(searchTerm);
+                    if (user != null && user.UserId != currentUserId)
+                    {
+                        return new List<User> { user };
+                    }
+                    return new List<User>();
+                }
+
                 using var connection = SQLiteDbService.CreateConnection();
                 connection.Open();
 
@@ -130,8 +141,10 @@ namespace Muffle.Data.Services
                         fr.RespondedAt,
                         sender.Name as SenderName,
                         sender.Email as SenderEmail,
+                        sender.Discriminator as SenderDiscriminator,
                         receiver.Name as ReceiverName,
-                        receiver.Email as ReceiverEmail
+                        receiver.Email as ReceiverEmail,
+                        receiver.Discriminator as ReceiverDiscriminator
                     FROM FriendRequests fr
                     INNER JOIN Users sender ON fr.SenderId = sender.UserId
                     INNER JOIN Users receiver ON fr.ReceiverId = receiver.UserId
@@ -169,8 +182,10 @@ namespace Muffle.Data.Services
                         fr.RespondedAt,
                         sender.Name as SenderName,
                         sender.Email as SenderEmail,
+                        sender.Discriminator as SenderDiscriminator,
                         receiver.Name as ReceiverName,
-                        receiver.Email as ReceiverEmail
+                        receiver.Email as ReceiverEmail,
+                        receiver.Discriminator as ReceiverDiscriminator
                     FROM FriendRequests fr
                     INNER JOIN Users sender ON fr.SenderId = sender.UserId
                     INNER JOIN Users receiver ON fr.ReceiverId = receiver.UserId

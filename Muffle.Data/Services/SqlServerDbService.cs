@@ -34,10 +34,18 @@ namespace Muffle.Data.Services
             Email NVARCHAR(255) UNIQUE NOT NULL,
             PasswordHash NVARCHAR(255) NOT NULL,
             Description NVARCHAR(MAX),
-            CreationDate DATETIME NOT NULL
+            CreationDate DATETIME NOT NULL,
+            Discriminator INT NOT NULL DEFAULT 0
         );";
 
             connection.Execute(createUsersTableQuery);
+
+            // Create index for username + discriminator lookups
+            var createUsernameDiscriminatorIndexQuery = @"
+        IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name='idx_users_name_discriminator' AND object_id = OBJECT_ID('Users'))
+        CREATE INDEX idx_users_name_discriminator ON Users(Name, Discriminator);";
+
+            connection.Execute(createUsernameDiscriminatorIndexQuery);
 
             // Create Servers table
             var createServersTableQuery = @"
@@ -99,11 +107,11 @@ namespace Muffle.Data.Services
 
             // Seed data for Users (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
-            INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate)
+            INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate, Discriminator)
             VALUES 
-            ('Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', GETDATE()),
-            ('Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', GETDATE()),
-            ('Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', GETDATE());";
+            ('Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', GETDATE(), 1001),
+            ('Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', GETDATE(), 1002),
+            ('Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', GETDATE(), 1003);";
 
             try
             {

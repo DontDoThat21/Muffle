@@ -7,6 +7,37 @@ namespace Muffle.Data.Services
     public class AuthenticationService
     {
         /// <summary>
+        /// Generates the next available discriminator for a username
+        /// </summary>
+        /// <param name="username">The username to generate a discriminator for</param>
+        /// <returns>The next available discriminator (1-9999), or -1 if all are taken</returns>
+        private static int GenerateDiscriminator(string username)
+        {
+            using var connection = SQLiteDbService.CreateConnection();
+            connection.Open();
+
+            // Get all existing discriminators for this username
+            var existingDiscriminatorsQuery = @"
+                SELECT Discriminator FROM Users 
+                WHERE Name = @Name 
+                ORDER BY Discriminator ASC;";
+
+            var existingDiscriminators = connection.Query<int>(existingDiscriminatorsQuery, new { Name = username }).ToList();
+
+            // Find the first available discriminator (1-9999)
+            for (int discriminator = 1; discriminator <= 9999; discriminator++)
+            {
+                if (!existingDiscriminators.Contains(discriminator))
+                {
+                    return discriminator;
+                }
+            }
+
+            // All discriminators are taken
+            return -1;
+        }
+
+        /// <summary>
         /// Registers a new user with email, username, and password
         /// </summary>
         /// <returns>The created User object or null if registration failed</returns>
@@ -29,13 +60,22 @@ namespace Muffle.Data.Services
                 return null;
             }
 
+            // Generate a discriminator for the username
+            var discriminator = GenerateDiscriminator(username);
+
+            if (discriminator == -1)
+            {
+                Console.WriteLine($"All discriminators for username '{username}' are taken");
+                return null;
+            }
+
             // Hash the password using BCrypt
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
             // Insert new user
             var insertUserQuery = @"
-                INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate)
-                VALUES (@Name, @Email, @PasswordHash, @Description, @CreationDate);
+                INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate, Discriminator)
+                VALUES (@Name, @Email, @PasswordHash, @Description, @CreationDate, @Discriminator);
                 SELECT last_insert_rowid();";
 
             try
@@ -46,7 +86,8 @@ namespace Muffle.Data.Services
                     Email = email,
                     PasswordHash = passwordHash,
                     Description = string.Empty,
-                    CreationDate = DateTime.Now
+                    CreationDate = DateTime.Now,
+                    Discriminator = discriminator
                 });
 
                 return new User
@@ -56,7 +97,8 @@ namespace Muffle.Data.Services
                     Email = email,
                     PasswordHash = passwordHash,
                     Description = string.Empty,
-                    CreationDate = DateTime.Now
+                    CreationDate = DateTime.Now,
+                    Discriminator = discriminator
                 };
             }
             catch (Exception ex)
@@ -319,6 +361,48 @@ namespace Muffle.Data.Services
             }
 
             return validAccounts;
+        }
+
+        /// <summary>
+        /// Gets a user by their full username (e.g., "John#1234")
+        /// </summary>
+        /// <param name="fullUsername">The full username including discriminator</param>
+        /// <returns>The User object if found, null otherwise</returns>
+        public static User? GetUserByFullUsername(string fullUsername)
+        {
+            if (string.IsNullOrWhiteSpace(fullUsername))
+            {
+                return null;
+            }
+
+            try
+            {
+                // Parse the username and discriminator
+                var parts = fullUsername.Split('#');
+                if (parts.Length != 2)
+                {
+                    return null;
+                }
+
+                var username = parts[0];
+                if (!int.TryParse(parts[1], out int discriminator))
+                {
+                    return null;
+                }
+
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                var getUserQuery = "SELECT * FROM Users WHERE Name = @Name AND Discriminator = @Discriminator;";
+                var user = connection.QueryFirstOrDefault<User>(getUserQuery, new { Name = username, Discriminator = discriminator });
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting user by full username: {ex.Message}");
+                return null;
+            }
         }
     }
 }

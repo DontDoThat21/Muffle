@@ -103,7 +103,7 @@
 
                                         <!-- User Info -->
                                         <VerticalStackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center" Spacing="3">
-                                            <Label Text="{Binding SenderName}" 
+                                            <Label Text="{Binding SenderFullUsername}" 
                                                    FontSize="16" 
                                                    FontAttributes="Bold"
                                                    TextColor="White"/>
@@ -182,7 +182,7 @@
 
                                         <!-- User Info -->
                                         <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
-                                            <Label Text="{Binding ReceiverName}" 
+                                            <Label Text="{Binding ReceiverFullUsername}" 
                                                    FontSize="16" 
                                                    FontAttributes="Bold"
                                                    TextColor="White"/>
