@@ -33,19 +33,19 @@ Core infrastructure, UI layout, and basic real-time messaging.
 
 ---
 
-## Phase 2: Voice & Video (WebRTC) 🔧
+## Phase 2: Voice & Video (WebRTC) ✅
 
 Real-time voice and video calls powered by WebRTC.
 
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
-| 2.1 | Voice calls | 🔧 | Voice call button exists, `StartVoiceCallAsync` placeholder |
-| 2.2 | Video calls | 🔧 | Video call button exists, `StartVideoCallAsync` placeholder |
-| 2.3 | WebRTC peer connection management | 🔧 | `WebRTCManager` defined (commented out), needs STUN/ICE/SDP implementation |
-| 2.4 | SDP offer/answer negotiation | 📋 | Signaling channel ready, negotiation logic not yet implemented |
-| 2.5 | ICE candidate exchange | 📋 | Infrastructure ready via SignalingService |
-| 2.6 | Media track management | 📋 | WebRTCme integration for local/remote audio/video tracks |
-| 2.7 | Call state UI (calling, connected, ended) | 📋 | Need in-call overlay with controls |
+| 2.1 | Voice calls | ✅ | `StartVoiceCallAsync` fully implemented with WebRTCManager |
+| 2.2 | Video calls | ✅ | `StartVideoCallAsync` fully implemented with WebRTCManager |
+| 2.3 | WebRTC peer connection management | ✅ | `WebRTCManager` complete with STUN server, peer connection lifecycle |
+| 2.4 | SDP offer/answer negotiation | ✅ | Full SDP negotiation via MessageWrapper signaling |
+| 2.5 | ICE candidate exchange | ✅ | ICE candidates exchanged via SignalingService |
+| 2.6 | Media track management | ✅ | WebRTCme integration for local/remote audio/video tracks, OnRemoteStreamAdded event |
+| 2.7 | Call state UI (calling, connected, ended) | ✅ | CallState enum + OnCallStateChanged event, chat notifications for call states |
 
 ---
 
@@ -175,7 +175,7 @@ Social features, subscriptions, and mobile-specific views.
 | Phase | Status | Count |
 |-------|--------|-------|
 | Phase 1: Foundation | ✅ Complete | 10/10 |
-| Phase 2: Voice & Video | 🔧 In Progress | 2/7 |
+| Phase 2: Voice & Video | ✅ Complete | 7/7 |
 | Phase 3: User Management | 📋 Planned | 0/9 |
 | Phase 4: Server Features | 📋 Planned | 0/10 |
 | Phase 5: Chat Enhancements | 📋 Planned | 0/11 |
@@ -183,7 +183,7 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 7: Settings & Configuration | 📋 Planned | 0/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **12/75** |
+| **Total** | | **17/75** |
 
 ---
 
@@ -197,5 +197,5 @@ Social features, subscriptions, and mobile-specific views.
 
 ---
 
-**Last updated:** 2026-02-19 04:27 UTC  
+**Last updated:** 2026-02-19 16:00 UTC  
 **Maintainer:** Auto-updated by "Muffle Dev Sprint" cron job

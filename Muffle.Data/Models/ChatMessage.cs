@@ -9,7 +9,14 @@ namespace Muffle.Data.Models
     public enum MessageType
     {
         Text,
-        Image
+        Image,
+        WebRtcOffer,
+        WebRtcAnswer,
+        IceCandidate,
+        CallInvite,
+        CallAccept,
+        CallReject,
+        CallEnd
     }
 
     public class ChatMessage
