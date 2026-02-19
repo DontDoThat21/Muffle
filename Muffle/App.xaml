@@ -17,6 +17,8 @@
             <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
             <converters:MessageTypeToTextVisibilityConverter x:Key="MessageTypeToTextVisibilityConverter" />
             <converters:MessageTypeToImageVisibilityConverter x:Key="MessageTypeToImageVisibilityConverter" />
+            <converters:TabBackgroundConverter x:Key="TabBackgroundConverter" />
+            <converters:TabVisibilityConverter x:Key="TabVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -124,4 +124,38 @@ namespace Muffle.Converters
             throw new NotImplementedException();
         }
     }
+
+    public class TabBackgroundConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int selectedIndex && parameter is string parameterString && int.TryParse(parameterString, out int tabIndex))
+            {
+                return selectedIndex == tabIndex ? Color.FromArgb("#7289DA") : Color.FromArgb("#424242");
+            }
+            return Color.FromArgb("#424242");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TabVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int selectedIndex && parameter is string parameterString && int.TryParse(parameterString, out int tabIndex))
+            {
+                return selectedIndex == tabIndex;
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
