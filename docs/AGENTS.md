@@ -8,9 +8,12 @@ This document defines how an AI coding agent should approach building, maintaini
 >
 > | Document | Location | Purpose |
 > |----------|----------|---------|
-> | Product Specification | `SPEC.md` | Feature requirements, data model, architecture |
+> | Feature Tracker | `Muffle/FEATURES.md` | Phase-based feature status (✅ 🔧 📋) — **primary task source** |
+> | Product Specification | `Muffle/SPEC.md` | Detailed requirements, data model, architecture |
 > | Copilot Instructions | `.github/copilot-instructions.md` | Build commands, project structure, time limits, known limitations |
 > | App Settings | `Muffle/appsettings.json` | Connection strings |
+
+> **Important:** This is a **.NET 10 MAUI** project — not WPF, not Xamarin Forms. Use MAUI APIs (`ContentPage`, `ContentView`, `BindableObject`, etc.).
 
 ---
 
@@ -18,10 +21,12 @@ This document defines how an AI coding agent should approach building, maintaini
 
 ### 1.1 Task-Driven Development
 
-- Read tasks from `SPEC.md` feature tables (IDs like `SRV-1`, `CHAT-3`, etc.).
-- Complete tasks **sequentially within each feature area** — respect implicit dependencies (e.g., `DB-1` before `DAT-1`).
-- After completing a task, note what was done and any follow-up needed.
-- Document blockers with the specific requirement ID and reason.
+- Read tasks from `Muffle/FEATURES.md` feature tables (IDs like `2.4`, `3.1`, etc.).
+- **Finish 🔧 (in-progress) items before starting 📋 (planned) items.**
+- Within planned items, prioritize by phase number (Phase 2 before Phase 3, etc.).
+- Cross-reference `Muffle/SPEC.md` for detailed requirements (IDs like `SRV-1`, `CHAT-3`, etc.).
+- After completing a task, update `FEATURES.md` status to ✅ (or 🔧 if partially done).
+- Document blockers with the specific feature ID and reason.
 
 ### 1.2 Data-Layer-First Rule
 
@@ -323,19 +328,41 @@ When no tests exist for the area being modified:
 
 ---
 
-## 10. Session Checklist
+## 10. Database Initialization Flow
+
+From `MauiProgram.cs`:
+
+```
+#if DEBUG
+    SqlServerDbService.DisposeDatabase();   // Drop all tables
+    SQLiteDbService.DisposeDatabase();      // Drop all tables
+    SqlServerDbService.InitializeDatabase(); // Create + seed
+    SQLiteDbService.InitializeDatabase();    // Create + seed
+#else
+    SqliteDbService.InitializeDatabase();    // Create if not exists
+#endif
+```
+
+- **Debug**: Database is destroyed and recreated every launch. Seed data: 3 users (Alice, Bob, Charlie), 3 servers, 4 friends.
+- **Release**: SQLite only, tables created with `IF NOT EXISTS` guards.
+
+---
+
+## 11. Session Checklist
 
 Use this checklist at the start and end of every agent session:
 
 ### Start of Session
-- [ ] Read `SPEC.md` for current requirements
+- [ ] Read `Muffle/FEATURES.md` for current feature status
+- [ ] Read `Muffle/SPEC.md` for detailed requirement specs
 - [ ] Read `.github/copilot-instructions.md` for build/env constraints
-- [ ] Identify which requirement IDs to work on
+- [ ] Identify next feature: 🔧 in-progress first, then 📋 planned by phase
 - [ ] Review current state of target files
 
 ### End of Session
 - [ ] All modified files compile (`dotnet build Muffle.Data/Muffle.Data.csproj` at minimum)
 - [ ] No regressions — existing features still work (full build if possible)
-- [ ] Any new requirement IDs completed are noted
+- [ ] `FEATURES.md` updated with new status
+- [ ] Commit with descriptive message referencing feature ID
 - [ ] Blockers and open questions are documented
 - [ ] No uncommitted partial implementations left in a broken state
