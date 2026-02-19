@@ -34,7 +34,9 @@ namespace Muffle.Data.Services
                 PasswordHash TEXT NOT NULL,
                 Description TEXT,
                 CreationDate DATETIME NOT NULL,
-                Discriminator INTEGER NOT NULL DEFAULT 0
+                Discriminator INTEGER NOT NULL DEFAULT 0,
+                IsActive INTEGER NOT NULL DEFAULT 1,
+                DisabledAt DATETIME
             );";
 
             connection.Execute(createUsersTableQuery);
@@ -131,11 +133,11 @@ namespace Muffle.Data.Services
 
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
-                INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator)
+                INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)
                 VALUES 
-                (1, 'Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', datetime('now'), 1001),
-                (2, 'Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', datetime('now'), 1002),
-                (3, 'Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', datetime('now'), 1003);";
+                (1, 'Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', datetime('now'), 1001, 1),
+                (2, 'Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', datetime('now'), 1002, 1),
+                (3, 'Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', datetime('now'), 1003, 1);";
 
             try
             {

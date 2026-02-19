@@ -215,6 +215,17 @@ namespace Muffle
             }
         }
 
+        private void SettingsButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Account Settings view
+            var accountSettingsViewModel = new AccountSettingsViewModel();
+            var accountSettingsView = new AccountSettingsView(accountSettingsViewModel);
+            
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = accountSettingsView;
+        }
+
     }
 
 }

@@ -131,6 +131,13 @@ namespace Muffle.Data.Services
                 return null;
             }
 
+            // Check if account is active
+            if (!user.IsActive)
+            {
+                Console.WriteLine("Account is disabled");
+                return null;
+            }
+
             // Verify password using BCrypt
             var passwordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 

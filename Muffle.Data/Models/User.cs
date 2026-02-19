@@ -12,6 +12,8 @@ namespace Muffle.Data.Models
         public string? Description { get; set; }
         public DateTime CreationDate { get; set; }
         public int Discriminator { get; set; }
+        public bool IsActive { get; set; } = true;
+        public DateTime? DisabledAt { get; set; }
 
         /// <summary>
         /// Gets the full username with discriminator (e.g., "John#1234")

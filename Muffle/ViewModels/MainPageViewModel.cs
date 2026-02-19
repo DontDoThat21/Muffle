@@ -115,6 +115,9 @@ namespace Muffle.ViewModels
         public ICommand SelectServerCommand { get; }
         public ICommand LogoutCommand { get; }
         public ICommand SwitchAccountCommand { get; }
+        public ICommand SettingsCommand { get; }
+
+        public event EventHandler? SettingsRequested;
 
         public MainPageViewModel()
         {
@@ -123,6 +126,7 @@ namespace Muffle.ViewModels
             SelectServerCommand = new Command<Server>(ExecuteSelectServerCommand);
             LogoutCommand = new Command(async () => await ExecuteLogoutCommandAsync());
             SwitchAccountCommand = new Command(async () => await ExecuteSwitchAccountCommandAsync());
+            SettingsCommand = new Command(() => SettingsRequested?.Invoke(this, EventArgs.Empty));
             Servers = new ObservableCollection<Server>(UsersService.GetUsersServers() ?? new List<Server>());
             Friends = UsersService.GetUsersFriends();
         }

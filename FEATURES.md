@@ -62,8 +62,8 @@ Account creation, authentication, and friend management.
 | 3.5 | Friend requests & approval flow | ✅ | FriendRequestsView with incoming/outgoing tabs, accept/decline/cancel actions, accessible via Pending button |
 | 3.6 | User discriminator (incremented numbers) | ✅ | Added Discriminator column, auto-generation on registration (1-9999), FullUsername property, search by name#discriminator |
 | 3.7 | Block users | ✅ | BlockedUsers table, BlockService with block/unblock/check methods, BlockedUsersView, block from search results |
-| 3.8 | Disable account | 📋 | Soft-delete account (recoverable) |
-| 3.9 | Delete account | 📋 | Permanent account deletion |
+| 3.8 | Disable account | ✅ | Added IsActive/DisabledAt columns, AccountManagementService, AccountSettingsView with disable/delete, login check |
+| 3.9 | Delete account | ✅ | Permanent deletion via AccountManagementService with cascading deletes, double confirmation |
 
 ---
 
@@ -176,14 +176,14 @@ Social features, subscriptions, and mobile-specific views.
 |-------|--------|-------|
 | Phase 1: Foundation | ✅ Complete | 10/10 |
 | Phase 2: Voice & Video | ✅ Complete | 7/7 |
-| Phase 3: User Management | 🔧 In Progress | 7/9 |
+| Phase 3: User Management | ✅ Complete | 9/9 |
 | Phase 4: Server Features | 📋 Planned | 0/10 |
 | Phase 5: Chat Enhancements | 📋 Planned | 0/11 |
 | Phase 6: User Profile & Customization | 📋 Planned | 0/8 |
 | Phase 7: Settings & Configuration | 📋 Planned | 0/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **24/75** |
+| **Total** | | **26/75** |
 
 ---
 
@@ -197,5 +197,5 @@ Social features, subscriptions, and mobile-specific views.
 
 ---
 
-**Last updated:** 2026-02-19 18:28 UTC  
+**Last updated:** 2026-02-19 19:46 UTC  
 **Maintainer:** Auto-updated by "Muffle Dev Sprint" cron job
