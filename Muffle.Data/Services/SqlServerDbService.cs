@@ -31,6 +31,8 @@ namespace Muffle.Data.Services
         CREATE TABLE Users (
             UserId INT PRIMARY KEY IDENTITY(1,1),
             Name NVARCHAR(100) NOT NULL,
+            Email NVARCHAR(255) UNIQUE NOT NULL,
+            PasswordHash NVARCHAR(255) NOT NULL,
             Description NVARCHAR(MAX),
             CreationDate DATETIME NOT NULL
         );";
@@ -64,13 +66,13 @@ namespace Muffle.Data.Services
 
             connection.Execute(createServerOwnersTableQuery);
 
-            // Seed data for Users
+            // Seed data for Users (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
-            INSERT INTO Users (Name, Description, CreationDate)
+            INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate)
             VALUES 
-            ('Alice', 'First user', GETDATE()),
-            ('Bob', 'Second user', GETDATE()),
-            ('Charlie', 'Third user', GETDATE());";
+            ('Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', GETDATE()),
+            ('Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', GETDATE()),
+            ('Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', GETDATE());";
 
             try
             {

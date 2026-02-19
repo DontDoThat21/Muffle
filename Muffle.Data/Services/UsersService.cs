@@ -12,7 +12,7 @@ namespace Muffle.Data.Services
     {
         public static User? GetUser()
         {
-            return new User();
+            return CurrentUserService.CurrentUser;
         }
 
         public static List<Server>? GetUsersServers()

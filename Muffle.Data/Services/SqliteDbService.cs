@@ -30,6 +30,8 @@ namespace Muffle.Data.Services
             CREATE TABLE IF NOT EXISTS Users (
                 UserId INTEGER PRIMARY KEY AUTOINCREMENT,
                 Name TEXT NOT NULL,
+                Email TEXT UNIQUE NOT NULL,
+                PasswordHash TEXT NOT NULL,
                 Description TEXT,
                 CreationDate DATETIME NOT NULL
             );";
@@ -76,13 +78,13 @@ namespace Muffle.Data.Services
             // need to manually handle auto increments for composite primary keys
             connection.Execute(createFriendsTableQuery);
 
-            // Seed Users data
+            // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
-                INSERT INTO Users (UserId, Name, Description, CreationDate)
+                INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate)
                 VALUES 
-                (1, 'Alice', 'First user', datetime('now')),
-                (2, 'Bob', 'Second user', datetime('now')),
-                (3, 'Charlie', 'Third user', datetime('now'));";
+                (1, 'Alice', 'alice@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'First user', datetime('now')),
+                (2, 'Bob', 'bob@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Second user', datetime('now')),
+                (3, 'Charlie', 'charlie@example.com', '$2a$11$XZKDqGKqV3F6z.6YyKJ8JOZq0YLKQmJ8qX9L3jYVZ8n8.5Kl6vJYm', 'Third user', datetime('now'));";
 
             try
             {

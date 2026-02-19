@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Muffle.Views.LoginView"
+             Title="Login"
+             BackgroundColor="#36393f">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="40" Spacing="20" VerticalOptions="Center">
+            
+            <!-- Logo/Title -->
+            <Label Text="Muffle"
+                   FontSize="48"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,40"/>
+
+            <Label Text="Welcome back!"
+                   FontSize="24"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20"/>
+
+            <!-- Email Entry -->
+            <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
+                <Entry x:Name="EmailEntry"
+                       Placeholder="Email"
+                       PlaceholderColor="#72767d"
+                       TextColor="White"
+                       BackgroundColor="Transparent"
+                       Keyboard="Email"
+                       Text="{Binding Email}"/>
+            </Frame>
+
+            <!-- Password Entry -->
+            <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
+                <Entry x:Name="PasswordEntry"
+                       Placeholder="Password"
+                       PlaceholderColor="#72767d"
+                       TextColor="White"
+                       BackgroundColor="Transparent"
+                       IsPassword="True"
+                       Text="{Binding Password}"/>
+            </Frame>
+
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="#ed4245"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center"/>
+
+            <!-- Login Button -->
+            <Button Text="Login"
+                    Command="{Binding LoginCommand}"
+                    BackgroundColor="#5865f2"
+                    TextColor="White"
+                    CornerRadius="5"
+                    HeightRequest="44"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                              IsVisible="{Binding IsLoading}"
+                              Color="#5865f2"/>
+
+            <!-- Register Link -->
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,20,0,0">
+                <Label Text="Don't have an account?"
+                       TextColor="#b9bbbe"
+                       VerticalOptions="Center"/>
+                <Label Text="Register"
+                       TextColor="#00b0f4"
+                       VerticalOptions="Center"
+                       Margin="5,0,0,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
