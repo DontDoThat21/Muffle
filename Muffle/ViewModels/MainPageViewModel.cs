@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Muffle.Data.Models;
 using Muffle.Data.Services;
+using Muffle.Services;
+using Muffle.Views;
 
 namespace Muffle.ViewModels
 {
@@ -111,12 +113,14 @@ namespace Muffle.ViewModels
         }
 
         public ICommand SelectServerCommand { get; }
+        public ICommand LogoutCommand { get; }
 
         public MainPageViewModel()
         {
             User = new User();
             User = UsersService.GetUser();
             SelectServerCommand = new Command<Server>(ExecuteSelectServerCommand);
+            LogoutCommand = new Command(async () => await ExecuteLogoutCommandAsync());
             Servers = new ObservableCollection<Server>(UsersService.GetUsersServers() ?? new List<Server>());
             Friends = UsersService.GetUsersFriends();
         }
@@ -133,6 +137,34 @@ namespace Muffle.ViewModels
             foreach (var server in updatedServers)
             {
                 Servers.Add(server);
+            }
+        }
+
+        private async Task ExecuteLogoutCommandAsync()
+        {
+            try
+            {
+                // Clear secure storage token
+                TokenStorageService.RemoveToken();
+
+                // Logout from current session (this also revokes the token in the database)
+                CurrentUserService.Logout();
+
+                // Navigate back to authentication page
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    var authPage = new AuthenticationPage();
+                    authPage.AuthenticationSucceeded += (sender, user) =>
+                    {
+                        CurrentUserService.CurrentUser = user;
+                        Application.Current!.MainPage = new AppShell();
+                    };
+                    Application.Current!.MainPage = authPage;
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during logout: {ex.Message}");
             }
         }
 

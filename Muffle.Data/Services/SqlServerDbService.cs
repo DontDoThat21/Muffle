@@ -66,6 +66,20 @@ namespace Muffle.Data.Services
 
             connection.Execute(createServerOwnersTableQuery);
 
+            // Create AuthTokens table
+            var createAuthTokensTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='AuthTokens' and xtype='U')
+        CREATE TABLE AuthTokens (
+            TokenId INT PRIMARY KEY IDENTITY(1,1),
+            UserId INT NOT NULL,
+            Token NVARCHAR(255) NOT NULL UNIQUE,
+            CreatedAt DATETIME NOT NULL,
+            ExpiresAt DATETIME NOT NULL,
+            FOREIGN KEY (UserId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createAuthTokensTableQuery);
+
             // Seed data for Users (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
             INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate)
@@ -139,6 +153,16 @@ namespace Muffle.Data.Services
                 {
                     var dropServerOwnersTable = "DROP TABLE IF EXISTS ServerOwners";
                     connection.Execute(dropServerOwnersTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropAuthTokensTable = "DROP TABLE IF EXISTS AuthTokens";
+                    connection.Execute(dropAuthTokensTable);
                 }
                 catch (Exception)
                 {

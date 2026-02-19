@@ -78,6 +78,19 @@ namespace Muffle.Data.Services
             // need to manually handle auto increments for composite primary keys
             connection.Execute(createFriendsTableQuery);
 
+            // Create AuthTokens table
+            var createAuthTokensTableQuery = @"
+            CREATE TABLE IF NOT EXISTS AuthTokens (
+                TokenId INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserId INTEGER NOT NULL,
+                Token TEXT NOT NULL UNIQUE,
+                CreatedAt DATETIME NOT NULL,
+                ExpiresAt DATETIME NOT NULL,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createAuthTokensTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate)
@@ -194,6 +207,16 @@ namespace Muffle.Data.Services
                 {
                     var dropFriendsTable = "DROP TABLE IF EXISTS Friends";
                     connection.Execute(dropFriendsTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropAuthTokensTable = "DROP TABLE IF EXISTS AuthTokens";
+                    connection.Execute(dropAuthTokensTable);
                 }
                 catch (Exception)
                 {

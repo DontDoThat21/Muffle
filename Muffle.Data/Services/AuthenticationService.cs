@@ -106,5 +106,193 @@ namespace Muffle.Data.Services
             var checkEmailQuery = "SELECT COUNT(*) FROM Users WHERE Email = @Email;";
             return connection.ExecuteScalar<int>(checkEmailQuery, new { Email = email }) > 0;
         }
+
+        /// <summary>
+        /// Generates and stores a new authentication token for a user
+        /// </summary>
+        /// <param name="userId">The user ID to create a token for</param>
+        /// <param name="expirationDays">Number of days until token expires (default 30)</param>
+        /// <returns>The generated token string, or null if failed</returns>
+        public static string? GenerateAuthToken(int userId, int expirationDays = 30)
+        {
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                // Generate a unique token
+                var token = Guid.NewGuid().ToString();
+                var createdAt = DateTime.Now;
+                var expiresAt = createdAt.AddDays(expirationDays);
+
+                var insertTokenQuery = @"
+                    INSERT INTO AuthTokens (UserId, Token, CreatedAt, ExpiresAt)
+                    VALUES (@UserId, @Token, @CreatedAt, @ExpiresAt);";
+
+                connection.Execute(insertTokenQuery, new
+                {
+                    UserId = userId,
+                    Token = token,
+                    CreatedAt = createdAt,
+                    ExpiresAt = expiresAt
+                });
+
+                return token;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error generating auth token: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Validates an authentication token
+        /// </summary>
+        /// <param name="token">The token string to validate</param>
+        /// <returns>True if token exists and is not expired, false otherwise</returns>
+        public static bool ValidateAuthToken(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return false;
+            }
+
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                var validateTokenQuery = @"
+                    SELECT COUNT(*) FROM AuthTokens 
+                    WHERE Token = @Token AND ExpiresAt > @CurrentTime;";
+
+                var count = connection.ExecuteScalar<int>(validateTokenQuery, new
+                {
+                    Token = token,
+                    CurrentTime = DateTime.Now
+                });
+
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error validating auth token: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves a user by their authentication token
+        /// </summary>
+        /// <param name="token">The authentication token</param>
+        /// <returns>The User object if token is valid, null otherwise</returns>
+        public static User? GetUserByToken(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return null;
+            }
+
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                var getUserQuery = @"
+                    SELECT u.* FROM Users u
+                    INNER JOIN AuthTokens t ON u.UserId = t.UserId
+                    WHERE t.Token = @Token AND t.ExpiresAt > @CurrentTime;";
+
+                var user = connection.QueryFirstOrDefault<User>(getUserQuery, new
+                {
+                    Token = token,
+                    CurrentTime = DateTime.Now
+                });
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting user by token: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Revokes (deletes) an authentication token
+        /// </summary>
+        /// <param name="token">The token to revoke</param>
+        /// <returns>True if token was revoked, false otherwise</returns>
+        public static bool RevokeAuthToken(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return false;
+            }
+
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                var deleteTokenQuery = "DELETE FROM AuthTokens WHERE Token = @Token;";
+                var rowsAffected = connection.Execute(deleteTokenQuery, new { Token = token });
+
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error revoking auth token: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Revokes all authentication tokens for a specific user
+        /// </summary>
+        /// <param name="userId">The user ID whose tokens should be revoked</param>
+        /// <returns>Number of tokens revoked</returns>
+        public static int RevokeAllUserTokens(int userId)
+        {
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                var deleteTokensQuery = "DELETE FROM AuthTokens WHERE UserId = @UserId;";
+                var rowsAffected = connection.Execute(deleteTokensQuery, new { UserId = userId });
+
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error revoking user tokens: {ex.Message}");
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Cleans up expired authentication tokens from the database
+        /// </summary>
+        /// <returns>Number of expired tokens deleted</returns>
+        public static int CleanupExpiredTokens()
+        {
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                var deleteExpiredQuery = "DELETE FROM AuthTokens WHERE ExpiresAt < @CurrentTime;";
+                var rowsAffected = connection.Execute(deleteExpiredQuery, new { CurrentTime = DateTime.Now });
+
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error cleaning up expired tokens: {ex.Message}");
+                return 0;
+            }
+        }
     }
 }

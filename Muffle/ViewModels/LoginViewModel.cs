@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using Muffle.Data.Models;
 using Muffle.Data.Services;
+using Muffle.Services;
 
 namespace Muffle.ViewModels
 {
@@ -83,7 +84,7 @@ namespace Muffle.ViewModels
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 try
                 {
@@ -93,6 +94,18 @@ namespace Muffle.ViewModels
                     {
                         ErrorMessage = "Invalid email or password";
                         return;
+                    }
+
+                    // Generate authentication token
+                    var token = AuthenticationService.GenerateAuthToken(user.UserId);
+
+                    if (token != null)
+                    {
+                        // Save token to secure storage
+                        await TokenStorageService.SaveTokenAsync(token);
+                        
+                        // Store token in current session
+                        CurrentUserService.CurrentAuthToken = token;
                     }
 
                     MainThread.BeginInvokeOnMainThread(() =>

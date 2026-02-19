@@ -11,7 +11,18 @@
             ColumnDefinitions="1*,2*,8*"
             BackgroundColor="#303030">
 
-            <ImageButton Source="mufflelogo.png" Grid.Column="0" BackgroundColor="#252525" Padding="20"/>
+            <Grid Grid.Column="0" BackgroundColor="#252525">
+                <ImageButton Source="mufflelogo.png" Padding="20" VerticalOptions="Center"/>
+                <Button Text="Logout" 
+                        BackgroundColor="#1a1a1a" 
+                        TextColor="White" 
+                        FontSize="10"
+                        Padding="5,2"
+                        HorizontalOptions="End" 
+                        VerticalOptions="Start"
+                        Margin="5"
+                        Command="{Binding LogoutCommand}"/>
+            </Grid>
             <Frame Grid.Column="1" BackgroundColor="#303030" BorderColor="#303030" VerticalOptions="Start" >
                 <StackLayout VerticalOptions="Start">
                     <Entry Text="Find or start a discussion" BackgroundColor="#252525"></Entry>
