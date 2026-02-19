@@ -73,7 +73,7 @@ Advanced server management, channels, permissions, and discoverability.
 
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
-| 4.1 | Server channels (text + voice) | 📋 | Separate WebSocket and RTC channels per server |
+| 4.1 | Server channels (text + voice) | ✅ | Channel model, Channels table (SQLite/SQL Server), ChannelService with CRUD and reordering |
 | 4.2 | Public/private server toggle | 📋 | Server visibility setting |
 | 4.3 | Invite links (customizable or generated) | 📋 | Chrono-expiring invite codes |
 | 4.4 | Server browser (public servers) | 📋 | Searchable list of public servers |
@@ -177,13 +177,14 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 1: Foundation | ✅ Complete | 10/10 |
 | Phase 2: Voice & Video | ✅ Complete | 7/7 |
 | Phase 3: User Management | ✅ Complete | 9/9 |
+| Phase 4: Server Features | 🔧 In Progress | 1/9 |
 | Phase 4: Server Features | 📋 Planned | 0/10 |
 | Phase 5: Chat Enhancements | 📋 Planned | 0/11 |
 | Phase 6: User Profile & Customization | 📋 Planned | 0/8 |
 | Phase 7: Settings & Configuration | 📋 Planned | 0/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **26/75** |
+| **Total** | | **27/75** |
 
 ---
 
@@ -197,5 +198,5 @@ Social features, subscriptions, and mobile-specific views.
 
 ---
 
-**Last updated:** 2026-02-19 19:46 UTC  
+**Last updated:** 2026-02-19 23:04 UTC  
 **Maintainer:** Auto-updated by "Muffle Dev Sprint" cron job

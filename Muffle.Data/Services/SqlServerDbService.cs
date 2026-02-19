@@ -63,6 +63,24 @@ namespace Muffle.Data.Services
 
             connection.Execute(createServersTableQuery);
 
+            // Create Channels table
+            var createChannelsTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Channels' and xtype='U')
+        CREATE TABLE Channels (
+            ChannelId INT PRIMARY KEY IDENTITY(1,1),
+            ServerId UNIQUEIDENTIFIER NOT NULL,
+            Name NVARCHAR(100) NOT NULL,
+            Description NVARCHAR(MAX),
+            Type INT NOT NULL DEFAULT 0,
+            Position INT NOT NULL DEFAULT 0,
+            CreatedAt DATETIME NOT NULL,
+            CreatedBy INT NOT NULL,
+            FOREIGN KEY (ServerId) REFERENCES Servers(ServerId),
+            FOREIGN KEY (CreatedBy) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createChannelsTableQuery);
+
             // Create ServerOwners table
             var createServerOwnersTableQuery = @"
         IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='ServerOwners' and xtype='U')
@@ -195,6 +213,16 @@ namespace Muffle.Data.Services
                 {
                     var dropServerOwnersTable = "DROP TABLE IF EXISTS ServerOwners";
                     connection.Execute(dropServerOwnersTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropChannelsTable = "DROP TABLE IF EXISTS Channels";
+                    connection.Execute(dropChannelsTable);
                 }
                 catch (Exception)
                 {
