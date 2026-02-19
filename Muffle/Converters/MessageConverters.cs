@@ -112,8 +112,8 @@ namespace Muffle.Converters
                 }
                 catch
                 {
-                    // If base64 decode fails, it's not our data format
-                    return false;
+                    // If base64 decode fails, treat as regular string - return true if not empty
+                    return !string.IsNullOrWhiteSpace(str);
                 }
             }
             return false;

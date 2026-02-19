@@ -58,7 +58,7 @@ Account creation, authentication, and friend management.
 | 3.1 | User account creation process | ✅ | Registration flow with email validation, password hashing (BCrypt), login/registration views |
 | 3.2 | Remember user login | ✅ | Token-based auth with SecureStorage, auto-login on startup, logout functionality |
 | 3.3 | Multiple account support | ✅ | AccountSwitcherView with stored accounts list, switch/remove buttons, auto-restore last used account |
-| 3.4 | Add friend functionality | 📋 | "+" button exists in Friends panel, needs implementation |
+| 3.4 | Add friend functionality | ✅ | FriendRequests table, SearchUsers service, AddFriendView with search and send request |
 | 3.5 | Friend requests & approval flow | 📋 | Send/receive/accept/decline friend requests |
 | 3.6 | User discriminator (incremented numbers) | 📋 | Username#1234 for unique identification |
 | 3.7 | Block users | 📋 | Block list, hide messages from blocked users |
@@ -176,14 +176,14 @@ Social features, subscriptions, and mobile-specific views.
 |-------|--------|-------|
 | Phase 1: Foundation | ✅ Complete | 10/10 |
 | Phase 2: Voice & Video | ✅ Complete | 7/7 |
-| Phase 3: User Management | 🔧 In Progress | 3/9 |
+| Phase 3: User Management | 🔧 In Progress | 4/9 |
 | Phase 4: Server Features | 📋 Planned | 0/10 |
 | Phase 5: Chat Enhancements | 📋 Planned | 0/11 |
 | Phase 6: User Profile & Customization | 📋 Planned | 0/8 |
 | Phase 7: Settings & Configuration | 📋 Planned | 0/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **20/75** |
+| **Total** | | **21/75** |
 
 ---
 
@@ -197,5 +197,5 @@ Social features, subscriptions, and mobile-specific views.
 
 ---
 
-**Last updated:** 2026-02-19 17:04 UTC  
+**Last updated:** 2026-02-19 17:16 UTC  
 **Maintainer:** Auto-updated by "Muffle Dev Sprint" cron job

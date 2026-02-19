@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             xmlns:models="clr-namespace:Muffle.Data.Models;assembly=Muffle.Data"
+             x:Class="Muffle.Views.AddFriendView"
+             x:DataType="viewmodels:AddFriendViewModel"
+             BackgroundColor="#303030">
+    
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="15">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Add Friend" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="White"/>
+            <Label Text="Search for users by email or username" 
+                   FontSize="14" 
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Search Bar -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+            <Entry Grid.Column="0"
+                   Text="{Binding SearchText}"
+                   Placeholder="Enter email or username..."
+                   PlaceholderColor="Gray"
+                   TextColor="White"
+                   BackgroundColor="#252525"
+                   ReturnCommand="{Binding SearchCommand}"/>
+            
+            <Button Grid.Column="1"
+                    Text="Search"
+                    Command="{Binding SearchCommand}"
+                    BackgroundColor="#7289DA"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="20,10"
+                    IsEnabled="{Binding IsSearching, Converter={StaticResource InverseBoolConverter}}"/>
+            
+            <Button Grid.Column="2"
+                    Text="Clear"
+                    Command="{Binding ClearSearchCommand}"
+                    BackgroundColor="#424242"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="20,10"/>
+        </Grid>
+
+        <!-- Results Area -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Spacing="10">
+                
+                <!-- Loading Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsSearching}" 
+                                 IsRunning="{Binding IsSearching}"
+                                 Color="White"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Margin="0,40,0,0"/>
+
+                <!-- Status Message -->
+                <Label Text="{Binding StatusMessage}" 
+                       IsVisible="{Binding HasStatusMessage}"
+                       HorizontalOptions="Center"
+                       TextColor="LightGray"
+                       FontSize="14"
+                       Margin="0,20,0,0"/>
+
+                <!-- No Results Message -->
+                <Label Text="No users found. Try a different search term." 
+                       IsVisible="{Binding ShowNoResults}"
+                       HorizontalOptions="Center"
+                       TextColor="Gray"
+                       FontSize="14"
+                       Margin="0,40,0,0"/>
+
+                <!-- Search Results -->
+                <CollectionView ItemsSource="{Binding SearchResults}"
+                              IsVisible="{Binding HasResults}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:User">
+                            <Frame Padding="15" 
+                                   Margin="0,5,0,5" 
+                                   BorderColor="#424242"
+                                   BackgroundColor="#252525"
+                                   CornerRadius="8"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+                                    
+                                    <!-- Avatar Placeholder -->
+                                    <Frame Grid.Column="0" 
+                                           WidthRequest="50" 
+                                           HeightRequest="50" 
+                                           CornerRadius="25"
+                                           Padding="0"
+                                           HasShadow="False"
+                                           BackgroundColor="#7289DA">
+                                        <Label Text="{Binding Name, StringFormat='{0:C1}'}" 
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               TextColor="White"/>
+                                    </Frame>
+
+                                    <!-- User Info -->
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                        <Label Text="{Binding Name}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="White"/>
+                                        <Label Text="{Binding Email}" 
+                                               FontSize="12" 
+                                               TextColor="LightGray"/>
+                                        <Label Text="{Binding Description}" 
+                                               FontSize="11" 
+                                               TextColor="Gray"
+                                               IsVisible="{Binding Description, Converter={StaticResource StringNotEmptyConverter}}"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Add Button -->
+                                    <Button Grid.Column="2" 
+                                            Text="Add Friend" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddFriendViewModel}}, Path=SendFriendRequestCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#43B581"
+                                            TextColor="White"
+                                            CornerRadius="4"
+                                            Padding="15,8"
+                                            VerticalOptions="Center"/>
+                                    
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </Grid>
+</ContentView>

@@ -91,6 +91,22 @@ namespace Muffle.Data.Services
 
             connection.Execute(createAuthTokensTableQuery);
 
+            // Create FriendRequests table
+            var createFriendRequestsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS FriendRequests (
+                RequestId INTEGER PRIMARY KEY AUTOINCREMENT,
+                SenderId INTEGER NOT NULL,
+                ReceiverId INTEGER NOT NULL,
+                Status INTEGER NOT NULL DEFAULT 0,
+                CreatedAt DATETIME NOT NULL,
+                RespondedAt DATETIME,
+                FOREIGN KEY (SenderId) REFERENCES Users(UserId),
+                FOREIGN KEY (ReceiverId) REFERENCES Users(UserId),
+                UNIQUE (SenderId, ReceiverId)
+            );";
+
+            connection.Execute(createFriendRequestsTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate)
@@ -217,6 +233,16 @@ namespace Muffle.Data.Services
                 {
                     var dropAuthTokensTable = "DROP TABLE IF EXISTS AuthTokens";
                     connection.Execute(dropAuthTokensTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropFriendRequestsTable = "DROP TABLE IF EXISTS FriendRequests";
+                    connection.Execute(dropFriendRequestsTable);
                 }
                 catch (Exception)
                 {

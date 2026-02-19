@@ -80,6 +80,23 @@ namespace Muffle.Data.Services
 
             connection.Execute(createAuthTokensTableQuery);
 
+            // Create FriendRequests table
+            var createFriendRequestsTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='FriendRequests' and xtype='U')
+        CREATE TABLE FriendRequests (
+            RequestId INT PRIMARY KEY IDENTITY(1,1),
+            SenderId INT NOT NULL,
+            ReceiverId INT NOT NULL,
+            Status INT NOT NULL DEFAULT 0,
+            CreatedAt DATETIME NOT NULL,
+            RespondedAt DATETIME,
+            FOREIGN KEY (SenderId) REFERENCES Users(UserId),
+            FOREIGN KEY (ReceiverId) REFERENCES Users(UserId),
+            CONSTRAINT UQ_FriendRequest UNIQUE (SenderId, ReceiverId)
+        );";
+
+            connection.Execute(createFriendRequestsTableQuery);
+
             // Seed data for Users (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
             INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate)
@@ -163,6 +180,16 @@ namespace Muffle.Data.Services
                 {
                     var dropAuthTokensTable = "DROP TABLE IF EXISTS AuthTokens";
                     connection.Execute(dropAuthTokensTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropFriendRequestsTable = "DROP TABLE IF EXISTS FriendRequests";
+                    connection.Execute(dropFriendRequestsTable);
                 }
                 catch (Exception)
                 {

@@ -130,9 +130,13 @@ namespace Muffle
 
         private void FriendsTopBarUIView_FriendAddButtonClicked(object sender, EventArgs e)
         {
-            // Update the MainContentFrame here
-            MainContentFrame.BackgroundColor = Colors.Red; // Example action
-            MainContentFrame.Content = new Label { Text = "Friend Added", TextColor = Colors.White };
+            // Show the Add Friend view
+            var addFriendViewModel = new AddFriendViewModel();
+            var addFriendView = new AddFriendView(addFriendViewModel);
+            
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = addFriendView;
         }
 
         private async void FriendDetailTopBarUIView_VoiceCallRequested(object sender, EventArgs e)
