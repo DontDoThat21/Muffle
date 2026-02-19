@@ -20,11 +20,10 @@ namespace Muffle.ViewModels
         private readonly IImagePickerService _imagePickerService;
         private UsersService _userService;
         private string _messageToSend;
-
-        //private readonly WebRTCManager _webRTCManager;
-        public Command StartCallCommand { get; }
-        public Command ReceiveCallCommand { get; }
+        private WebRTCManager? _webRTCManager;
+        
         public ICommand SendImageCommand { get; }
+        public ICommand EndCallCommand { get; }
 
         public Friend _friendSelected;
         public User _userSelected;
@@ -46,9 +45,7 @@ namespace Muffle.ViewModels
             _userService = new UsersService();
             SendMessageCommand = new Command<string>(SendMessage);
             SendImageCommand = new Command(async () => await SendImageAsync());
-            //_webRTCManager = new WebRTCManager(new SignalingService());
-            //StartCallCommand = new Command(async () => await _webRTCManager.StartCall());
-            //ReceiveCallCommand = new Command<string>(async (sdp) => await _webRTCManager.ReceiveCall(sdp));
+            EndCallCommand = new Command(async () => await EndCallAsync());
 
             Task.Run(async () => await InitializeAsync());
         }
@@ -77,7 +74,6 @@ namespace Muffle.ViewModels
                 {
                     string messageJson = await _signalingService.ReceiveMessageAsync();
                     
-                    // Try to deserialize as MessageWrapper first
                     MessageWrapper? messageWrapper = null;
                     try
                     {
@@ -88,24 +84,14 @@ namespace Muffle.ViewModels
                         // If deserialization fails, treat as legacy text message
                     }
 
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (messageWrapper != null)
                     {
-                        if (messageWrapper != null)
+                        await HandleMessageWrapperAsync(messageWrapper);
+                    }
+                    else
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            // Handle structured message
-                            var chatMessage = new ChatMessage 
-                            { 
-                                Content = messageWrapper.Content,
-                                Sender = _userSelected, 
-                                Timestamp = messageWrapper.Timestamp,
-                                Type = messageWrapper.Type,
-                                ImageData = messageWrapper.ImageData
-                            };
-                            ChatMessages.Add(chatMessage);
-                        }
-                        else
-                        {
-                            // Handle legacy text message
                             ChatMessages.Add(new ChatMessage 
                             { 
                                 Content = messageJson, 
@@ -113,8 +99,8 @@ namespace Muffle.ViewModels
                                 Timestamp = DateTime.Now,
                                 Type = MessageType.Text
                             });
-                        }
-                    });
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -122,6 +108,124 @@ namespace Muffle.ViewModels
                     break;
                 }
             }
+        }
+
+        private async Task HandleMessageWrapperAsync(MessageWrapper messageWrapper)
+        {
+            switch (messageWrapper.Type)
+            {
+                case MessageType.Text:
+                case MessageType.Image:
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var chatMessage = new ChatMessage 
+                        { 
+                            Content = messageWrapper.Content,
+                            Sender = _userSelected, 
+                            Timestamp = messageWrapper.Timestamp,
+                            Type = messageWrapper.Type,
+                            ImageData = messageWrapper.ImageData
+                        };
+                        ChatMessages.Add(chatMessage);
+                    });
+                    break;
+
+                case MessageType.CallInvite:
+                    await HandleIncomingCallInviteAsync(messageWrapper);
+                    break;
+
+                case MessageType.WebRtcOffer:
+                    await HandleWebRtcOfferAsync(messageWrapper);
+                    break;
+
+                case MessageType.WebRtcAnswer:
+                    await HandleWebRtcAnswerAsync(messageWrapper);
+                    break;
+
+                case MessageType.IceCandidate:
+                    await HandleIceCandidateAsync(messageWrapper);
+                    break;
+
+                case MessageType.CallEnd:
+                    await HandleCallEndAsync();
+                    break;
+
+                default:
+                    Console.WriteLine($"Unknown message type: {messageWrapper.Type}");
+                    break;
+            }
+        }
+
+        private async Task HandleIncomingCallInviteAsync(MessageWrapper messageWrapper)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var chatMessage = new ChatMessage
+                {
+                    Content = $"📞 Incoming {messageWrapper.CallType} call from {messageWrapper.SenderName}",
+                    Sender = _userSelected,
+                    Timestamp = messageWrapper.Timestamp,
+                    Type = MessageType.Text
+                };
+                ChatMessages.Add(chatMessage);
+            });
+            
+            Console.WriteLine($"Incoming {messageWrapper.CallType} call from user {messageWrapper.SenderId}");
+        }
+
+        private async Task HandleWebRtcOfferAsync(MessageWrapper messageWrapper)
+        {
+            if (_webRTCManager == null || string.IsNullOrEmpty(messageWrapper.SdpOffer))
+            {
+                Console.WriteLine("Cannot handle offer: no WebRTC manager or missing SDP");
+                return;
+            }
+
+            bool includeVideo = messageWrapper.CallType == "video";
+            await _webRTCManager.AcceptCallAsync(messageWrapper.SdpOffer, includeVideo);
+        }
+
+        private async Task HandleWebRtcAnswerAsync(MessageWrapper messageWrapper)
+        {
+            if (_webRTCManager == null || string.IsNullOrEmpty(messageWrapper.SdpAnswer))
+            {
+                Console.WriteLine("Cannot handle answer: no WebRTC manager or missing SDP");
+                return;
+            }
+
+            await _webRTCManager.HandleAnswerAsync(messageWrapper.SdpAnswer);
+        }
+
+        private async Task HandleIceCandidateAsync(MessageWrapper messageWrapper)
+        {
+            if (_webRTCManager == null || string.IsNullOrEmpty(messageWrapper.IceCandidateData))
+            {
+                Console.WriteLine("Cannot handle ICE candidate: no WebRTC manager or missing data");
+                return;
+            }
+
+            await _webRTCManager.HandleIceCandidateAsync(messageWrapper.IceCandidateData);
+        }
+
+        private async Task HandleCallEndAsync()
+        {
+            if (_webRTCManager != null)
+            {
+                _webRTCManager.Cleanup();
+                _webRTCManager = null;
+            }
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var chatMessage = new ChatMessage
+                {
+                    Content = "📞 Call ended",
+                    Sender = _userSelected,
+                    Timestamp = DateTime.Now,
+                    Type = MessageType.Text
+                };
+                ChatMessages.Add(chatMessage);
+            });
         }
 
         public async void SendMessage(string message)
@@ -208,20 +312,78 @@ namespace Muffle.ViewModels
         {
             try
             {
+                if (_friendSelected == null)
+                {
+                    Console.WriteLine("No friend selected for voice call");
+                    return;
+                }
+
                 Console.WriteLine("Starting voice call...");
-                // TODO: Implement WebRTC voice call functionality
-                // For now, this is a placeholder implementation
                 
-                // When WebRTC is enabled, this would:
-                // 1. Initialize WebRTC connection with audio only
-                // 2. Send call invitation through signaling service
-                // 3. Handle the call setup process
+                var userId = _userSelected?.Id ?? 0;
+                _webRTCManager = new WebRTCManager(_signalingService, userId);
+                
+                _webRTCManager.OnCallStateChanged += (state) =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var chatMessage = new ChatMessage
+                        {
+                            Content = $"📞 Voice call state: {state}",
+                            Sender = _userSelected,
+                            Timestamp = DateTime.Now,
+                            Type = MessageType.Text
+                        };
+                        ChatMessages.Add(chatMessage);
+                    });
+                };
+
+                _webRTCManager.OnError += (error) =>
+                {
+                    Console.WriteLine($"WebRTC Error: {error}");
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var chatMessage = new ChatMessage
+                        {
+                            Content = $"❌ Call error: {error}",
+                            Sender = _userSelected,
+                            Timestamp = DateTime.Now,
+                            Type = MessageType.Text
+                        };
+                        ChatMessages.Add(chatMessage);
+                    });
+                };
+
+                await _webRTCManager.StartCallAsync(_friendSelected.Id, includeVideo: false);
+                
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    var chatMessage = new ChatMessage
+                    {
+                        Content = $"📞 Calling {_friendSelected.Name}...",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    };
+                    ChatMessages.Add(chatMessage);
+                });
                 
                 Console.WriteLine("Voice call initiated");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error starting voice call: {ex.Message}");
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    var chatMessage = new ChatMessage
+                    {
+                        Content = $"❌ Failed to start voice call: {ex.Message}",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    };
+                    ChatMessages.Add(chatMessage);
+                });
             }
         }
 
@@ -229,21 +391,116 @@ namespace Muffle.ViewModels
         {
             try
             {
+                if (_friendSelected == null)
+                {
+                    Console.WriteLine("No friend selected for video call");
+                    return;
+                }
+
                 Console.WriteLine("Starting video call...");
-                // TODO: Implement WebRTC video call functionality
-                // For now, this is a placeholder implementation
                 
-                // When WebRTC is enabled, this would:
-                // 1. Initialize WebRTC connection with audio and video
-                // 2. Send call invitation through signaling service
-                // 3. Handle the call setup process
+                var userId = _userSelected?.Id ?? 0;
+                _webRTCManager = new WebRTCManager(_signalingService, userId);
                 
-                await Task.Delay(100); // Simulate async operation
+                _webRTCManager.OnCallStateChanged += (state) =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var chatMessage = new ChatMessage
+                        {
+                            Content = $"📹 Video call state: {state}",
+                            Sender = _userSelected,
+                            Timestamp = DateTime.Now,
+                            Type = MessageType.Text
+                        };
+                        ChatMessages.Add(chatMessage);
+                    });
+                };
+
+                _webRTCManager.OnError += (error) =>
+                {
+                    Console.WriteLine($"WebRTC Error: {error}");
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var chatMessage = new ChatMessage
+                        {
+                            Content = $"❌ Call error: {error}",
+                            Sender = _userSelected,
+                            Timestamp = DateTime.Now,
+                            Type = MessageType.Text
+                        };
+                        ChatMessages.Add(chatMessage);
+                    });
+                };
+
+                _webRTCManager.OnRemoteStreamAdded += (stream) =>
+                {
+                    Console.WriteLine("Remote video stream received");
+                };
+
+                await _webRTCManager.StartCallAsync(_friendSelected.Id, includeVideo: true);
+                
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    var chatMessage = new ChatMessage
+                    {
+                        Content = $"📹 Video calling {_friendSelected.Name}...",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    };
+                    ChatMessages.Add(chatMessage);
+                });
+                
                 Console.WriteLine("Video call initiated");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error starting video call: {ex.Message}");
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    var chatMessage = new ChatMessage
+                    {
+                        Content = $"❌ Failed to start video call: {ex.Message}",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    };
+                    ChatMessages.Add(chatMessage);
+                });
+            }
+        }
+
+        public async Task EndCallAsync()
+        {
+            try
+            {
+                if (_webRTCManager == null)
+                {
+                    Console.WriteLine("No active call to end");
+                    return;
+                }
+
+                await _webRTCManager.EndCallAsync();
+                _webRTCManager = null;
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    var chatMessage = new ChatMessage
+                    {
+                        Content = "📞 Call ended",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    };
+                    ChatMessages.Add(chatMessage);
+                });
+
+                Console.WriteLine("Call ended successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error ending call: {ex.Message}");
             }
         }
 
