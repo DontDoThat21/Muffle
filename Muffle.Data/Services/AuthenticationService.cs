@@ -339,7 +339,7 @@ namespace Muffle.Data.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error cleaning up expired tokens: {ex.message}");
+                Console.WriteLine($"Error cleaning up expired tokens: {ex.Message}");
                 return 0;
             }
         }

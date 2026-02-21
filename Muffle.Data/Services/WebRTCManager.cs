@@ -22,19 +22,21 @@ namespace Muffle.Data.Services
         private IRTCPeerConnection? _peerConnection;
         private IMediaStream? _localStream;
         private readonly ISignalingService _signalingService;
+        private readonly IWindow _window;
         private readonly int _userId;
         private string _callType = "voice";
-        
+
         public event Action<IMediaStream>? OnRemoteStreamAdded;
         public event Action<CallState>? OnCallStateChanged;
         public event Action<string>? OnError;
-        
+
         public CallState CurrentCallState { get; private set; } = CallState.Idle;
 
-        public WebRTCManager(ISignalingService signalingService, int userId)
+        public WebRTCManager(ISignalingService signalingService, int userId, IWindow window)
         {
             _signalingService = signalingService;
             _userId = userId;
+            _window = window;
         }
 
         public async Task InitializeAsync(bool includeVideo)
@@ -51,7 +53,7 @@ namespace Muffle.Data.Services
                     }
                 };
                 
-                _peerConnection = WebRTC.Window(null).CreatePeerConnection(config);
+                _peerConnection = _window.RTCPeerConnection(config);
 
                 _peerConnection.OnIceCandidate += OnIceCandidateHandler;
                 _peerConnection.OnTrack += OnTrackHandler;
@@ -59,15 +61,15 @@ namespace Muffle.Data.Services
 
                 var constraints = new MediaStreamConstraints
                 {
-                    Audio = new MediaTrackConstraints { Enabled = true },
-                    Video = includeVideo ? new MediaTrackConstraints { Enabled = true } : null
+                    Audio = new MediaStreamContraintsUnion { Value = true },
+                    Video = includeVideo ? new MediaStreamContraintsUnion { Value = true } : null
                 };
-                
-                _localStream = await WebRTC.Window(null).Navigator.MediaDevices.GetUserMedia(constraints);
+
+                _localStream = await _window.Navigator().MediaDevices.GetUserMedia(constraints);
 
                 foreach (var track in _localStream.GetTracks())
                 {
-                    _peerConnection.AddTrack(track, new IMediaStream[] { _localStream });
+                    _peerConnection.AddTrack(track, _localStream);
                 }
 
                 Console.WriteLine($"WebRTC initialized for {_callType} call");
@@ -79,7 +81,7 @@ namespace Muffle.Data.Services
             }
         }
 
-        private void OnIceCandidateHandler(IRTCPeerConnectionIceEvent evt)
+        private void OnIceCandidateHandler(object? sender, IRTCPeerConnectionIceEvent evt)
         {
             try
             {
@@ -107,7 +109,7 @@ namespace Muffle.Data.Services
             }
         }
 
-        private void OnTrackHandler(IRTCTrackEvent evt)
+        private void OnTrackHandler(object? sender, IRTCTrackEvent evt)
         {
             try
             {
@@ -123,7 +125,7 @@ namespace Muffle.Data.Services
             }
         }
 
-        private void OnIceConnectionStateChangeHandler()
+        private void OnIceConnectionStateChangeHandler(object? sender, EventArgs e)
         {
             try
             {

@@ -2,7 +2,7 @@ using Muffle.ViewModels;
 
 namespace Muffle.Views
 {
-    public partial class RegistrationView : ContentPage
+    public partial class RegistrationView : ContentView
     {
         private readonly RegistrationViewModel _viewModel;
 

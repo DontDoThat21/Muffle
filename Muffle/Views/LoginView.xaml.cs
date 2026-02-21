@@ -3,7 +3,7 @@ using Muffle.ViewModels;
 
 namespace Muffle.Views
 {
-    public partial class LoginView : ContentPage
+    public partial class LoginView : ContentView
     {
         private readonly LoginViewModel _viewModel;
 

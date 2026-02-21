@@ -17,8 +17,8 @@ namespace Muffle.Tests
             Console.WriteLine();
 
             // Create test data
-            var user = new User { Id = 1, Name = "Alice", Email = "alice@example.com", Password = "test" };
-            var friend = new User { Id = 2, Name = "Bob", Email = "bob@example.com", Password = "test" };
+            var user = new User { UserId = 1, Name = "Alice", Email = "alice@example.com", PasswordHash = "test" };
+            var friend = new User { UserId = 2, Name = "Bob", Email = "bob@example.com", PasswordHash = "test" };
 
             // Create and send a text message
             Console.WriteLine("1. Creating text message...");
@@ -36,9 +36,9 @@ namespace Muffle.Tests
                 Content = textMessage.Content,
                 Timestamp = textMessage.Timestamp,
                 SenderName = user.Name,
-                SenderId = user.Id
+                SenderId = user.UserId
             };
-            
+
             string textJson = JsonSerializer.Serialize(textWrapper);
             Console.WriteLine($"Text message JSON: {textJson}");
             Console.WriteLine();
@@ -67,9 +67,9 @@ namespace Muffle.Tests
                 ImageData = imageData,
                 Timestamp = imageMessage.Timestamp,
                 SenderName = user.Name,
-                SenderId = user.Id
+                SenderId = user.UserId
             };
-            
+
             string imageJson = JsonSerializer.Serialize(imageWrapper);
             Console.WriteLine($"Image message JSON: {imageJson}");
             Console.WriteLine();

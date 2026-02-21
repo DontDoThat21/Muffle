@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Text.Json;
+using WebRTCme;
 
 namespace Muffle.ViewModels
 {
@@ -239,14 +240,14 @@ namespace Muffle.ViewModels
                     Content = MessageToSend,
                     Timestamp = DateTime.Now,
                     SenderName = _userSelected?.Name ?? "Unknown",
-                    SenderId = _userSelected?.Id ?? 0
+                    SenderId = _userSelected?.UserId ?? 0
                 };
 
                 await _signalingService.SendMessageWrapperAsync(messageWrapper);
-                
+
                 ChatMessages.Add(new ChatMessage 
                 { 
-                    Content = MessageToSend, 
+                    Content = MessageToSend,
                     Sender = _userSelected, 
                     Timestamp = DateTime.Now,
                     Type = MessageType.Text
@@ -285,14 +286,14 @@ namespace Muffle.ViewModels
                     ImageData = imageData,
                     Timestamp = DateTime.Now,
                     SenderName = _userSelected?.Name ?? "Unknown",
-                    SenderId = _userSelected?.Id ?? 0
+                    SenderId = _userSelected?.UserId ?? 0
                 };
 
                 await _signalingService.SendMessageWrapperAsync(messageWrapper);
-                
+
                 ChatMessages.Add(new ChatMessage 
                 { 
-                    Content = $"📷 Image: {Path.GetFileName(imagePath)}", 
+                    Content = $"📷 Image: {Path.GetFileName(imagePath)}",
                     Sender = _userSelected, 
                     Timestamp = DateTime.Now,
                     Type = MessageType.Image,
@@ -320,9 +321,10 @@ namespace Muffle.ViewModels
 
                 Console.WriteLine("Starting voice call...");
                 
-                var userId = _userSelected?.Id ?? 0;
-                _webRTCManager = new WebRTCManager(_signalingService, userId);
-                
+                var userId = _userSelected?.UserId ?? 0;
+                var window = CrossWebRtc.Current.Window(null);
+                _webRTCManager = new WebRTCManager(_signalingService, userId, window);
+
                 _webRTCManager.OnCallStateChanged += (state) =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
@@ -399,9 +401,10 @@ namespace Muffle.ViewModels
 
                 Console.WriteLine("Starting video call...");
                 
-                var userId = _userSelected?.Id ?? 0;
-                _webRTCManager = new WebRTCManager(_signalingService, userId);
-                
+                var userId = _userSelected?.UserId ?? 0;
+                var window = CrossWebRtc.Current.Window(null);
+                _webRTCManager = new WebRTCManager(_signalingService, userId, window);
+
                 _webRTCManager.OnCallStateChanged += (state) =>
                 {
                     Device.BeginInvokeOnMainThread(() =>

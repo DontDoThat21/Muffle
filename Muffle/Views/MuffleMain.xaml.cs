@@ -192,7 +192,7 @@ namespace Muffle
                 var viewModel = BindingContext as MainPageViewModel;
                 if (viewModel?.User != null)
                 {
-                    userId = viewModel.User.Id;
+                    userId = viewModel.User.UserId;
                 }
 
                 var createdServer = UsersService.CreateServer(
