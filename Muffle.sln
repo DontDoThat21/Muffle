@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34728.123
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11513.90 insiders
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muffle", "Muffle\Muffle.csproj", "{D3CE730B-4F9A-4F2A-A315-9C1EE142A6AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muffle.Data", "Muffle.Data\Muffle.Data.csproj", "{82F31591-CFAC-407A-92C7-EA3CAA2C5C66}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B057F4E0-58F7-49A9-A8D8-A3EB6785B501}"
+	ProjectSection(SolutionItems) = preProject
+		FEATURES.md = FEATURES.md
+		IMAGE_SUPPORT.md = IMAGE_SUPPORT.md
+		SPEC.md = SPEC.md
+		TASKS.md = TASKS.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
