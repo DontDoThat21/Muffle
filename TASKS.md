@@ -252,7 +252,7 @@ On success: update FEATURES.md — feature 5.6 from 📋 to ✅.
 
 ### 5.7 File searching (local)
 
-⬜ TASK-063: In Muffle.Data/Services/MessageSearchService.cs — add SearchFiles(int userId, string query) static method. SQL: `SELECT * FROM Messages WHERE (SenderId = @userId OR ReceiverId = @userId) AND Type = @imageType AND Content LIKE @q LIMIT 50`. One file only.
+✅ TASK-063: In Muffle.Data/Services/MessageSearchService.cs — add SearchFiles(int userId, string query) static method. SQL: `SELECT * FROM Messages WHERE (SenderId = @userId OR ReceiverId = @userId) AND Type = @imageType AND Content LIKE @q LIMIT 50`. One file only.
 On success: update FEATURES.md — feature 5.7 from 📋 to ✅.
 
 ### 5.8 Search filters (by user, date, type)

@@ -30,5 +30,22 @@ namespace Muffle.Data.Services
                 .Select(m => m.Value)
                 .ToList();
         }
+
+        // TASK-063: Search shared files/images
+        public static List<ChatMessage> SearchFiles(int userId, string query)
+        {
+            var q = $"%{query}%";
+            var imageType = (int)MessageType.Image;
+            using var connection = SQLiteDbService.CreateConnection();
+            connection.Open();
+
+            return connection.Query<ChatMessage>(@"
+                SELECT * FROM Messages
+                WHERE (SenderId = @userId OR ReceiverId = @userId)
+                AND Type = @imageType
+                AND Content LIKE @q
+                LIMIT 50",
+                new { userId, imageType, q }).ToList();
+        }
     }
 }
