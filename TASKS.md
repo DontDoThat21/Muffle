@@ -109,19 +109,19 @@ On success: update FEATURES.md — feature 4.2 from 📋 to ✅.
 
 ### 4.3 Invite links
 
-⬜ TASK-026: Create Muffle.Data/Models/InviteLink.cs — properties: InviteLinkId (int), ServerId (int), Code (string), CreatedBy (int), CreatedAt (DateTime), ExpiresAt (DateTime?), MaxUses (int?), UseCount (int, default 0). One file only.
+✅ TASK-026: Create Muffle.Data/Models/InviteLink.cs — properties: InviteLinkId (int), ServerId (int), Code (string), CreatedBy (int), CreatedAt (DateTime), ExpiresAt (DateTime?), MaxUses (int?), UseCount (int, default 0). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-027: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS InviteLinks DDL (InviteLinkId INTEGER PRIMARY KEY AUTOINCREMENT, ServerId INTEGER NOT NULL, Code TEXT NOT NULL UNIQUE, CreatedBy INTEGER NOT NULL, CreatedAt DATETIME NOT NULL, ExpiresAt DATETIME, MaxUses INTEGER, UseCount INTEGER NOT NULL DEFAULT 0, FK to Servers and Users). Also add `DROP TABLE IF EXISTS InviteLinks` to DisposeDatabase method. One file only.
+✅ TASK-027: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS InviteLinks DDL (InviteLinkId INTEGER PRIMARY KEY AUTOINCREMENT, ServerId INTEGER NOT NULL, Code TEXT NOT NULL UNIQUE, CreatedBy INTEGER NOT NULL, CreatedAt DATETIME NOT NULL, ExpiresAt DATETIME, MaxUses INTEGER, UseCount INTEGER NOT NULL DEFAULT 0, FK to Servers and Users). Also add `DROP TABLE IF EXISTS InviteLinks` to DisposeDatabase method. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-028: Create Muffle.Data/Services/InviteLinkService.cs — static class with CreateInviteLink(int serverId, int createdBy, DateTime? expiresAt, int? maxUses) returning InviteLink?. Generate Code via Guid.NewGuid().ToString("N")[..8]. INSERT into InviteLinks, return created object. Use Dapper + SQLiteDbService.CreateConnection(). One file only.
+✅ TASK-028: Create Muffle.Data/Services/InviteLinkService.cs — static class with CreateInviteLink(int serverId, int createdBy, DateTime? expiresAt, int? maxUses) returning InviteLink?. Generate Code via Guid.NewGuid().ToString("N")[..8]. INSERT into InviteLinks, return created object. Use Dapper + SQLiteDbService.CreateConnection(). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-029: In Muffle.Data/Services/InviteLinkService.cs — add GetInviteLinkByCode(string code) returning InviteLink? and ValidateInviteLink(string code) returning bool (checks ExpiresAt > now and UseCount < MaxUses or MaxUses is null). One file only.
+✅ TASK-029: In Muffle.Data/Services/InviteLinkService.cs — add GetInviteLinkByCode(string code) returning InviteLink? and ValidateInviteLink(string code) returning bool (checks ExpiresAt > now and UseCount < MaxUses or MaxUses is null). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-030: In Muffle.Data/Services/InviteLinkService.cs — add UseInviteLink(string code, int userId) method. Validates link, increments UseCount, inserts into ServerMembers table (ServerId, UserId, JoinedAt=now). Returns bool success. One file only.
+✅ TASK-030: In Muffle.Data/Services/InviteLinkService.cs — add UseInviteLink(string code, int userId) method. Validates link, increments UseCount, inserts into ServerMembers table (ServerId, UserId, JoinedAt=now). Returns bool success. One file only.
 On success: update FEATURES.md — feature 4.3 from 📋 to ✅.
 
 ### 4.4 Server browser (public servers)
