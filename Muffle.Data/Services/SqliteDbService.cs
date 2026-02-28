@@ -56,7 +56,8 @@ namespace Muffle.Data.Services
                 Description TEXT,
                 IpAddress TEXT NOT NULL,
                 Port INTEGER NOT NULL,
-                IsPublic INTEGER NOT NULL DEFAULT 0
+                IsPublic INTEGER NOT NULL DEFAULT 0,
+                IconUrl TEXT
             );";
 
             connection.Execute(createServersTableQuery);
@@ -72,6 +73,7 @@ namespace Muffle.Data.Services
                 Position INTEGER NOT NULL DEFAULT 0,
                 CreatedAt DATETIME NOT NULL,
                 CreatedBy INTEGER NOT NULL,
+                IconUrl TEXT,
                 FOREIGN KEY (ServerId) REFERENCES Servers(Id),
                 FOREIGN KEY (CreatedBy) REFERENCES Users(UserId)
             );";

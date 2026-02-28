@@ -148,18 +148,18 @@ On success: update FEATURES.md — feature 4.5 from 📋 to ✅.
 
 ### 4.6 Server icons
 
-⬜ TASK-037: In Muffle.Data/Models/Server.cs — add `public string? IconUrl { get; set; }` property after IsPublic. One file only.
+✅ TASK-037: In Muffle.Data/Models/Server.cs — add `public string? IconUrl { get; set; }` property after IsPublic. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-038: In Muffle.Data/Services/SqliteDbService.cs — add `IconUrl TEXT` column to the Servers CREATE TABLE statement. One file only.
+✅ TASK-038: In Muffle.Data/Services/SqliteDbService.cs — add `IconUrl TEXT` column to the Servers CREATE TABLE statement. One file only.
 On success: update FEATURES.md — feature 4.6 from 📋 to ✅.
 
 ### 4.7 Channel icons
 
-⬜ TASK-039: In Muffle.Data/Models/Channel.cs — add `public string? IconUrl { get; set; }` property after CreatedBy. One file only.
+✅ TASK-039: In Muffle.Data/Models/Channel.cs — add `public string? IconUrl { get; set; }` property after CreatedBy. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-040: In Muffle.Data/Services/SqliteDbService.cs — add `IconUrl TEXT` column to the Channels CREATE TABLE statement. One file only.
+✅ TASK-040: In Muffle.Data/Services/SqliteDbService.cs — add `IconUrl TEXT` column to the Channels CREATE TABLE statement. One file only.
 On success: update FEATURES.md — feature 4.7 from 📋 to ✅.
 
 ### 4.8 Server permissions & roles

@@ -78,8 +78,8 @@ Advanced server management, channels, permissions, and discoverability.
 | 4.3 | Invite links (customizable or generated) | ✅ | InviteLink model, InviteLinks table, InviteLinkService with create/validate/use |
 | 4.4 | Server browser (public servers) | ✅ | ServerBrowserService (GetPublicServers, SearchServers), ServerBrowserViewModel, ServerBrowserView |
 | 4.5 | Join server from browser | ✅ | ServerBrowserService.JoinServer (duplicate-guard insert into ServerMembers), wired to JoinServerCommand |
-| 4.6 | Server icons (customizable) | 📋 | Upload/change server avatar (owner only) |
-| 4.7 | Channel icons (customizable) | 📋 | Upload/change channel avatar (channel/server owner) |
+| 4.6 | Server icons (customizable) | ✅ | IconUrl property on Server model, IconUrl TEXT column in Servers table |
+| 4.7 | Channel icons (customizable) | ✅ | IconUrl property on Channel model, IconUrl TEXT column in Channels table |
 | 4.8 | Server permissions & roles | 📋 | Role-based access control (admin, moderator, member) |
 | 4.9 | Channel permissions | 📋 | Per-channel view/send permissions |
 | 4.10 | Server-specific nicknames | 📋 | Override display name per server |

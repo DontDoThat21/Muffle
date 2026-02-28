@@ -21,5 +21,6 @@
         public string IpAddress { get; set; }
         public double Port { get; set; }
         public bool IsPublic { get; set; }
+        public string? IconUrl { get; set; }
     }
 }

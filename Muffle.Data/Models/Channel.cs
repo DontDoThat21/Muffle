@@ -23,6 +23,7 @@ namespace Muffle.Data.Models
         public int Position { get; set; } // For ordering channels
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; } // UserId who created the channel
+        public string? IconUrl { get; set; }
 
         /// <summary>
         /// Gets a formatted display name with type indicator
