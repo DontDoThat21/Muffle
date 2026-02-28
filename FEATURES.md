@@ -102,7 +102,7 @@ Rich media, search, mentions, and notifications.
 | 5.8 | Search filters (by user, date, type) | ✅ | MessageSearchService.SearchMessagesFiltered (DynamicParameters, optional query/fromUserId/after/before/type filters) |
 | 5.9 | Message reactions | ✅ | MessageReaction model, MessageReactions table (UNIQUE per message+user+emoji), MessageReactionService (AddReaction, RemoveReaction, GetReactionsForMessage) |
 | 5.10 | Message threads/replies | ✅ | ParentMessageId (int?) added to ChatMessage for reply threading |
-| 5.11 | Rich link previews | 📋 | Embed previews for URLs (title, image, description) |
+| 5.11 | Rich link previews | ✅ | LinkPreviewService (Open Graph + fallback parsing), LinkPreviewResult model, INotifyPropertyChanged on ChatMessage, inline preview card (site name, title, description, og:image) |
 
 ---
 

@@ -12,6 +12,7 @@
             <converters:MessageTypeToImageVisibilityConverter x:Key="MessageTypeToImageVisibilityConverter" />
             <converters:Base64ToImageConverter x:Key="Base64ToImageConverter" />
             <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+            <converters:NotNullConverter x:Key="NotNullConverter" />
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -51,7 +52,7 @@
                                             
                                             <!-- Display for Image Messages -->
                                             <StackLayout IsVisible="{Binding Type, Converter={StaticResource MessageTypeToImageVisibilityConverter}}">
-                                                <Label Text="📷 Image" 
+                                                <Label Text="📷 Image"
                                                        FontSize="14"
                                                        TextColor="LightBlue"/>
                                                 <Image Source="{Binding ImageData, Converter={StaticResource Base64ToImageConverter}}"
@@ -60,7 +61,39 @@
                                                        Aspect="AspectFit"
                                                        IsVisible="{Binding ImageData, Converter={StaticResource StringNotEmptyConverter}}"/>
                                             </StackLayout>
-                                            
+
+                                            <!-- Rich Link Preview Card -->
+                                            <Frame IsVisible="{Binding LinkPreview, Converter={StaticResource NotNullConverter}}"
+                                                   BackgroundColor="#1e1e2e"
+                                                   BorderColor="#444466"
+                                                   CornerRadius="8"
+                                                   Padding="10"
+                                                   Margin="0,4,0,0"
+                                                   HasShadow="False">
+                                                <StackLayout Spacing="4">
+                                                    <Label Text="{Binding LinkPreview.SiteName}"
+                                                           FontSize="10"
+                                                           TextColor="#7289DA"
+                                                           FontAttributes="Bold"/>
+                                                    <Label Text="{Binding LinkPreview.Title}"
+                                                           FontSize="13"
+                                                           TextColor="White"
+                                                           FontAttributes="Bold"
+                                                           MaxLines="2"
+                                                           LineBreakMode="TailTruncation"/>
+                                                    <Label Text="{Binding LinkPreview.Description}"
+                                                           FontSize="11"
+                                                           TextColor="#B0B0B0"
+                                                           MaxLines="3"
+                                                           LineBreakMode="TailTruncation"/>
+                                                    <Image Source="{Binding LinkPreview.ImageUrl}"
+                                                           HeightRequest="120"
+                                                           Aspect="AspectFill"
+                                                           IsVisible="{Binding LinkPreview.ImageUrl, Converter={StaticResource StringNotEmptyConverter}}"
+                                                           HorizontalOptions="FillAndExpand"/>
+                                                </StackLayout>
+                                            </Frame>
+
                                             <!-- Timestamp for all messages -->
                                             <Label Text="{Binding Timestamp, StringFormat='{0:HH:mm}'}"
                                                    FontSize="10"

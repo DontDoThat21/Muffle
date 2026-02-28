@@ -119,15 +119,18 @@ namespace Muffle.ViewModels
                 case MessageType.Image:
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        var chatMessage = new ChatMessage 
-                        { 
+                        var chatMessage = new ChatMessage
+                        {
                             Content = messageWrapper.Content,
-                            Sender = _userSelected, 
+                            Sender = _userSelected,
                             Timestamp = messageWrapper.Timestamp,
                             Type = messageWrapper.Type,
                             ImageData = messageWrapper.ImageData
                         };
                         ChatMessages.Add(chatMessage);
+
+                        if (messageWrapper.Type == MessageType.Text)
+                            _ = FetchAndAttachLinkPreviewAsync(chatMessage, messageWrapper.Content);
                     });
                     break;
 
@@ -245,14 +248,30 @@ namespace Muffle.ViewModels
 
                 await _signalingService.SendMessageWrapperAsync(messageWrapper);
 
-                ChatMessages.Add(new ChatMessage 
-                { 
-                    Content = MessageToSend,
-                    Sender = _userSelected, 
+                var sentContent = MessageToSend;
+                var chatMessage = new ChatMessage
+                {
+                    Content = sentContent,
+                    Sender = _userSelected,
                     Timestamp = DateTime.Now,
                     Type = MessageType.Text
-                });
+                };
+                ChatMessages.Add(chatMessage);
                 MessageToSend = string.Empty; // Clear the message input after sending
+
+                _ = FetchAndAttachLinkPreviewAsync(chatMessage, sentContent);
+            }
+        }
+
+        private async Task FetchAndAttachLinkPreviewAsync(ChatMessage chatMessage, string content)
+        {
+            var links = MessageSearchService.ExtractLinks(content);
+            if (links.Count == 0) return;
+
+            var preview = await LinkPreviewService.FetchPreviewAsync(links[0]);
+            if (preview != null)
+            {
+                Device.BeginInvokeOnMainThread(() => chatMessage.LinkPreview = preview);
             }
         }
 
