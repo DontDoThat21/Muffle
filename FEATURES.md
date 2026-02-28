@@ -146,7 +146,7 @@ Authentication hardening, 2FA, and account safety.
 
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
-| 8.1 | Optional 2FA/MFA | 📋 | TOTP (Google Authenticator, Authy) |
+| 8.1 | Optional 2FA/MFA | ✅ | TOTP (RFC 6238), self-contained HMAC-SHA1 implementation, otpauth:// URI, BCrypt-hashed backup codes (8 single-use), enable/disable flow with code verification, login challenge step |
 | 8.2 | Password change flow | 📋 | Change password with email verification |
 | 8.3 | Email verification | 📋 | Verify email on signup |
 | 8.4 | Password reset (forgot password) | 📋 | Email-based password recovery |
@@ -181,9 +181,9 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 5: Chat Enhancements | ✅ Complete | 11/11 |
 | Phase 6: User Profile & Customization | ✅ Complete | 8/8 |
 | Phase 7: Settings & Configuration | ✅ Complete | 8/8 |
-| Phase 8: Security & Account | 📋 Planned | 0/5 |
+| Phase 8: Security & Account | 🔧 In Progress | 1/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **52/75** |
+| **Total** | | **53/75** |
 
 ---
 
