@@ -136,7 +136,7 @@ App settings, voice/video config, accessibility, and developer tools.
 | 7.5 | Privacy and safety settings | ✅ | DM privacy, friend request filtering, content filtering; PrivacySettings model + PrivacySettingsService (SQLite/SQL Server), PrivacySettingsViewModel, PrivacySettingsView, Privacy button in MuffleMain |
 | 7.6 | Devices connected to account | ✅ | View active sessions, log out remotely; ConnectedDevicesViewModel, ConnectedDevicesView, Devices button in MuffleMain |
 | 7.7 | Patch notes viewer | ✅ | PatchNote + PatchNoteEntry models, PatchNotesService (hardcoded changelog), PatchNotesViewModel, PatchNotesView with versioned entries and color-coded type badges |
-| 7.8 | Library acknowledgements | 📋 | Credits for open-source libraries used |
+| 7.8 | Library acknowledgements | ✅ | LibraryAcknowledgement model, LibraryAcknowledgementsService (12 packages), LibraryAcknowledgementsViewModel, LibraryAcknowledgementsView with license badges and URLs |
 
 ---
 
@@ -180,10 +180,10 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 4: Server Features | ✅ Complete | 10/10 |
 | Phase 5: Chat Enhancements | ✅ Complete | 11/11 |
 | Phase 6: User Profile & Customization | ✅ Complete | 8/8 |
-| Phase 7: Settings & Configuration | 🔧 In Progress | 6/8 |
+| Phase 7: Settings & Configuration | ✅ Complete | 8/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **51/75** |
+| **Total** | | **52/75** |
 
 ---
 

@@ -325,6 +325,17 @@ namespace Muffle
             MainContentFrame.Content = patchNotesView;
         }
 
+        private void LibraryAcknowledgementsButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Library Acknowledgements view
+            var libraryAcknowledgementsViewModel = new LibraryAcknowledgementsViewModel();
+            var libraryAcknowledgementsView = new LibraryAcknowledgementsView(libraryAcknowledgementsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = libraryAcknowledgementsView;
+        }
+
     }
 
 }

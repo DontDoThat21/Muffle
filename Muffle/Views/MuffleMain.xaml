@@ -68,6 +68,12 @@
                             FontSize="10"
                             Padding="5,2"
                             Clicked="PatchNotesButton_OnClicked"/>
+                    <Button Text="Credits"
+                            BackgroundColor="#2980B9"
+                            TextColor="White"
+                            FontSize="10"
+                            Padding="5,2"
+                            Clicked="LibraryAcknowledgementsButton_OnClicked"/>
                     <Button Text="Settings"
                             BackgroundColor="#43B581" 
                             TextColor="White" 
