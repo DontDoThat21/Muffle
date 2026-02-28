@@ -168,6 +168,36 @@ namespace Muffle.Data.Services
 
             connection.Execute(createInviteLinksTableQuery);
 
+            // Create ServerRoles table
+            var createServerRolesTableQuery = @"
+            CREATE TABLE IF NOT EXISTS ServerRoles (
+                RoleId INTEGER PRIMARY KEY AUTOINCREMENT,
+                ServerId INTEGER NOT NULL,
+                Name TEXT NOT NULL,
+                Permissions INTEGER NOT NULL DEFAULT 1,
+                Position INTEGER NOT NULL DEFAULT 0,
+                Color TEXT,
+                FOREIGN KEY (ServerId) REFERENCES Servers(Id)
+            );";
+
+            connection.Execute(createServerRolesTableQuery);
+
+            // Create ServerMembers table
+            var createServerMembersTableQuery = @"
+            CREATE TABLE IF NOT EXISTS ServerMembers (
+                ServerId INTEGER NOT NULL,
+                UserId INTEGER NOT NULL,
+                RoleId INTEGER,
+                Nickname TEXT,
+                JoinedAt DATETIME NOT NULL,
+                PRIMARY KEY (ServerId, UserId),
+                FOREIGN KEY (ServerId) REFERENCES Servers(Id),
+                FOREIGN KEY (UserId) REFERENCES Users(UserId),
+                FOREIGN KEY (RoleId) REFERENCES ServerRoles(RoleId)
+            );";
+
+            connection.Execute(createServerMembersTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)
@@ -254,6 +284,26 @@ namespace Muffle.Data.Services
                 {
                     var dropInviteLinksTable = "DROP TABLE IF EXISTS InviteLinks";
                     connection.Execute(dropInviteLinksTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropServerMembersTable = "DROP TABLE IF EXISTS ServerMembers";
+                    connection.Execute(dropServerMembersTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropServerRolesTable = "DROP TABLE IF EXISTS ServerRoles";
+                    connection.Execute(dropServerRolesTable);
                 }
                 catch (Exception)
                 {

@@ -164,19 +164,19 @@ On success: update FEATURES.md — feature 4.7 from 📋 to ✅.
 
 ### 4.8 Server permissions & roles
 
-⬜ TASK-041: Create Muffle.Data/Models/ServerRole.cs — properties: RoleId (int), ServerId (int), Name (string), Permissions (int, bitflags: 1=Read, 2=Send, 4=Manage, 8=Admin), Position (int), Color (string?). One file only.
+✅ TASK-041: Create Muffle.Data/Models/ServerRole.cs — properties: RoleId (int), ServerId (int), Name (string), Permissions (int, bitflags: 1=Read, 2=Send, 4=Manage, 8=Admin), Position (int), Color (string?). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-042: Create Muffle.Data/Models/ServerMember.cs — properties: ServerId (int), UserId (int), RoleId (int?), Nickname (string?), JoinedAt (DateTime). One file only.
+✅ TASK-042: Create Muffle.Data/Models/ServerMember.cs — properties: ServerId (int), UserId (int), RoleId (int?), Nickname (string?), JoinedAt (DateTime). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-043: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS ServerRoles DDL (RoleId INTEGER PRIMARY KEY AUTOINCREMENT, ServerId INTEGER NOT NULL, Name TEXT NOT NULL, Permissions INTEGER NOT NULL DEFAULT 1, Position INTEGER NOT NULL DEFAULT 0, Color TEXT, FK to Servers). Also add DROP TABLE IF EXISTS ServerRoles to DisposeDatabase. One file only.
+✅ TASK-043: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS ServerRoles DDL (RoleId INTEGER PRIMARY KEY AUTOINCREMENT, ServerId INTEGER NOT NULL, Name TEXT NOT NULL, Permissions INTEGER NOT NULL DEFAULT 1, Position INTEGER NOT NULL DEFAULT 0, Color TEXT, FK to Servers). Also add DROP TABLE IF EXISTS ServerRoles to DisposeDatabase. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-044: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS ServerMembers DDL (ServerId INTEGER NOT NULL, UserId INTEGER NOT NULL, RoleId INTEGER, Nickname TEXT, JoinedAt DATETIME NOT NULL, PRIMARY KEY (ServerId, UserId), FK to Servers, Users, ServerRoles). Also add DROP TABLE IF EXISTS ServerMembers to DisposeDatabase. One file only.
+✅ TASK-044: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS ServerMembers DDL (ServerId INTEGER NOT NULL, UserId INTEGER NOT NULL, RoleId INTEGER, Nickname TEXT, JoinedAt DATETIME NOT NULL, PRIMARY KEY (ServerId, UserId), FK to Servers, Users, ServerRoles). Also add DROP TABLE IF EXISTS ServerMembers to DisposeDatabase. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-045: Create Muffle.Data/Services/RoleService.cs — static class with CreateRole(int serverId, string name, int permissions) returning ServerRole?, GetServerRoles(int serverId) returning List<ServerRole>, AssignRole(int serverId, int userId, int roleId) returning bool. Use Dapper + SQLiteDbService.CreateConnection(). One file only.
+✅ TASK-045: Create Muffle.Data/Services/RoleService.cs — static class with CreateRole(int serverId, string name, int permissions) returning ServerRole?, GetServerRoles(int serverId) returning List<ServerRole>, AssignRole(int serverId, int userId, int roleId) returning bool. Use Dapper + SQLiteDbService.CreateConnection(). One file only.
 On success: update FEATURES.md — feature 4.8 from 📋 to ✅.
 
 ### 4.9 Channel permissions
