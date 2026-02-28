@@ -27,6 +27,6 @@ namespace Muffle.Data.Models
         public MessageType Type { get; set; } = MessageType.Text;
         public string? ImagePath { get; set; }
         public string? ImageData { get; set; } // Base64 encoded image data for transmission
-        // Add other properties as needed
+        public int? ParentMessageId { get; set; }
     }
 }

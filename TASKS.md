@@ -273,7 +273,7 @@ On success: update FEATURES.md — feature 5.9 from 📋 to ✅.
 
 ### 5.10 Message threads/replies
 
-⬜ TASK-068: In Muffle.Data/Models/ChatMessage.cs — add `public int? ParentMessageId { get; set; }` property for reply threading. One file only.
+✅ TASK-068: In Muffle.Data/Models/ChatMessage.cs — add `public int? ParentMessageId { get; set; }` property for reply threading. One file only.
 On success: update FEATURES.md — feature 5.10 from 📋 to ✅.
 
 ### 5.11 Rich link previews
