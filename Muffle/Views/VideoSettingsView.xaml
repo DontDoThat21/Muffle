@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             x:Class="Muffle.Views.VideoSettingsView"
+             x:DataType="viewmodels:VideoSettingsViewModel"
+             BackgroundColor="#303030">
+
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="15">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Video Settings"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"/>
+            <Label Text="Configure your camera, resolution, and frame rate for video calls"
+                   FontSize="14"
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Status Message -->
+                <Label Text="{Binding StatusMessage}"
+                       IsVisible="{Binding HasStatusMessage}"
+                       HorizontalOptions="Center"
+                       TextColor="Orange"
+                       FontSize="14"
+                       FontAttributes="Bold"/>
+
+                <!-- Processing Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsProcessing}"
+                                   IsRunning="{Binding IsProcessing}"
+                                   Color="White"
+                                   HorizontalOptions="Center"/>
+
+                <!-- Camera Selection -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Camera"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Select the camera used for video calls"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select camera"
+                                ItemsSource="{Binding Cameras}"
+                                SelectedItem="{Binding SelectedCamera}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Resolution -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Resolution"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Higher resolutions require more bandwidth and processing power"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select resolution"
+                                ItemsSource="{Binding Resolutions}"
+                                SelectedItem="{Binding SelectedResolution}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Frame Rate -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Frame Rate (FPS)"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Higher frame rates produce smoother video but use more bandwidth"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select frame rate"
+                                ItemsSource="{Binding FpsOptions}"
+                                SelectedItem="{Binding SelectedFps}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Save Button -->
+                <Button Text="Save Video Settings"
+                        Command="{Binding SaveVideoSettingsCommand}"
+                        BackgroundColor="#43B581"
+                        TextColor="White"
+                        CornerRadius="4"
+                        Padding="0,12"
+                        IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"
+                        Margin="0,5,0,20"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentView>

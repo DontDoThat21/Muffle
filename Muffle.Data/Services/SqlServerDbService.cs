@@ -194,7 +194,33 @@ namespace Muffle.Data.Services
 
             connection.Execute(createVoiceSettingsTableQuery);
 
-            // Seed data for Users (password is 'password123' hashed with BCrypt)
+            // Create VideoSettings table
+            var createVideoSettingsTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='VideoSettings' and xtype='U')
+        CREATE TABLE VideoSettings (
+            UserId INT PRIMARY KEY,
+            Camera NVARCHAR(255) NOT NULL DEFAULT 'Default',
+            Resolution NVARCHAR(20) NOT NULL DEFAULT '1280x720',
+            Fps INT NOT NULL DEFAULT 30,
+            FOREIGN KEY (UserId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createVideoSettingsTableQuery);
+
+            // Create AccessibilitySettings table
+            var createAccessibilitySettingsTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='AccessibilitySettings' and xtype='U')
+        CREATE TABLE AccessibilitySettings (
+            UserId INT PRIMARY KEY,
+            FontSize FLOAT NOT NULL DEFAULT 14.0,
+            HighContrast BIT NOT NULL DEFAULT 0,
+            ScreenReader BIT NOT NULL DEFAULT 0,
+            FOREIGN KEY (UserId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createAccessibilitySettingsTableQuery);
+
+            // Seed data for Users
             var seedUsersQuery = @"
             INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)
             VALUES 

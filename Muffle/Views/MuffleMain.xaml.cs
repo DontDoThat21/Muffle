@@ -259,6 +259,17 @@ namespace Muffle
             MainContentFrame.Content = voiceSettingsView;
         }
 
+        private void VideoSettingsButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Video Settings view
+            var videoSettingsViewModel = new VideoSettingsViewModel();
+            var videoSettingsView = new VideoSettingsView(videoSettingsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = videoSettingsView;
+        }
+
     }
 
 }
