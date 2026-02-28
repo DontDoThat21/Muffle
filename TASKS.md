@@ -262,13 +262,13 @@ On success: update FEATURES.md — feature 5.8 from 📋 to ✅.
 
 ### 5.9 Message reactions
 
-⬜ TASK-065: Create Muffle.Data/Models/MessageReaction.cs — properties: ReactionId (int), MessageId (int), UserId (int), Emoji (string), CreatedAt (DateTime). One file only.
+✅ TASK-065: Create Muffle.Data/Models/MessageReaction.cs — properties: ReactionId (int), MessageId (int), UserId (int), Emoji (string), CreatedAt (DateTime). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-066: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS MessageReactions DDL (ReactionId INTEGER PRIMARY KEY AUTOINCREMENT, MessageId INTEGER NOT NULL, UserId INTEGER NOT NULL, Emoji TEXT NOT NULL, CreatedAt DATETIME NOT NULL, UNIQUE(MessageId, UserId, Emoji)). Also add DROP TABLE IF EXISTS MessageReactions to DisposeDatabase. One file only.
+✅ TASK-066: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS MessageReactions DDL (ReactionId INTEGER PRIMARY KEY AUTOINCREMENT, MessageId INTEGER NOT NULL, UserId INTEGER NOT NULL, Emoji TEXT NOT NULL, CreatedAt DATETIME NOT NULL, UNIQUE(MessageId, UserId, Emoji)). Also add DROP TABLE IF EXISTS MessageReactions to DisposeDatabase. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-067: Create Muffle.Data/Services/MessageReactionService.cs — static class with AddReaction(int messageId, int userId, string emoji), RemoveReaction(int messageId, int userId, string emoji), GetReactionsForMessage(int messageId) returning List<MessageReaction>. Use Dapper. One file only.
+✅ TASK-067: Create Muffle.Data/Services/MessageReactionService.cs — static class with AddReaction(int messageId, int userId, string emoji), RemoveReaction(int messageId, int userId, string emoji), GetReactionsForMessage(int messageId) returning List<MessageReaction>. Use Dapper. One file only.
 On success: update FEATURES.md — feature 5.9 from 📋 to ✅.
 
 ### 5.10 Message threads/replies

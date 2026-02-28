@@ -100,7 +100,7 @@ Rich media, search, mentions, and notifications.
 | 5.6 | Link searching from chats | ✅ | MessageSearchService.ExtractLinks (compiled regex https?://[^\s]+) |
 | 5.7 | File searching (local) | ✅ | MessageSearchService.SearchFiles (Type = Image filter + Content LIKE query) |
 | 5.8 | Search filters (by user, date, type) | ✅ | MessageSearchService.SearchMessagesFiltered (DynamicParameters, optional query/fromUserId/after/before/type filters) |
-| 5.9 | Message reactions | 📋 | React to messages with emoji |
+| 5.9 | Message reactions | ✅ | MessageReaction model, MessageReactions table (UNIQUE per message+user+emoji), MessageReactionService (AddReaction, RemoveReaction, GetReactionsForMessage) |
 | 5.10 | Message threads/replies | 📋 | Reply to specific messages |
 | 5.11 | Rich link previews | 📋 | Embed previews for URLs (title, image, description) |
 

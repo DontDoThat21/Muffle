@@ -229,6 +229,19 @@ namespace Muffle.Data.Services
 
             connection.Execute(createNotificationsTableQuery);
 
+            // Create MessageReactions table
+            var createMessageReactionsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS MessageReactions (
+                ReactionId INTEGER PRIMARY KEY AUTOINCREMENT,
+                MessageId INTEGER NOT NULL,
+                UserId INTEGER NOT NULL,
+                Emoji TEXT NOT NULL,
+                CreatedAt DATETIME NOT NULL,
+                UNIQUE(MessageId, UserId, Emoji)
+            );";
+
+            connection.Execute(createMessageReactionsTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)
@@ -311,6 +324,16 @@ namespace Muffle.Data.Services
             {
                 using var connection = CreateConnection();
                 connection.Open();
+                try
+                {
+                    var dropMessageReactionsTable = "DROP TABLE IF EXISTS MessageReactions";
+                    connection.Execute(dropMessageReactionsTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
                 try
                 {
                     var dropNotificationsTable = "DROP TABLE IF EXISTS Notifications";
