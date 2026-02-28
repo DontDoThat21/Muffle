@@ -317,6 +317,18 @@ namespace Muffle.Data.Services
 
             connection.Execute(createAccessibilitySettingsTableQuery);
 
+            // Create DeveloperSettings table
+            var createDeveloperSettingsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS DeveloperSettings (
+                UserId INTEGER PRIMARY KEY,
+                DebugMode INTEGER NOT NULL DEFAULT 0,
+                WebSocketInspector INTEGER NOT NULL DEFAULT 0,
+                EnableDevTools INTEGER NOT NULL DEFAULT 0,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createDeveloperSettingsTableQuery);
+
             // Seed Users data
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)

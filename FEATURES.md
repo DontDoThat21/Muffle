@@ -131,8 +131,8 @@ App settings, voice/video config, accessibility, and developer tools.
 |----|---------|--------|-------|
 | 7.1 | Voice detailed settings | ✅ | Input/output device picker, input/output volume sliders, push-to-talk toggle + key binding, noise suppression toggle; VoiceSettings model + VoiceSettingsService (SQLite/SQL Server), VoiceSettingsViewModel, VoiceSettingsView, Voice button in MuffleMain |
 | 7.2 | Video settings | ✅ | Camera selection picker, resolution picker (360p–4K), FPS picker (15/30/60); VideoSettings model + VideoSettingsService (SQLite/SQL Server), VideoSettingsViewModel, VideoSettingsView, Video button in MuffleMain |
-| 7.3 | Accessibility settings | 📋 | Font size, high contrast, screen reader support |
-| 7.4 | Developer settings | 📋 | Debug mode, WebSocket inspector, enable dev tools |
+| 7.3 | Accessibility settings | ✅ | Font size picker (12–22pt), high contrast toggle, screen reader toggle; AccessibilitySettings model + AccessibilitySettingsService (SQLite/SQL Server), AccessibilitySettingsViewModel, AccessibilitySettingsView, Accessibility button in MuffleMain |
+| 7.4 | Developer settings | ✅ | Debug mode toggle, WebSocket inspector toggle, dev tools toggle; DeveloperSettings model + DeveloperSettingsService (SQLite/SQL Server), DeveloperSettingsViewModel, DeveloperSettingsView, Dev button in MuffleMain |
 | 7.5 | Privacy and safety settings | 📋 | DM privacy, friend request filtering, content filtering |
 | 7.6 | Devices connected to account | 📋 | View active sessions, log out remotely |
 | 7.7 | Patch notes viewer | 📋 | Display app changelog in-app |
@@ -180,10 +180,10 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 4: Server Features | ✅ Complete | 10/10 |
 | Phase 5: Chat Enhancements | ✅ Complete | 11/11 |
 | Phase 6: User Profile & Customization | ✅ Complete | 8/8 |
-| Phase 7: Settings & Configuration | 🔧 In Progress | 2/8 |
+| Phase 7: Settings & Configuration | 🔧 In Progress | 4/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **47/75** |
+| **Total** | | **49/75** |
 
 ---
 

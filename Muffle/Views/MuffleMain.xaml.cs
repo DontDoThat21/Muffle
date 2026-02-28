@@ -281,6 +281,17 @@ namespace Muffle
             MainContentFrame.Content = accessibilitySettingsView;
         }
 
+        private void DeveloperSettingsButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Developer Settings view
+            var developerSettingsViewModel = new DeveloperSettingsViewModel();
+            var developerSettingsView = new DeveloperSettingsView(developerSettingsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = developerSettingsView;
+        }
+
     }
 
 }
