@@ -226,7 +226,7 @@ On success: update FEATURES.md — feature 5.2 from 📋 to ✅.
 
 ### 5.3 Mentions (@username)
 
-⬜ TASK-057: Create Muffle.Data/Services/MentionService.cs — static class with ParseMentions(string messageContent) returning List<string> of mentioned usernames (regex: @(\w+)), and ResolveMentions(string content) that replaces @name with bolded display. One file only.
+✅ TASK-057: Create Muffle.Data/Services/MentionService.cs — static class with ParseMentions(string messageContent) returning List<string> of mentioned usernames (regex: @(\w+)), and ResolveMentions(string content) that replaces @name with bolded display. One file only.
 On success: update FEATURES.md — feature 5.3 from 📋 to ✅.
 
 ### 5.4 Notifications
