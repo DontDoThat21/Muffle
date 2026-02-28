@@ -201,19 +201,19 @@ On success: update FEATURES.md — feature 4.10 from 📋 to ✅. Also update FE
 
 ### 5.1 Emoji support
 
-⬜ TASK-050: Create Muffle.Data/Models/Emoji.cs — properties: Code (string, e.g. ":smile:"), Unicode (string, e.g. "😄"), Category (string), Name (string). One file only.
+✅ TASK-050: Create Muffle.Data/Models/Emoji.cs — properties: Code (string, e.g. ":smile:"), Unicode (string, e.g. "😄"), Category (string), Name (string). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-051: Create Muffle.Data/Services/EmojiService.cs — static class with GetAllEmojis() returning a hardcoded List<Emoji> of ~30 common emoji (smile, heart, thumbsup, fire, laugh, cry, etc. with their Unicode chars). One file only.
+✅ TASK-051: Create Muffle.Data/Services/EmojiService.cs — static class with GetAllEmojis() returning a hardcoded List<Emoji> of ~30 common emoji (smile, heart, thumbsup, fire, laugh, cry, etc. with their Unicode chars). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-052: Create Muffle/ViewModels/EmojiPickerViewModel.cs — ObservableCollection<Emoji> Emojis loaded from EmojiService.GetAllEmojis(), SelectEmojiCommand of type Command<Emoji>, event Action<string> EmojiSelected that fires with Unicode. Implement BindableObject. One file only.
+✅ TASK-052: Create Muffle/ViewModels/EmojiPickerViewModel.cs — ObservableCollection<Emoji> Emojis loaded from EmojiService.GetAllEmojis(), SelectEmojiCommand of type Command<Emoji>, event Action<string> EmojiSelected that fires with Unicode. Implement BindableObject. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-053: Create Muffle/Views/EmojiPickerView.xaml — MAUI ContentView with CollectionView using GridItemsLayout (4 columns) showing emoji Unicode as Button text. Bind to EmojiPickerViewModel. One file only.
+✅ TASK-053: Create Muffle/Views/EmojiPickerView.xaml — MAUI ContentView with CollectionView using GridItemsLayout (4 columns) showing emoji Unicode as Button text. Bind to EmojiPickerViewModel. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-054: Create Muffle/Views/EmojiPickerView.xaml.cs — code-behind setting BindingContext to new EmojiPickerViewModel(). One file only.
+✅ TASK-054: Create Muffle/Views/EmojiPickerView.xaml.cs — code-behind setting BindingContext to new EmojiPickerViewModel(). One file only.
 On success: update FEATURES.md — feature 5.1 from 📋 to ✅.
 
 ### 5.2 Tenor API integration (GIFs)
