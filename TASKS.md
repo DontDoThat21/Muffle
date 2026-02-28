@@ -242,7 +242,7 @@ On success: update FEATURES.md — feature 5.4 from 📋 to ✅.
 
 ### 5.5 Search through friend messages
 
-⬜ TASK-061: Create Muffle.Data/Services/MessageSearchService.cs — static class with SearchMessages(int userId, string query) returning List<ChatMessage>. SQL: `SELECT * FROM Messages WHERE (SenderId = @userId OR ReceiverId = @userId) AND Content LIKE @q ORDER BY Timestamp DESC LIMIT 50`. Use Dapper. One file only.
+✅ TASK-061: Create Muffle.Data/Services/MessageSearchService.cs — static class with SearchMessages(int userId, string query) returning List<ChatMessage>. SQL: `SELECT * FROM Messages WHERE (SenderId = @userId OR ReceiverId = @userId) AND Content LIKE @q ORDER BY Timestamp DESC LIMIT 50`. Use Dapper. One file only.
 On success: update FEATURES.md — feature 5.5 from 📋 to ✅.
 
 ### 5.6 Link searching from chats
