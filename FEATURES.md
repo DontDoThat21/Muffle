@@ -93,7 +93,7 @@ Rich media, search, mentions, and notifications.
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
 | 5.1 | Emoji support | ✅ | Emoji model, EmojiService (30 hardcoded emoji), EmojiPickerViewModel (SelectEmojiCommand, EmojiSelected event), EmojiPickerView (4-column grid) |
-| 5.2 | Tenor API integration (GIFs) | 📋 | GIF search + embed (if free API available) |
+| 5.2 | Tenor API integration (GIFs) | ✅ | GifResult model, GifSearchService.SearchGifsAsync (Tenor v2 API, JSON parsing, PLACEHOLDER key) |
 | 5.3 | Mentions (@username) | 📋 | @mention autocomplete, highlight mentioned users |
 | 5.4 | Notifications (desktop + mobile) | 📋 | Push notifications for mentions, DMs, friend requests |
 | 5.5 | Search through friend messages | 📋 | Full-text search across DM history |

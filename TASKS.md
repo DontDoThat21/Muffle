@@ -218,10 +218,10 @@ On success: update FEATURES.md — feature 5.1 from 📋 to ✅.
 
 ### 5.2 Tenor API integration (GIFs)
 
-⬜ TASK-055: Create Muffle.Data/Models/GifResult.cs — properties: Id (string), PreviewUrl (string), FullUrl (string), Title (string). One file only.
+✅ TASK-055: Create Muffle.Data/Models/GifResult.cs — properties: Id (string), PreviewUrl (string), FullUrl (string), Title (string). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-056: Create Muffle.Data/Services/GifSearchService.cs — static class with SearchGifsAsync(string query) returning Task<List<GifResult>>. Use HttpClient to GET `https://tenor.googleapis.com/v2/search?q={query}&key=PLACEHOLDER&limit=20`. Parse JSON results. One file only.
+✅ TASK-056: Create Muffle.Data/Services/GifSearchService.cs — static class with SearchGifsAsync(string query) returning Task<List<GifResult>>. Use HttpClient to GET `https://tenor.googleapis.com/v2/search?q={query}&key=PLACEHOLDER&limit=20`. Parse JSON results. One file only.
 On success: update FEATURES.md — feature 5.2 from 📋 to ✅.
 
 ### 5.3 Mentions (@username)
