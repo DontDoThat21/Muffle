@@ -76,8 +76,8 @@ Advanced server management, channels, permissions, and discoverability.
 | 4.1 | Server channels (text + voice) | ✅ | Channel model, Channels table (SQLite/SQL Server), ChannelService with CRUD and reordering |
 | 4.2 | Public/private server toggle | ✅ | IsPublic bool on Server model, IsPublic column in Servers table, seed data updated |
 | 4.3 | Invite links (customizable or generated) | ✅ | InviteLink model, InviteLinks table, InviteLinkService with create/validate/use |
-| 4.4 | Server browser (public servers) | 📋 | Searchable list of public servers |
-| 4.5 | Join server from browser | 📋 | Click to join public servers |
+| 4.4 | Server browser (public servers) | ✅ | ServerBrowserService (GetPublicServers, SearchServers), ServerBrowserViewModel, ServerBrowserView |
+| 4.5 | Join server from browser | ✅ | ServerBrowserService.JoinServer (duplicate-guard insert into ServerMembers), wired to JoinServerCommand |
 | 4.6 | Server icons (customizable) | 📋 | Upload/change server avatar (owner only) |
 | 4.7 | Channel icons (customizable) | 📋 | Upload/change channel avatar (channel/server owner) |
 | 4.8 | Server permissions & roles | 📋 | Role-based access control (admin, moderator, member) |

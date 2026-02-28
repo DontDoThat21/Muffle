@@ -126,24 +126,24 @@ On success: update FEATURES.md — feature 4.3 from 📋 to ✅.
 
 ### 4.4 Server browser (public servers)
 
-⬜ TASK-031: Create Muffle.Data/Services/ServerBrowserService.cs — static class with GetPublicServers() returning List<Server>: `SELECT * FROM Servers WHERE IsPublic = 1`. Use Dapper + SQLiteDbService.CreateConnection(). One file only.
+✅ TASK-031: Create Muffle.Data/Services/ServerBrowserService.cs — static class with GetPublicServers() returning List<Server>: `SELECT * FROM Servers WHERE IsPublic = 1`. Use Dapper + SQLiteDbService.CreateConnection(). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-032: In Muffle.Data/Services/ServerBrowserService.cs — add SearchServers(string query) returning List<Server>: `SELECT * FROM Servers WHERE IsPublic = 1 AND (Name LIKE @q OR Description LIKE @q)`. Parameter @q = $"%{query}%". One file only.
+✅ TASK-032: In Muffle.Data/Services/ServerBrowserService.cs — add SearchServers(string query) returning List<Server>: `SELECT * FROM Servers WHERE IsPublic = 1 AND (Name LIKE @q OR Description LIKE @q)`. Parameter @q = $"%{query}%". One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-033: Create Muffle/ViewModels/ServerBrowserViewModel.cs — ObservableCollection<Server> PublicServers, SearchText string, SearchCommand calling ServerBrowserService.SearchServers, LoadCommand calling GetPublicServers, JoinServerCommand. Implement BindableObject. One file only.
+✅ TASK-033: Create Muffle/ViewModels/ServerBrowserViewModel.cs — ObservableCollection<Server> PublicServers, SearchText string, SearchCommand calling ServerBrowserService.SearchServers, LoadCommand calling GetPublicServers, JoinServerCommand. Implement BindableObject. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-034: Create Muffle/Views/ServerBrowserView.xaml — MAUI ContentPage with SearchBar bound to SearchText, CollectionView of PublicServers showing Name + Description, and a "Join" Button per item. Bind to ServerBrowserViewModel. One file only.
+✅ TASK-034: Create Muffle/Views/ServerBrowserView.xaml — MAUI ContentPage with SearchBar bound to SearchText, CollectionView of PublicServers showing Name + Description, and a "Join" Button per item. Bind to ServerBrowserViewModel. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-035: Create Muffle/Views/ServerBrowserView.xaml.cs — code-behind setting BindingContext to new ServerBrowserViewModel(). One file only.
+✅ TASK-035: Create Muffle/Views/ServerBrowserView.xaml.cs — code-behind setting BindingContext to new ServerBrowserViewModel(). One file only.
 On success: update FEATURES.md — feature 4.4 from 📋 to ✅.
 
 ### 4.5 Join server from browser
 
-⬜ TASK-036: In Muffle.Data/Services/ServerBrowserService.cs — add JoinServer(int serverId, int userId) static method. INSERT INTO ServerMembers (ServerId, UserId, JoinedAt) VALUES (...) if not already a member. Return bool success. One file only.
+✅ TASK-036: In Muffle.Data/Services/ServerBrowserService.cs — add JoinServer(int serverId, int userId) static method. INSERT INTO ServerMembers (ServerId, UserId, JoinedAt) VALUES (...) if not already a member. Return bool success. One file only.
 On success: update FEATURES.md — feature 4.5 from 📋 to ✅.
 
 ### 4.6 Server icons
