@@ -277,6 +277,22 @@ namespace Muffle.Data.Services
 
             connection.Execute(createUserThemePreferencesTableQuery);
 
+            // Create VoiceSettings table
+            var createVoiceSettingsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS VoiceSettings (
+                UserId INTEGER PRIMARY KEY,
+                InputDevice TEXT NOT NULL DEFAULT 'Default',
+                OutputDevice TEXT NOT NULL DEFAULT 'Default',
+                PushToTalk INTEGER NOT NULL DEFAULT 0,
+                PushToTalkKey TEXT NOT NULL DEFAULT '',
+                NoiseSuppression INTEGER NOT NULL DEFAULT 1,
+                InputVolume INTEGER NOT NULL DEFAULT 100,
+                OutputVolume INTEGER NOT NULL DEFAULT 100,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createVoiceSettingsTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)

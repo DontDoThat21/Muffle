@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             x:Class="Muffle.Views.VoiceSettingsView"
+             x:DataType="viewmodels:VoiceSettingsViewModel"
+             BackgroundColor="#303030">
+
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="15">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Voice Settings"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"/>
+            <Label Text="Configure your microphone, speakers, push-to-talk, and noise suppression"
+                   FontSize="14"
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Status Message -->
+                <Label Text="{Binding StatusMessage}"
+                       IsVisible="{Binding HasStatusMessage}"
+                       HorizontalOptions="Center"
+                       TextColor="Orange"
+                       FontSize="14"
+                       FontAttributes="Bold"/>
+
+                <!-- Processing Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsProcessing}"
+                                   IsRunning="{Binding IsProcessing}"
+                                   Color="White"
+                                   HorizontalOptions="Center"/>
+
+                <!-- Input Device -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Input Device"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Select the microphone used for voice chat"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select input device"
+                                ItemsSource="{Binding InputDevices}"
+                                SelectedItem="{Binding SelectedInputDevice}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Output Device -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Output Device"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Select the speaker or headphones used for voice chat"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select output device"
+                                ItemsSource="{Binding OutputDevices}"
+                                SelectedItem="{Binding SelectedOutputDevice}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Input Volume -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Input Volume"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="{Binding InputVolumeDisplay}"
+                                   FontSize="14"
+                                   TextColor="#7289DA"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        <Label Text="Adjust how loud your microphone captures audio"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Slider Minimum="0"
+                                Maximum="150"
+                                Value="{Binding InputVolume}"
+                                MinimumTrackColor="#7289DA"
+                                MaximumTrackColor="#424242"
+                                ThumbColor="White"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Output Volume -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Output Volume"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="{Binding OutputVolumeDisplay}"
+                                   FontSize="14"
+                                   TextColor="#7289DA"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        <Label Text="Adjust how loud you hear other participants"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Slider Minimum="0"
+                                Maximum="150"
+                                Value="{Binding OutputVolume}"
+                                MinimumTrackColor="#7289DA"
+                                MaximumTrackColor="#424242"
+                                ThumbColor="White"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Push-to-Talk -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Push-to-Talk"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="When enabled, your mic only transmits while the key is held"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Grid ColumnDefinitions="*,Auto" Padding="0,6,0,6">
+                            <Label Grid.Column="0"
+                                   Text="Enable Push-to-Talk"
+                                   FontSize="14"
+                                   TextColor="White"
+                                   VerticalOptions="Center"/>
+                            <Switch Grid.Column="1"
+                                    IsToggled="{Binding PushToTalk}"
+                                    OnColor="#7289DA"
+                                    ThumbColor="White"/>
+                        </Grid>
+                        <VerticalStackLayout Spacing="6"
+                                            IsVisible="{Binding PushToTalkKeyVisible}">
+                            <Label Text="Push-to-Talk Key"
+                                   FontSize="13"
+                                   TextColor="LightGray"/>
+                            <Entry Text="{Binding PushToTalkKey}"
+                                   Placeholder="e.g. LeftCtrl"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"
+                                   MaxLength="30"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Noise Suppression -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Noise Suppression"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Reduce background noise from your microphone feed"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Grid ColumnDefinitions="*,Auto" Padding="0,6,0,6">
+                            <Label Grid.Column="0"
+                                   Text="Enable Noise Suppression"
+                                   FontSize="14"
+                                   TextColor="White"
+                                   VerticalOptions="Center"/>
+                            <Switch Grid.Column="1"
+                                    IsToggled="{Binding NoiseSuppression}"
+                                    OnColor="#7289DA"
+                                    ThumbColor="White"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Save Button -->
+                <Button Text="Save Voice Settings"
+                        Command="{Binding SaveVoiceSettingsCommand}"
+                        BackgroundColor="#43B581"
+                        TextColor="White"
+                        CornerRadius="4"
+                        Padding="0,12"
+                        IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"
+                        Margin="0,5,0,20"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentView>

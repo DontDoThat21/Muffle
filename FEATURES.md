@@ -129,7 +129,7 @@ App settings, voice/video config, accessibility, and developer tools.
 
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
-| 7.1 | Voice detailed settings | 📋 | Input/output device, push-to-talk, noise suppression |
+| 7.1 | Voice detailed settings | ✅ | Input/output device picker, input/output volume sliders, push-to-talk toggle + key binding, noise suppression toggle; VoiceSettings model + VoiceSettingsService (SQLite/SQL Server), VoiceSettingsViewModel, VoiceSettingsView, Voice button in MuffleMain |
 | 7.2 | Video settings | 📋 | Camera selection, resolution, FPS |
 | 7.3 | Accessibility settings | 📋 | Font size, high contrast, screen reader support |
 | 7.4 | Developer settings | 📋 | Debug mode, WebSocket inspector, enable dev tools |
@@ -180,10 +180,10 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 4: Server Features | ✅ Complete | 10/10 |
 | Phase 5: Chat Enhancements | ✅ Complete | 11/11 |
 | Phase 6: User Profile & Customization | ✅ Complete | 8/8 |
-| Phase 7: Settings & Configuration | 📋 Planned | 0/8 |
+| Phase 7: Settings & Configuration | 🔧 In Progress | 1/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **46/75** |
+| **Total** | | **47/75** |
 
 ---
 

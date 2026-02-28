@@ -248,6 +248,17 @@ namespace Muffle
             MainContentFrame.Content = themeSettingsView;
         }
 
+        private void VoiceSettingsButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Voice Settings view
+            var voiceSettingsViewModel = new VoiceSettingsViewModel();
+            var voiceSettingsView = new VoiceSettingsView(voiceSettingsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = voiceSettingsView;
+        }
+
     }
 
 }
