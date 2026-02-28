@@ -192,7 +192,7 @@ On success: update FEATURES.md — feature 4.9 from 📋 to ✅.
 
 ### 4.10 Server-specific nicknames
 
-⬜ TASK-049: In Muffle.Data/Services/RoleService.cs — add GetNickname(int serverId, int userId) returning string? and SetNickname(int serverId, int userId, string? nickname) returning bool. Query/update the Nickname column in ServerMembers table. One file only.
+✅ TASK-049: In Muffle.Data/Services/RoleService.cs — add GetNickname(int serverId, int userId) returning string? and SetNickname(int serverId, int userId, string? nickname) returning bool. Query/update the Nickname column in ServerMembers table. One file only.
 On success: update FEATURES.md — feature 4.10 from 📋 to ✅. Also update FEATURES.md summary — Phase 4 from 0/10 to 10/10, status ✅ Complete.
 
 ---

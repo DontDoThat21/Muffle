@@ -67,7 +67,7 @@ Account creation, authentication, and friend management.
 
 ---
 
-## Phase 4: Server Features 📋
+## Phase 4: Server Features ✅
 
 Advanced server management, channels, permissions, and discoverability.
 
@@ -82,7 +82,7 @@ Advanced server management, channels, permissions, and discoverability.
 | 4.7 | Channel icons (customizable) | ✅ | IconUrl property on Channel model, IconUrl TEXT column in Channels table |
 | 4.8 | Server permissions & roles | ✅ | ServerRole + ServerMember models, ServerRoles + ServerMembers tables, RoleService (CreateRole, GetServerRoles, AssignRole) |
 | 4.9 | Channel permissions | ✅ | ChannelPermission model, ChannelPermissions table, ChannelPermissionService (SetPermission, GetPermission, CheckUserCanRead, CheckUserCanSend) |
-| 4.10 | Server-specific nicknames | 📋 | Override display name per server |
+| 4.10 | Server-specific nicknames | ✅ | RoleService.GetNickname + SetNickname querying Nickname column in ServerMembers |
 
 ---
 
@@ -177,8 +177,7 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 1: Foundation | ✅ Complete | 10/10 |
 | Phase 2: Voice & Video | ✅ Complete | 7/7 |
 | Phase 3: User Management | ✅ Complete | 9/9 |
-| Phase 4: Server Features | 🔧 In Progress | 1/9 |
-| Phase 4: Server Features | 📋 Planned | 0/10 |
+| Phase 4: Server Features | ✅ Complete | 10/10 |
 | Phase 5: Chat Enhancements | 📋 Planned | 0/11 |
 | Phase 6: User Profile & Customization | 📋 Planned | 0/8 |
 | Phase 7: Settings & Configuration | 📋 Planned | 0/8 |

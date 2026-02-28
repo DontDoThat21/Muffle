@@ -56,5 +56,35 @@ namespace Muffle.Data.Services
                 return false;
             }
         }
+
+        public static string? GetNickname(int serverId, int userId)
+        {
+            using var connection = SQLiteDbService.CreateConnection();
+            connection.Open();
+
+            return connection.ExecuteScalar<string?>(
+                "SELECT Nickname FROM ServerMembers WHERE ServerId = @ServerId AND UserId = @UserId",
+                new { ServerId = serverId, UserId = userId });
+        }
+
+        public static bool SetNickname(int serverId, int userId, string? nickname)
+        {
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                connection.Execute(
+                    "UPDATE ServerMembers SET Nickname = @Nickname WHERE ServerId = @ServerId AND UserId = @UserId",
+                    new { Nickname = nickname, ServerId = serverId, UserId = userId });
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error setting nickname: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
