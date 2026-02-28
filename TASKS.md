@@ -257,7 +257,7 @@ On success: update FEATURES.md — feature 5.7 from 📋 to ✅.
 
 ### 5.8 Search filters (by user, date, type)
 
-⬜ TASK-064: In Muffle.Data/Services/MessageSearchService.cs — add SearchMessagesFiltered(int userId, string? query, int? fromUserId, DateTime? after, DateTime? before, MessageType? type) returning List<ChatMessage>. Build WHERE clause dynamically with Dapper DynamicParameters. One file only.
+✅ TASK-064: In Muffle.Data/Services/MessageSearchService.cs — add SearchMessagesFiltered(int userId, string? query, int? fromUserId, DateTime? after, DateTime? before, MessageType? type) returning List<ChatMessage>. Build WHERE clause dynamically with Dapper DynamicParameters. One file only.
 On success: update FEATURES.md — feature 5.8 from 📋 to ✅.
 
 ### 5.9 Message reactions
