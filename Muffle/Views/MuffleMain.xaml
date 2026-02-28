@@ -38,7 +38,13 @@
                             FontSize="10"
                             Padding="5,2"
                             Clicked="VideoSettingsButton_OnClicked"/>
-                    <Button Text="Settings" 
+                    <Button Text="Access" 
+                            BackgroundColor="#F39C12" 
+                            TextColor="White" 
+                            FontSize="10"
+                            Padding="5,2"
+                            Clicked="AccessibilitySettingsButton_OnClicked"/>
+                    <Button Text="Settings"
                             BackgroundColor="#43B581" 
                             TextColor="White" 
                             FontSize="10"

@@ -270,6 +270,17 @@ namespace Muffle
             MainContentFrame.Content = videoSettingsView;
         }
 
+        private void AccessibilitySettingsButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Accessibility Settings view
+            var accessibilitySettingsViewModel = new AccessibilitySettingsViewModel();
+            var accessibilitySettingsView = new AccessibilitySettingsView(accessibilitySettingsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = accessibilitySettingsView;
+        }
+
     }
 
 }

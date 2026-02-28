@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             x:Class="Muffle.Views.AccessibilitySettingsView"
+             x:DataType="viewmodels:AccessibilitySettingsViewModel"
+             BackgroundColor="#303030">
+
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="15">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Accessibility Settings"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"/>
+            <Label Text="Configure font size, high contrast mode, and screen reader support"
+                   FontSize="14"
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Status Message -->
+                <Label Text="{Binding StatusMessage}"
+                       IsVisible="{Binding HasStatusMessage}"
+                       HorizontalOptions="Center"
+                       TextColor="Orange"
+                       FontSize="14"
+                       FontAttributes="Bold"/>
+
+                <!-- Processing Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsProcessing}"
+                                   IsRunning="{Binding IsProcessing}"
+                                   Color="White"
+                                   HorizontalOptions="Center"/>
+
+                <!-- Font Size -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Font Size"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="{Binding FontSizeDisplay}"
+                                   FontSize="14"
+                                   TextColor="#7289DA"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        <Label Text="Adjust the text size throughout the app"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select font size"
+                                ItemsSource="{Binding FontSizes}"
+                                SelectedItem="{Binding SelectedFontSize}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- High Contrast -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
+                                <Label Text="High Contrast Mode"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White"/>
+                                <Label Text="Increases contrast between text and backgrounds for better readability"
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="1"
+                                    IsToggled="{Binding HighContrast}"
+                                    OnColor="#7289DA"
+                                    VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Screen Reader -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
+                                <Label Text="Screen Reader Support"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White"/>
+                                <Label Text="Enables additional labels and hints for screen reader compatibility"
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="1"
+                                    IsToggled="{Binding ScreenReader}"
+                                    OnColor="#7289DA"
+                                    VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Save Button -->
+                <Button Text="Save Accessibility Settings"
+                        Command="{Binding SaveAccessibilitySettingsCommand}"
+                        BackgroundColor="#43B581"
+                        TextColor="White"
+                        CornerRadius="4"
+                        Padding="0,12"
+                        IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"
+                        Margin="0,5,0,20"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentView>
