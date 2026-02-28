@@ -247,7 +247,7 @@ On success: update FEATURES.md — feature 5.5 from 📋 to ✅.
 
 ### 5.6 Link searching from chats
 
-⬜ TASK-062: In Muffle.Data/Services/MessageSearchService.cs — add ExtractLinks(string content) static method using Regex `https?://[^\s]+` to find URLs, return List<string>. One file only.
+✅ TASK-062: In Muffle.Data/Services/MessageSearchService.cs — add ExtractLinks(string content) static method using Regex `https?://[^\s]+` to find URLs, return List<string>. One file only.
 On success: update FEATURES.md — feature 5.6 from 📋 to ✅.
 
 ### 5.7 File searching (local)

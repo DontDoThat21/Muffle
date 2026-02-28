@@ -97,7 +97,7 @@ Rich media, search, mentions, and notifications.
 | 5.3 | Mentions (@username) | ✅ | MentionService.ParseMentions (regex @(\w+)), ResolveMentions (bold display) |
 | 5.4 | Notifications (desktop + mobile) | ✅ | AppNotification model + NotificationType enum, Notifications table, NotificationService (Create, GetUnread, MarkAsRead, GetUnreadCount) |
 | 5.5 | Search through friend messages | ✅ | MessageSearchService.SearchMessages (LIKE query on Messages table, sender/receiver filter) |
-| 5.6 | Link searching from chats | 📋 | Extract and search shared links |
+| 5.6 | Link searching from chats | ✅ | MessageSearchService.ExtractLinks (compiled regex https?://[^\s]+) |
 | 5.7 | File searching (local) | 📋 | Search shared files/images |
 | 5.8 | Search filters (by user, date, type) | 📋 | Advanced search with filters |
 | 5.9 | Message reactions | 📋 | React to messages with emoji |

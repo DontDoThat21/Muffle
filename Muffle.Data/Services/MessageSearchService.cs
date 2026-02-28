@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Dapper;
 using Muffle.Data.Models;
 
@@ -5,6 +6,7 @@ namespace Muffle.Data.Services
 {
     public static class MessageSearchService
     {
+        private static readonly Regex LinkRegex = new(@"https?://[^\s]+", RegexOptions.Compiled);
         // TASK-061: Search through friend messages
         public static List<ChatMessage> SearchMessages(int userId, string query)
         {
@@ -19,6 +21,14 @@ namespace Muffle.Data.Services
                 ORDER BY Timestamp DESC
                 LIMIT 50",
                 new { userId, q }).ToList();
+        }
+
+        // TASK-062: Extract links from message content
+        public static List<string> ExtractLinks(string content)
+        {
+            return LinkRegex.Matches(content)
+                .Select(m => m.Value)
+                .ToList();
         }
     }
 }
