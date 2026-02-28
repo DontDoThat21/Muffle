@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             x:Class="Muffle.Views.TwoFactorAuthView"
+             x:DataType="viewmodels:TwoFactorAuthViewModel"
+             BackgroundColor="#303030">
+
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="15">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="6">
+            <Label Text="Two-Factor Authentication"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"/>
+            <Label Text="Add an extra layer of security with a TOTP authenticator app (Google Authenticator, Authy, etc.)"
+                   FontSize="14"
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Scrollable content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Status / feedback message -->
+                <Label Text="{Binding StatusMessage}"
+                       IsVisible="{Binding HasStatusMessage}"
+                       HorizontalOptions="Center"
+                       TextColor="Orange"
+                       FontSize="14"
+                       FontAttributes="Bold"/>
+
+                <ActivityIndicator IsVisible="{Binding IsProcessing}"
+                                   IsRunning="{Binding IsProcessing}"
+                                   Color="White"
+                                   HorizontalOptions="Center"/>
+
+                <!-- ── 2FA DISABLED: idle state ── -->
+                <Frame IsVisible="{Binding IsNotEnabled}"
+                       Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
+                                <Label Text="Two-Factor Auth"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White"/>
+                                <Label Text="Status: Disabled"
+                                       FontSize="12"
+                                       TextColor="#ed4245"/>
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1"
+                                   Text="🔓"
+                                   FontSize="28"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        <Label Text="Enable 2FA to protect your account with a time-based one-time password in addition to your regular password."
+                               FontSize="13"
+                               TextColor="LightGray"/>
+                        <Button Text="Set Up Two-Factor Authentication"
+                                Command="{Binding BeginSetupCommand}"
+                                BackgroundColor="#7289DA"
+                                TextColor="White"
+                                CornerRadius="6"
+                                IsVisible="{Binding IsSetupMode, Converter={StaticResource InverseBoolConverter}}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── SETUP STEP ── -->
+                <Frame IsVisible="{Binding IsSetupMode}"
+                       Padding="15"
+                       BorderColor="#7289DA"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="14">
+
+                        <Label Text="Step 1 — Add to your authenticator app"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+
+                        <Label Text="Open Google Authenticator, Authy, or any TOTP app and add a new account manually using the key below."
+                               FontSize="13"
+                               TextColor="LightGray"/>
+
+                        <!-- Secret key display -->
+                        <Frame Padding="12" BackgroundColor="#1E1E1E" CornerRadius="6" HasShadow="False" BorderColor="#555">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Your Secret Key"
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+                                <Label Text="{Binding Secret}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#7289DA"
+                                       LineBreakMode="CharacterWrap"/>
+                                <Label Text="Type: Time-based (TOTP) · Digits: 6 · Period: 30 s"
+                                       FontSize="11"
+                                       TextColor="Gray"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- otpauth URI for power users -->
+                        <Frame Padding="12" BackgroundColor="#1E1E1E" CornerRadius="6" HasShadow="False" BorderColor="#555">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Setup URI (paste into app if supported)"
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+                                <Label Text="{Binding SetupUri}"
+                                       FontSize="11"
+                                       TextColor="LightGray"
+                                       LineBreakMode="CharacterWrap"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Label Text="Step 2 — Verify your code"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               Margin="0,8,0,0"/>
+
+                        <Label Text="Enter the 6-digit code shown in your authenticator app to confirm setup."
+                               FontSize="13"
+                               TextColor="LightGray"/>
+
+                        <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
+                            <Entry Placeholder="6-digit code"
+                                   PlaceholderColor="#72767d"
+                                   TextColor="White"
+                                   BackgroundColor="Transparent"
+                                   Keyboard="Numeric"
+                                   MaxLength="6"
+                                   Text="{Binding VerificationCode}"/>
+                        </Frame>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Grid.Column="0"
+                                    Text="Activate 2FA"
+                                    Command="{Binding VerifyAndEnableCommand}"
+                                    BackgroundColor="#43B581"
+                                    TextColor="White"
+                                    CornerRadius="6"/>
+                            <Button Grid.Column="1"
+                                    Text="Cancel"
+                                    Command="{Binding CancelSetupCommand}"
+                                    BackgroundColor="#555"
+                                    TextColor="White"
+                                    CornerRadius="6"/>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── 2FA ENABLED: management state ── -->
+                <Frame IsVisible="{Binding IsEnabled}"
+                       Padding="15"
+                       BorderColor="#43B581"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
+                                <Label Text="Two-Factor Auth"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White"/>
+                                <Label Text="Status: Enabled"
+                                       FontSize="12"
+                                       TextColor="#43B581"/>
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1"
+                                   Text="🔒"
+                                   FontSize="28"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Label Text="Your account is protected with two-factor authentication."
+                               FontSize="13"
+                               TextColor="LightGray"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10"
+                              IsVisible="{Binding IsDisableMode, Converter={StaticResource InverseBoolConverter}}">
+                            <Button Grid.Column="0"
+                                    Text="View / Regen Backup Codes"
+                                    Command="{Binding RegenerateBackupCodesCommand}"
+                                    BackgroundColor="#7289DA"
+                                    TextColor="White"
+                                    CornerRadius="6"/>
+                            <Button Grid.Column="1"
+                                    Text="Disable 2FA"
+                                    Command="{Binding BeginDisableCommand}"
+                                    BackgroundColor="#ed4245"
+                                    TextColor="White"
+                                    CornerRadius="6"/>
+                        </Grid>
+
+                        <!-- Disable confirmation flow -->
+                        <VerticalStackLayout Spacing="10" IsVisible="{Binding IsDisableMode}">
+                            <Label Text="Enter your current authenticator code (or a backup code) to disable 2FA:"
+                                   FontSize="13"
+                                   TextColor="LightGray"/>
+                            <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
+                                <Entry Placeholder="Code"
+                                       PlaceholderColor="#72767d"
+                                       TextColor="White"
+                                       BackgroundColor="Transparent"
+                                       Keyboard="Numeric"
+                                       MaxLength="12"
+                                       Text="{Binding VerificationCode}"/>
+                            </Frame>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                                <Button Grid.Column="0"
+                                        Text="Confirm Disable"
+                                        Command="{Binding ConfirmDisableCommand}"
+                                        BackgroundColor="#ed4245"
+                                        TextColor="White"
+                                        CornerRadius="6"/>
+                                <Button Grid.Column="1"
+                                        Text="Cancel"
+                                        Command="{Binding CancelDisableCommand}"
+                                        BackgroundColor="#555"
+                                        TextColor="White"
+                                        CornerRadius="6"/>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Backup codes display ── -->
+                <Frame IsVisible="{Binding ShowBackupCodes}"
+                       Padding="15"
+                       BorderColor="#F39C12"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="⚠️ Save Your Backup Codes"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#F39C12"/>
+                        <Label Text="Each backup code can only be used once. Store them in a safe place — they are the only way to access your account if you lose your authenticator device."
+                               FontSize="13"
+                               TextColor="LightGray"/>
+                        <CollectionView ItemsSource="{Binding BackupCodes}" Margin="0,8,0,0">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="10" VerticalItemSpacing="8"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Frame Padding="8,6"
+                                           BackgroundColor="#1E1E1E"
+                                           CornerRadius="4"
+                                           HasShadow="False"
+                                           BorderColor="#555">
+                                        <Label Text="{Binding .}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               FontFamily="Courier New"/>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="I've Saved My Codes"
+                                Command="{Binding DismissBackupCodesCommand}"
+                                BackgroundColor="#43B581"
+                                TextColor="White"
+                                CornerRadius="6"
+                                Margin="0,8,0,0"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentView>

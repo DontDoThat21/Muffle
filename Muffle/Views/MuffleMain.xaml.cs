@@ -336,6 +336,15 @@ namespace Muffle
             MainContentFrame.Content = libraryAcknowledgementsView;
         }
 
+        private void TwoFactorAuthButton_OnClicked(object sender, EventArgs e)
+        {
+            var twoFactorAuthViewModel = new TwoFactorAuthViewModel();
+            var twoFactorAuthView = new TwoFactorAuthView(twoFactorAuthViewModel);
+
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = twoFactorAuthView;
+        }
+
     }
 
 }

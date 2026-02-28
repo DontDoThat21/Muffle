@@ -6,7 +6,7 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="40" Spacing="20" VerticalOptions="Center">
-            
+
             <!-- Logo/Title -->
             <Label Text="Muffle"
                    FontSize="48"
@@ -15,68 +15,111 @@
                    HorizontalOptions="Center"
                    Margin="0,0,0,40"/>
 
-            <Label Text="Welcome back!"
-                   FontSize="24"
-                   TextColor="White"
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,20"/>
+            <!-- ── Credential step ── -->
+            <VerticalStackLayout Spacing="20" IsVisible="{Binding IsCredentialStep}">
 
-            <!-- Email Entry -->
-            <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
-                <Entry x:Name="EmailEntry"
-                       Placeholder="Email"
-                       PlaceholderColor="#72767d"
+                <Label Text="Welcome back!"
+                       FontSize="24"
                        TextColor="White"
-                       BackgroundColor="Transparent"
-                       Keyboard="Email"
-                       Text="{Binding Email}"/>
-            </Frame>
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,20"/>
 
-            <!-- Password Entry -->
-            <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
-                <Entry x:Name="PasswordEntry"
-                       Placeholder="Password"
-                       PlaceholderColor="#72767d"
+                <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
+                    <Entry x:Name="EmailEntry"
+                           Placeholder="Email"
+                           PlaceholderColor="#72767d"
+                           TextColor="White"
+                           BackgroundColor="Transparent"
+                           Keyboard="Email"
+                           Text="{Binding Email}"/>
+                </Frame>
+
+                <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
+                    <Entry x:Name="PasswordEntry"
+                           Placeholder="Password"
+                           PlaceholderColor="#72767d"
+                           TextColor="White"
+                           BackgroundColor="Transparent"
+                           IsPassword="True"
+                           Text="{Binding Password}"/>
+                </Frame>
+
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="#ed4245"
+                       IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                       HorizontalOptions="Center"/>
+
+                <Button Text="Login"
+                        Command="{Binding LoginCommand}"
+                        BackgroundColor="#5865f2"
+                        TextColor="White"
+                        CornerRadius="5"
+                        HeightRequest="44"
+                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="#5865f2"/>
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,20,0,0">
+                    <Label Text="Don't have an account?"
+                           TextColor="#b9bbbe"
+                           VerticalOptions="Center"/>
+                    <Label Text="Register"
+                           TextColor="#00b0f4"
+                           VerticalOptions="Center"
+                           Margin="5,0,0,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+
+            </VerticalStackLayout>
+
+            <!-- ── Two-factor step ── -->
+            <VerticalStackLayout Spacing="20" IsVisible="{Binding IsTwoFactorStep}">
+
+                <Label Text="Two-Factor Authentication"
+                       FontSize="24"
                        TextColor="White"
-                       BackgroundColor="Transparent"
-                       IsPassword="True"
-                       Text="{Binding Password}"/>
-            </Frame>
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,10"/>
 
-            <!-- Error Message -->
-            <Label Text="{Binding ErrorMessage}"
-                   TextColor="#ed4245"
-                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center"/>
-
-            <!-- Login Button -->
-            <Button Text="Login"
-                    Command="{Binding LoginCommand}"
-                    BackgroundColor="#5865f2"
-                    TextColor="White"
-                    CornerRadius="5"
-                    HeightRequest="44"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
-
-            <!-- Loading Indicator -->
-            <ActivityIndicator IsRunning="{Binding IsLoading}"
-                              IsVisible="{Binding IsLoading}"
-                              Color="#5865f2"/>
-
-            <!-- Register Link -->
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,20,0,0">
-                <Label Text="Don't have an account?"
+                <Label Text="Open your authenticator app and enter the 6-digit code, or enter one of your backup codes."
+                       FontSize="14"
                        TextColor="#b9bbbe"
-                       VerticalOptions="Center"/>
-                <Label Text="Register"
-                       TextColor="#00b0f4"
-                       VerticalOptions="Center"
-                       Margin="5,0,0,0">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}"/>
-                    </Label.GestureRecognizers>
-                </Label>
-            </StackLayout>
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"/>
+
+                <Frame CornerRadius="5" Padding="0" BackgroundColor="#40444b" HasShadow="False">
+                    <Entry Placeholder="Authentication code"
+                           PlaceholderColor="#72767d"
+                           TextColor="White"
+                           BackgroundColor="Transparent"
+                           Keyboard="Numeric"
+                           MaxLength="12"
+                           Text="{Binding TwoFactorCode}"/>
+                </Frame>
+
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="#ed4245"
+                       IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                       HorizontalOptions="Center"/>
+
+                <Button Text="Verify"
+                        Command="{Binding VerifyTwoFactorCommand}"
+                        BackgroundColor="#5865f2"
+                        TextColor="White"
+                        CornerRadius="5"
+                        HeightRequest="44"
+                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
+
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="#5865f2"/>
+
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>

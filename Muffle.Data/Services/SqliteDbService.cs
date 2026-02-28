@@ -347,6 +347,22 @@ namespace Muffle.Data.Services
 
             connection.Execute(createPrivacySettingsTableQuery);
 
+            // Create TwoFactorAuth table
+            var createTwoFactorAuthTableQuery = @"
+            CREATE TABLE IF NOT EXISTS TwoFactorAuth (
+                UserId INTEGER PRIMARY KEY,
+                IsEnabled INTEGER NOT NULL DEFAULT 0,
+                Secret TEXT,
+                BackupCodes TEXT,
+                EnabledAt DATETIME,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createTwoFactorAuthTableQuery);
+
+            // Migration: add IsTwoFactorEnabled column to Users if not present
+            try { connection.Execute("ALTER TABLE Users ADD COLUMN IsTwoFactorEnabled INTEGER NOT NULL DEFAULT 0;"); } catch { }
+
             // Seed Users data
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)

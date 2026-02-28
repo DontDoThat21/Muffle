@@ -27,6 +27,9 @@ namespace Muffle.Data.Models
         public string? CustomStatusEmoji { get; set; }
         public bool ShowOnlineStatus { get; set; } = true;
 
+        // Security (Phase 8)
+        public bool IsTwoFactorEnabled { get; set; } = false;
+
         /// <summary>
         /// Gets the full username with discriminator (e.g., "John#1234")
         /// </summary>
