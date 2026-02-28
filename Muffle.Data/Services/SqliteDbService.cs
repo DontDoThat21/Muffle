@@ -198,6 +198,21 @@ namespace Muffle.Data.Services
 
             connection.Execute(createServerMembersTableQuery);
 
+            // Create ChannelPermissions table
+            var createChannelPermissionsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS ChannelPermissions (
+                ChannelId INTEGER NOT NULL,
+                RoleId INTEGER NOT NULL,
+                AllowRead INTEGER NOT NULL DEFAULT 1,
+                AllowSend INTEGER NOT NULL DEFAULT 1,
+                AllowManage INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY (ChannelId, RoleId),
+                FOREIGN KEY (ChannelId) REFERENCES Channels(ChannelId),
+                FOREIGN KEY (RoleId) REFERENCES ServerRoles(RoleId)
+            );";
+
+            connection.Execute(createChannelPermissionsTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)
@@ -280,6 +295,16 @@ namespace Muffle.Data.Services
             {
                 using var connection = CreateConnection();
                 connection.Open();
+                try
+                {
+                    var dropChannelPermissionsTable = "DROP TABLE IF EXISTS ChannelPermissions";
+                    connection.Execute(dropChannelPermissionsTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
                 try
                 {
                     var dropInviteLinksTable = "DROP TABLE IF EXISTS InviteLinks";

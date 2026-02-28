@@ -181,13 +181,13 @@ On success: update FEATURES.md — feature 4.8 from 📋 to ✅.
 
 ### 4.9 Channel permissions
 
-⬜ TASK-046: Create Muffle.Data/Models/ChannelPermission.cs — properties: ChannelId (int), RoleId (int), AllowRead (bool), AllowSend (bool), AllowManage (bool). One file only.
+✅ TASK-046: Create Muffle.Data/Models/ChannelPermission.cs — properties: ChannelId (int), RoleId (int), AllowRead (bool), AllowSend (bool), AllowManage (bool). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-047: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS ChannelPermissions DDL (ChannelId INTEGER NOT NULL, RoleId INTEGER NOT NULL, AllowRead INTEGER NOT NULL DEFAULT 1, AllowSend INTEGER NOT NULL DEFAULT 1, AllowManage INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (ChannelId, RoleId), FK to Channels and ServerRoles). Also add DROP TABLE IF EXISTS ChannelPermissions to DisposeDatabase. One file only.
+✅ TASK-047: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS ChannelPermissions DDL (ChannelId INTEGER NOT NULL, RoleId INTEGER NOT NULL, AllowRead INTEGER NOT NULL DEFAULT 1, AllowSend INTEGER NOT NULL DEFAULT 1, AllowManage INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (ChannelId, RoleId), FK to Channels and ServerRoles). Also add DROP TABLE IF EXISTS ChannelPermissions to DisposeDatabase. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-048: Create Muffle.Data/Services/ChannelPermissionService.cs — static class with SetPermission(int channelId, int roleId, bool read, bool send, bool manage), GetPermission(int channelId, int roleId) returning ChannelPermission?, CheckUserCanRead(int channelId, int userId) returning bool, CheckUserCanSend(int channelId, int userId) returning bool. Use Dapper. One file only.
+✅ TASK-048: Create Muffle.Data/Services/ChannelPermissionService.cs — static class with SetPermission(int channelId, int roleId, bool read, bool send, bool manage), GetPermission(int channelId, int roleId) returning ChannelPermission?, CheckUserCanRead(int channelId, int userId) returning bool, CheckUserCanSend(int channelId, int userId) returning bool. Use Dapper. One file only.
 On success: update FEATURES.md — feature 4.9 from 📋 to ✅.
 
 ### 4.10 Server-specific nicknames

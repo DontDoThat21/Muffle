@@ -81,7 +81,7 @@ Advanced server management, channels, permissions, and discoverability.
 | 4.6 | Server icons (customizable) | ✅ | IconUrl property on Server model, IconUrl TEXT column in Servers table |
 | 4.7 | Channel icons (customizable) | ✅ | IconUrl property on Channel model, IconUrl TEXT column in Channels table |
 | 4.8 | Server permissions & roles | ✅ | ServerRole + ServerMember models, ServerRoles + ServerMembers tables, RoleService (CreateRole, GetServerRoles, AssignRole) |
-| 4.9 | Channel permissions | 📋 | Per-channel view/send permissions |
+| 4.9 | Channel permissions | ✅ | ChannelPermission model, ChannelPermissions table, ChannelPermissionService (SetPermission, GetPermission, CheckUserCanRead, CheckUserCanSend) |
 | 4.10 | Server-specific nicknames | 📋 | Override display name per server |
 
 ---
