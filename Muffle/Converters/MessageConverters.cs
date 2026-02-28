@@ -184,4 +184,25 @@ namespace Muffle.Converters
             throw new NotImplementedException();
         }
     }
+
+    /// <summary>
+    /// Maps a PatchNoteEntry.EntryType string to a badge background color.
+    /// </summary>
+    public class EntryTypeToBadgeColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value?.ToString() switch
+            {
+                "New"      => Color.FromArgb("#43B581"),
+                "Fixed"    => Color.FromArgb("#E74C3C"),
+                "Improved" => Color.FromArgb("#7289DA"),
+                "Changed"  => Color.FromArgb("#E67E22"),
+                _          => Color.FromArgb("#757575")
+            };
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
 }

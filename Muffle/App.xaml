@@ -20,6 +20,7 @@
             <converters:TabBackgroundConverter x:Key="TabBackgroundConverter" />
             <converters:TabVisibilityConverter x:Key="TabVisibilityConverter" />
             <converters:BoolToTabBackgroundConverter x:Key="BoolToTabBackgroundConverter" />
+            <converters:EntryTypeToBadgeColorConverter x:Key="EntryTypeToBadgeColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

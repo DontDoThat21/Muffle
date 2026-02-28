@@ -314,6 +314,17 @@ namespace Muffle
             MainContentFrame.Content = connectedDevicesView;
         }
 
+        private void PatchNotesButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Patch Notes view
+            var patchNotesViewModel = new PatchNotesViewModel();
+            var patchNotesView = new PatchNotesView(patchNotesViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = patchNotesView;
+        }
+
     }
 
 }
