@@ -98,13 +98,13 @@ On success: update FEATURES.md — feature 4.1 from 📋 to ✅.
 
 ### 4.2 Public/private server toggle
 
-⬜ TASK-023: In Muffle.Data/Models/Server.cs — add `public bool IsPublic { get; set; }` property after the Port property. One file only.
+✅ TASK-023: In Muffle.Data/Models/Server.cs — add `public bool IsPublic { get; set; }` property after the Port property. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-024: In Muffle.Data/Services/SqliteDbService.cs — add `IsPublic INTEGER NOT NULL DEFAULT 0` column to the Servers CREATE TABLE statement, after the Port column. One file only.
+✅ TASK-024: In Muffle.Data/Services/SqliteDbService.cs — add `IsPublic INTEGER NOT NULL DEFAULT 0` column to the Servers CREATE TABLE statement, after the Port column. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-025: In Muffle.Data/Services/SqliteDbService.cs — update the Servers seed INSERT to include IsPublic values. Set server Id=0 to IsPublic=1, others to 0. Add IsPublic to the column list and VALUES. One file only.
+✅ TASK-025: In Muffle.Data/Services/SqliteDbService.cs — update the Servers seed INSERT to include IsPublic values. Set server Id=0 to IsPublic=1, others to 0. Add IsPublic to the column list and VALUES. One file only.
 On success: update FEATURES.md — feature 4.2 from 📋 to ✅.
 
 ### 4.3 Invite links

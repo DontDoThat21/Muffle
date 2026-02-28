@@ -55,7 +55,8 @@ namespace Muffle.Data.Services
                 Name TEXT NOT NULL,
                 Description TEXT,
                 IpAddress TEXT NOT NULL,
-                Port INTEGER NOT NULL
+                Port INTEGER NOT NULL,
+                IsPublic INTEGER NOT NULL DEFAULT 0
             );";
 
             connection.Execute(createServersTableQuery);
@@ -167,11 +168,11 @@ namespace Muffle.Data.Services
 
                 // Seed data
             var seedDataQueryServers = @"
-                INSERT INTO Servers (Id, Name, Description, IpAddress, Port)
-                VALUES 
-                (0, 'Dynamic database test', 'Description for Server1', '192.168.1.1', 8080),
-                (1, 'Example 2', 'Description for Server2', '192.168.1.2', 8081),
-                (2, 'Tyler', 'Description for Server3', '192.168.1.3', 8082);";
+                INSERT INTO Servers (Id, Name, Description, IpAddress, Port, IsPublic)
+                VALUES
+                (0, 'Dynamic database test', 'Description for Server1', '192.168.1.1', 8080, 1),
+                (1, 'Example 2', 'Description for Server2', '192.168.1.2', 8081, 0),
+                (2, 'Tyler', 'Description for Server3', '192.168.1.3', 8082, 0);";
 
             try
             {
