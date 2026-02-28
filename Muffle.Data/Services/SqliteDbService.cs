@@ -329,6 +329,18 @@ namespace Muffle.Data.Services
 
             connection.Execute(createDeveloperSettingsTableQuery);
 
+            // Create PrivacySettings table
+            var createPrivacySettingsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS PrivacySettings (
+                UserId INTEGER PRIMARY KEY,
+                DmPrivacy INTEGER NOT NULL DEFAULT 1,
+                FriendRequestFilter INTEGER NOT NULL DEFAULT 0,
+                ContentFilter INTEGER NOT NULL DEFAULT 1,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createPrivacySettingsTableQuery);
+
             // Seed Users data
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)

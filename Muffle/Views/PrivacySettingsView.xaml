@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             x:Class="Muffle.Views.PrivacySettingsView"
+             x:DataType="viewmodels:PrivacySettingsViewModel"
+             BackgroundColor="#303030">
+
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="15">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Privacy &amp; Safety"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"/>
+            <Label Text="DM privacy, friend request filtering, and content filtering"
+                   FontSize="14"
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Status Message -->
+                <Label Text="{Binding StatusMessage}"
+                       IsVisible="{Binding HasStatusMessage}"
+                       HorizontalOptions="Center"
+                       TextColor="Orange"
+                       FontSize="14"
+                       FontAttributes="Bold"/>
+
+                <!-- Processing Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsProcessing}"
+                                   IsRunning="{Binding IsProcessing}"
+                                   Color="White"
+                                   HorizontalOptions="Center"/>
+
+                <!-- DM Privacy -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Direct Message Privacy"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Control who is allowed to send you direct messages"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select DM privacy"
+                                ItemsSource="{Binding DmPrivacyOptions}"
+                                SelectedItem="{Binding SelectedDmPrivacy}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Friend Request Filtering -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Friend Request Filtering"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Choose who is allowed to send you friend requests"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select friend request filter"
+                                ItemsSource="{Binding FriendRequestFilterOptions}"
+                                SelectedItem="{Binding SelectedFriendRequestFilter}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Content Filtering -->
+                <Frame Padding="15"
+                       BorderColor="#424242"
+                       BackgroundColor="#252525"
+                       CornerRadius="8"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Content Filtering"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label Text="Automatically filter explicit or unsafe content in messages"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                        <Picker Title="Select content filter level"
+                                ItemsSource="{Binding ContentFilterOptions}"
+                                SelectedItem="{Binding SelectedContentFilter}"
+                                TextColor="White"
+                                TitleColor="Gray"
+                                BackgroundColor="#1E1E1E"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Save Button -->
+                <Button Text="Save Privacy Settings"
+                        Command="{Binding SavePrivacySettingsCommand}"
+                        BackgroundColor="#7289DA"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="8"
+                        Padding="15,10"
+                        HorizontalOptions="FillAndExpand"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
+</ContentView>

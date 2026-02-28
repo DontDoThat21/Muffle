@@ -292,6 +292,17 @@ namespace Muffle
             MainContentFrame.Content = developerSettingsView;
         }
 
+        private void PrivacySettingsButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Privacy Settings view
+            var privacySettingsViewModel = new PrivacySettingsViewModel();
+            var privacySettingsView = new PrivacySettingsView(privacySettingsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = privacySettingsView;
+        }
+
     }
 
 }
