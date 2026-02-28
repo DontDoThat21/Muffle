@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             xmlns:models="clr-namespace:Muffle.Data.Models;assembly=Muffle.Data"
+             x:Class="Muffle.Views.ProfileSettingsView"
+             x:DataType="viewmodels:ProfileSettingsViewModel"
+             BackgroundColor="#303030">
+    
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="15">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Profile Settings" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="White"/>
+            <Label Text="{Binding CurrentUserFullUsername}" 
+                   FontSize="14" 
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Tab Buttons -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+            <Button Grid.Column="0"
+                    Text="Profile"
+                    Command="{Binding SelectProfileTabCommand}"
+                    BackgroundColor="{Binding IsProfileTabSelected, Converter={StaticResource BoolToTabBackgroundConverter}}"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="10,8"/>
+            <Button Grid.Column="1"
+                    Text="Status"
+                    Command="{Binding SelectStatusTabCommand}"
+                    BackgroundColor="{Binding IsStatusTabSelected, Converter={StaticResource BoolToTabBackgroundConverter}}"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="10,8"/>
+            <Button Grid.Column="2"
+                    Text="Connections"
+                    Command="{Binding SelectConnectionsTabCommand}"
+                    BackgroundColor="{Binding IsConnectionsTabSelected, Converter={StaticResource BoolToTabBackgroundConverter}}"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="10,8"/>
+            <Button Grid.Column="3"
+                    Text="Active Status"
+                    Command="{Binding SelectActiveStatusTabCommand}"
+                    BackgroundColor="{Binding IsActiveStatusTabSelected, Converter={StaticResource BoolToTabBackgroundConverter}}"
+                    TextColor="White"
+                    CornerRadius="4"
+                    Padding="10,8"/>
+        </Grid>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Status Message -->
+                <Label Text="{Binding StatusMessage}" 
+                       IsVisible="{Binding HasStatusMessage}"
+                       HorizontalOptions="Center"
+                       TextColor="Orange"
+                       FontSize="14"
+                       FontAttributes="Bold"/>
+
+                <!-- Processing Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsProcessing}" 
+                                 IsRunning="{Binding IsProcessing}"
+                                 Color="White"
+                                 HorizontalOptions="Center"/>
+
+                <!-- ==================== PROFILE TAB ==================== -->
+                <VerticalStackLayout Spacing="15" IsVisible="{Binding IsProfileTabSelected}">
+
+                    <!-- Avatar -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Avatar" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Enter a URL for your profile picture" 
+                                   FontSize="12" 
+                                   TextColor="Gray"/>
+                            <Entry Text="{Binding AvatarUrl}"
+                                   Placeholder="https://example.com/avatar.png"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Banner -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Banner" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Enter a URL for your profile banner" 
+                                   FontSize="12" 
+                                   TextColor="Gray"/>
+                            <Entry Text="{Binding BannerUrl}"
+                                   Placeholder="https://example.com/banner.png"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- About Me -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="About Me" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Tell others about yourself" 
+                                   FontSize="12" 
+                                   TextColor="Gray"/>
+                            <Editor Text="{Binding AboutMe}"
+                                    Placeholder="Write something about yourself..."
+                                    PlaceholderColor="Gray"
+                                    TextColor="White"
+                                    BackgroundColor="#1E1E1E"
+                                    HeightRequest="100"
+                                    AutoSize="TextChanges"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Pronouns -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Pronouns" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Let others know your pronouns" 
+                                   FontSize="12" 
+                                   TextColor="Gray"/>
+                            <Entry Text="{Binding Pronouns}"
+                                   Placeholder="e.g. they/them, she/her, he/him"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Save Profile Button -->
+                    <Button Text="Save Profile" 
+                            Command="{Binding SaveProfileCommand}"
+                            BackgroundColor="#43B581"
+                            TextColor="White"
+                            CornerRadius="4"
+                            Padding="0,12"
+                            IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"
+                            Margin="0,5,0,0"/>
+                </VerticalStackLayout>
+
+                <!-- ==================== STATUS TAB ==================== -->
+                <VerticalStackLayout Spacing="15" IsVisible="{Binding IsStatusTabSelected}">
+
+                    <!-- Presence Status -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Online Status" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="{Binding StatusDisplayName}" 
+                                   FontSize="14" 
+                                   TextColor="{Binding StatusColor}"/>
+
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
+                                <Button Grid.Row="0" Grid.Column="0"
+                                        Text="🟢 Online"
+                                        Command="{Binding SetStatusOnlineCommand}"
+                                        BackgroundColor="#1E1E1E"
+                                        TextColor="#43B581"
+                                        CornerRadius="4"
+                                        Padding="10,8"/>
+                                <Button Grid.Row="0" Grid.Column="1"
+                                        Text="🟡 Away"
+                                        Command="{Binding SetStatusAwayCommand}"
+                                        BackgroundColor="#1E1E1E"
+                                        TextColor="#FAA61A"
+                                        CornerRadius="4"
+                                        Padding="10,8"/>
+                                <Button Grid.Row="1" Grid.Column="0"
+                                        Text="🔴 Do Not Disturb"
+                                        Command="{Binding SetStatusDndCommand}"
+                                        BackgroundColor="#1E1E1E"
+                                        TextColor="#F04747"
+                                        CornerRadius="4"
+                                        Padding="10,8"/>
+                                <Button Grid.Row="1" Grid.Column="1"
+                                        Text="⚫ Invisible"
+                                        Command="{Binding SetStatusInvisibleCommand}"
+                                        BackgroundColor="#1E1E1E"
+                                        TextColor="#747F8D"
+                                        CornerRadius="4"
+                                        Padding="10,8"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Custom Status -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Custom Status" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Set a custom status message others can see" 
+                                   FontSize="12" 
+                                   TextColor="Gray"/>
+                            <Entry Text="{Binding CustomStatusEmoji}"
+                                   Placeholder="Emoji (e.g. 🎮)"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"/>
+                            <Entry Text="{Binding CustomStatusText}"
+                                   Placeholder="e.g. Playing Starcraft 2"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"/>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <Button Grid.Column="0"
+                                        Text="Clear Status"
+                                        Command="{Binding ClearCustomStatusCommand}"
+                                        BackgroundColor="#424242"
+                                        TextColor="White"
+                                        CornerRadius="4"
+                                        Padding="10,8"/>
+                                <Button Grid.Column="1"
+                                        Text="Save Status"
+                                        Command="{Binding SaveStatusCommand}"
+                                        BackgroundColor="#43B581"
+                                        TextColor="White"
+                                        CornerRadius="4"
+                                        Padding="10,8"
+                                        IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- ==================== CONNECTIONS TAB ==================== -->
+                <VerticalStackLayout Spacing="15" IsVisible="{Binding IsConnectionsTabSelected}">
+
+                    <!-- Add Connection -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Add Connection" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Link your accounts from other services" 
+                                   FontSize="12" 
+                                   TextColor="Gray"/>
+                            <Picker Title="Select Service"
+                                    ItemsSource="{Binding AvailableServices}"
+                                    SelectedItem="{Binding NewConnectionService}"
+                                    TextColor="White"
+                                    TitleColor="Gray"
+                                    BackgroundColor="#1E1E1E"/>
+                            <Entry Text="{Binding NewConnectionUsername}"
+                                   Placeholder="Your username on that service"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"/>
+                            <Entry Text="{Binding NewConnectionUrl}"
+                                   Placeholder="Profile URL (optional)"
+                                   PlaceholderColor="Gray"
+                                   TextColor="White"
+                                   BackgroundColor="#1E1E1E"/>
+                            <Button Text="Add Connection"
+                                    Command="{Binding AddConnectionCommand}"
+                                    BackgroundColor="#7289DA"
+                                    TextColor="White"
+                                    CornerRadius="4"
+                                    Padding="10,8"
+                                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Existing Connections -->
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Your Connections" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            
+                            <CollectionView ItemsSource="{Binding Connections}">
+                                <CollectionView.EmptyView>
+                                    <Label Text="No connections yet. Add one above!"
+                                           TextColor="Gray"
+                                           FontSize="14"
+                                           HorizontalOptions="Center"
+                                           Margin="0,20,0,0"/>
+                                </CollectionView.EmptyView>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:ProfileConnection">
+                                        <Frame Padding="12" 
+                                               Margin="0,5,0,5" 
+                                               BorderColor="#424242"
+                                               BackgroundColor="#1E1E1E"
+                                               CornerRadius="4"
+                                               HasShadow="False">
+                                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="3">
+                                                    <Label Text="{Binding ServiceName}" 
+                                                           FontSize="14" 
+                                                           FontAttributes="Bold"
+                                                           TextColor="White"/>
+                                                    <Label Text="{Binding ServiceUsername}" 
+                                                           FontSize="12" 
+                                                           TextColor="LightGray"/>
+                                                </VerticalStackLayout>
+                                                <Button Grid.Column="1"
+                                                        Text="{Binding IsVisible, StringFormat='{0:Visible|Hidden}'}"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ProfileSettingsViewModel}}, Path=ToggleConnectionVisibilityCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        BackgroundColor="#424242"
+                                                        TextColor="White"
+                                                        CornerRadius="4"
+                                                        FontSize="11"
+                                                        Padding="8,5"/>
+                                                <Button Grid.Column="2"
+                                                        Text="Remove"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ProfileSettingsViewModel}}, Path=RemoveConnectionCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        BackgroundColor="#F04747"
+                                                        TextColor="White"
+                                                        CornerRadius="4"
+                                                        FontSize="11"
+                                                        Padding="8,5"/>
+                                            </Grid>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <!-- ==================== ACTIVE STATUS TAB ==================== -->
+                <VerticalStackLayout Spacing="15" IsVisible="{Binding IsActiveStatusTabSelected}">
+
+                    <Frame Padding="15" 
+                           BorderColor="#424242"
+                           BackgroundColor="#252525"
+                           CornerRadius="8"
+                           HasShadow="False">
+                        <VerticalStackLayout Spacing="15">
+                            <Label Text="Active Status Settings" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Control whether other users can see when you are online or active." 
+                                   FontSize="12" 
+                                   TextColor="Gray"
+                                   LineBreakMode="WordWrap"/>
+
+                            <Grid ColumnDefinitions="*,Auto" Padding="0,10,0,10">
+                                <Label Grid.Column="0"
+                                       Text="Show my online status to others"
+                                       FontSize="14"
+                                       TextColor="White"
+                                       VerticalOptions="Center"/>
+                                <Switch Grid.Column="1"
+                                        IsToggled="{Binding ShowOnlineStatus}"
+                                        OnColor="#43B581"
+                                        ThumbColor="White"/>
+                            </Grid>
+
+                            <Label Text="When disabled, you will appear offline to other users. You will still be able to use all features normally."
+                                   FontSize="11"
+                                   TextColor="Gray"
+                                   LineBreakMode="WordWrap"/>
+
+                            <Button Text="Save Active Status Settings"
+                                    Command="{Binding SaveActiveStatusCommand}"
+                                    BackgroundColor="#43B581"
+                                    TextColor="White"
+                                    CornerRadius="4"
+                                    Padding="0,12"
+                                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}"
+                                    Margin="0,10,0,0"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </Grid>
+</ContentView>

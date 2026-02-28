@@ -36,7 +36,15 @@ namespace Muffle.Data.Services
                 CreationDate DATETIME NOT NULL,
                 Discriminator INTEGER NOT NULL DEFAULT 0,
                 IsActive INTEGER NOT NULL DEFAULT 1,
-                DisabledAt DATETIME
+                DisabledAt DATETIME,
+                AvatarUrl TEXT,
+                BannerUrl TEXT,
+                AboutMe TEXT,
+                Pronouns TEXT,
+                Status INTEGER NOT NULL DEFAULT 0,
+                CustomStatusText TEXT,
+                CustomStatusEmoji TEXT,
+                ShowOnlineStatus INTEGER NOT NULL DEFAULT 1
             );";
 
             connection.Execute(createUsersTableQuery);
@@ -241,6 +249,33 @@ namespace Muffle.Data.Services
             );";
 
             connection.Execute(createMessageReactionsTableQuery);
+
+            // Create ProfileConnections table
+            var createProfileConnectionsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS ProfileConnections (
+                ConnectionId INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserId INTEGER NOT NULL,
+                ServiceName TEXT NOT NULL,
+                ServiceUsername TEXT NOT NULL,
+                ServiceUrl TEXT,
+                IsVisible INTEGER NOT NULL DEFAULT 1,
+                ConnectedAt DATETIME NOT NULL,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createProfileConnectionsTableQuery);
+
+            // Create UserThemePreferences table
+            var createUserThemePreferencesTableQuery = @"
+            CREATE TABLE IF NOT EXISTS UserThemePreferences (
+                UserId INTEGER PRIMARY KEY,
+                ThemeName TEXT NOT NULL DEFAULT 'Dark',
+                IsDarkMode INTEGER NOT NULL DEFAULT 1,
+                AccentColor TEXT NOT NULL DEFAULT '#7289DA',
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createUserThemePreferencesTableQuery);
 
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
@@ -463,13 +498,33 @@ namespace Muffle.Data.Services
                 {
                     // Ignore exceptions
                 }
+
+                try
+                {
+                    var dropProfileConnectionsTable = "DROP TABLE IF EXISTS ProfileConnections";
+                    connection.Execute(dropProfileConnectionsTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
+                try
+                {
+                    var dropUserThemePreferencesTable = "DROP TABLE IF EXISTS UserThemePreferences";
+                    connection.Execute(dropUserThemePreferencesTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
             }
             catch (Exception ex)
             {
 
             }           
 
-            
+
         }
 
     }

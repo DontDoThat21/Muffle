@@ -19,6 +19,7 @@
             <converters:MessageTypeToImageVisibilityConverter x:Key="MessageTypeToImageVisibilityConverter" />
             <converters:TabBackgroundConverter x:Key="TabBackgroundConverter" />
             <converters:TabVisibilityConverter x:Key="TabVisibilityConverter" />
+            <converters:BoolToTabBackgroundConverter x:Key="BoolToTabBackgroundConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

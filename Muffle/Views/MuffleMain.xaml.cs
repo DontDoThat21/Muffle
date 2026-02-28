@@ -220,10 +220,32 @@ namespace Muffle
             // Show the Account Settings view
             var accountSettingsViewModel = new AccountSettingsViewModel();
             var accountSettingsView = new AccountSettingsView(accountSettingsViewModel);
-            
+
             // Update the main content frame
             MainContentFrame.BackgroundColor = Colors.Transparent;
             MainContentFrame.Content = accountSettingsView;
+        }
+
+        private void ProfileButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Profile Settings view
+            var profileSettingsViewModel = new ProfileSettingsViewModel();
+            var profileSettingsView = new ProfileSettingsView(profileSettingsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = profileSettingsView;
+        }
+
+        private void ThemesButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Theme Settings view
+            var themeSettingsViewModel = new ThemeSettingsViewModel();
+            var themeSettingsView = new ThemeSettingsView(themeSettingsViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = themeSettingsView;
         }
 
     }

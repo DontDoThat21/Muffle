@@ -10,33 +10,37 @@ namespace Muffle
         {
             InitializeComponent();
 
-            // Try to restore session from stored token
-            MainPage = new ContentPage(); // Temporary placeholder
-            Task.Run(async () => await InitializeAsync());
+            // Show authentication page immediately so the UI is never blank
+            var authPage = new AuthenticationPage();
+            authPage.AuthenticationSucceeded += OnAuthenticationSucceeded;
+            MainPage = authPage;
+
+            // Try to restore a previous session in the background
+            Task.Run(async () => await TryRestoreSessionAsync());
         }
 
-        private async Task InitializeAsync()
+        private async Task TryRestoreSessionAsync()
         {
             try
             {
                 // Check if we have stored accounts
                 var storedAccounts = await TokenStorageService.GetAllStoredAccountsAsync();
-                
+
                 // Clean up and validate stored accounts
                 if (storedAccounts.Count > 0)
                 {
                     var validAccounts = AuthenticationService.ValidateStoredAccounts(storedAccounts);
-                    
+
                     // If we have valid accounts, try to restore the last used one
                     if (validAccounts.Count > 0)
                     {
                         var lastUsedToken = await TokenStorageService.GetLastUsedTokenAsync();
-                        
+
                         // Try to use the last used token first
                         if (!string.IsNullOrEmpty(lastUsedToken))
                         {
                             var user = AuthenticationService.GetUserByToken(lastUsedToken);
-                            
+
                             if (user != null)
                             {
                                 // Last used token is valid - restore session
@@ -51,9 +55,8 @@ namespace Muffle
                                 return;
                             }
                         }
-                        
-                        // If no last used token or it's invalid, show account selector
-                        // For now, just use the first valid account
+
+                        // If no last used token or it's invalid, use the first valid account
                         var firstAccount = validAccounts.First();
                         var firstUser = AuthenticationService.GetUserByToken(firstAccount.Token);
                         

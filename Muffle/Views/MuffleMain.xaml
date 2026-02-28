@@ -14,6 +14,18 @@
             <Grid Grid.Column="0" BackgroundColor="#252525">
                 <ImageButton Source="mufflelogo.png" Padding="20" VerticalOptions="Center"/>
                 <VerticalStackLayout HorizontalOptions="End" VerticalOptions="Start" Margin="5" Spacing="5">
+                    <Button Text="Profile" 
+                            BackgroundColor="#7289DA" 
+                            TextColor="White" 
+                            FontSize="10"
+                            Padding="5,2"
+                            Clicked="ProfileButton_OnClicked"/>
+                    <Button Text="Themes" 
+                            BackgroundColor="#9B59B6" 
+                            TextColor="White" 
+                            FontSize="10"
+                            Padding="5,2"
+                            Clicked="ThemesButton_OnClicked"/>
                     <Button Text="Settings" 
                             BackgroundColor="#43B581" 
                             TextColor="White" 

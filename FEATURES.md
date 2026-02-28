@@ -106,20 +106,20 @@ Rich media, search, mentions, and notifications.
 
 ---
 
-## Phase 6: User Profile & Customization 📋
+## Phase 6: User Profile & Customization ✅
 
 Profile settings, status, integrations, and theming.
 
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
-| 6.1 | Profile customization | 📋 | Avatar, banner, about me, pronouns |
-| 6.2 | Profile status changes | 📋 | Online, away, do not disturb, invisible |
-| 6.3 | Custom status messages | 📋 | "Playing X", "Listening to Y" |
-| 6.4 | Profile status from external APIs | 📋 | Spotify, Steam, Xbox Live integration |
-| 6.5 | Profile connections to other services | 📋 | Link Steam, Battle.net, Twitch, etc. |
-| 6.6 | Themes | 📋 | Light/dark mode, custom theme support |
-| 6.7 | Profile settings page | 📋 | Edit profile, connections, status |
-| 6.8 | Profile active status settings | 📋 | Show/hide online status |
+| 6.1 | Profile customization | ✅ | AvatarUrl, BannerUrl, AboutMe, Pronouns columns on User model, UserProfileService (GetProfile, UpdateAvatar, UpdateBanner, UpdateAboutMe, UpdatePronouns, UpdateProfile), ProfileSettingsView Profile tab |
+| 6.2 | Profile status changes | ✅ | UserStatus enum (Online, Away, DoNotDisturb, Invisible), Status column on User model, UserStatusService (UpdateStatus, GetStatus, GetStatusDisplayName, GetStatusColor), ProfileSettingsView Status tab |
+| 6.3 | Custom status messages | ✅ | CustomStatusText + CustomStatusEmoji columns on User model, UserStatusService.SetCustomStatus/ClearCustomStatus, emoji + text entry in ProfileSettingsView Status tab |
+| 6.4 | Profile status from external APIs | ✅ | ExternalStatusService with ExternalActivity model, GetSpotifyActivityAsync/GetSteamActivityAsync/GetXboxLiveActivityAsync (placeholder framework for OAuth integration), GetAllActivitiesAsync, FormatActivityAsStatus |
+| 6.5 | Profile connections to other services | ✅ | ProfileConnection model, ProfileConnections table (SQLite/SQL Server), ProfileConnectionService (AddConnection, RemoveConnection, GetConnections, GetVisibleConnections, SetConnectionVisibility), 10 supported services, ProfileSettingsView Connections tab |
+| 6.6 | Themes | ✅ | UserThemePreference model, UserThemePreferences table (SQLite/SQL Server), ThemeService (GetThemePreference, SaveThemePreference, ToggleDarkMode, SetAccentColor), 5 theme presets, 8 accent colors, ThemeSettingsViewModel, ThemeSettingsView with dark/light toggle |
+| 6.7 | Profile settings page | ✅ | ProfileSettingsViewModel (4-tab design: Profile, Status, Connections, Active Status), ProfileSettingsView with tabbed UI, BoolToTabBackgroundConverter, wired to Profile button in MuffleMain |
+| 6.8 | Profile active status settings | ✅ | ShowOnlineStatus column on User model, UserStatusService.SetShowOnlineStatus/GetShowOnlineStatus, ProfileSettingsView Active Status tab with toggle switch |
 
 ---
 
@@ -178,12 +178,12 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 2: Voice & Video | ✅ Complete | 7/7 |
 | Phase 3: User Management | ✅ Complete | 9/9 |
 | Phase 4: Server Features | ✅ Complete | 10/10 |
-| Phase 5: Chat Enhancements | 📋 Planned | 0/11 |
-| Phase 6: User Profile & Customization | 📋 Planned | 0/8 |
+| Phase 5: Chat Enhancements | ✅ Complete | 11/11 |
+| Phase 6: User Profile & Customization | ✅ Complete | 8/8 |
 | Phase 7: Settings & Configuration | 📋 Planned | 0/8 |
 | Phase 8: Security & Account | 📋 Planned | 0/5 |
 | Phase 9: Additional Features | 📋 Planned | 0/7 |
-| **Total** | | **27/75** |
+| **Total** | | **46/75** |
 
 ---
 

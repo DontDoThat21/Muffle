@@ -90,7 +90,13 @@
 	    <DependentUpon>MuffleMain.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\ServerDetailsContentView.xaml.cs">
-	    <DependentUpon>ServerDetailsContentView.xaml</DependentUpon>
+		<DependentUpon>ServerDetailsContentView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ProfileSettingsView.xaml.cs">
+		<DependentUpon>ProfileSettingsView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ThemeSettingsView.xaml.cs">
+		<DependentUpon>ThemeSettingsView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -101,10 +107,16 @@
 	  <MauiXaml Update="Views\FriendsUIComponents\FriendsTopBarUIView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ProfileSettingsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ServerDetailsContentView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\ServersUIComponents\ServerTopBarUIView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ThemeSettingsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
