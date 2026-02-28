@@ -231,13 +231,13 @@ On success: update FEATURES.md — feature 5.3 from 📋 to ✅.
 
 ### 5.4 Notifications
 
-⬜ TASK-058: Create Muffle.Data/Models/AppNotification.cs — enum NotificationType { Mention, DirectMessage, FriendRequest, ServerInvite }. Class properties: NotificationId (int), UserId (int), Title (string), Body (string), Type (NotificationType), IsRead (bool), CreatedAt (DateTime), RelatedId (int?, e.g. senderId or serverId). One file only.
+✅ TASK-058: Create Muffle.Data/Models/AppNotification.cs — enum NotificationType { Mention, DirectMessage, FriendRequest, ServerInvite }. Class properties: NotificationId (int), UserId (int), Title (string), Body (string), Type (NotificationType), IsRead (bool), CreatedAt (DateTime), RelatedId (int?, e.g. senderId or serverId). One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-059: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS Notifications DDL (NotificationId INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER NOT NULL, Title TEXT NOT NULL, Body TEXT, Type INTEGER NOT NULL, IsRead INTEGER NOT NULL DEFAULT 0, CreatedAt DATETIME NOT NULL, RelatedId INTEGER, FK to Users). Also add DROP TABLE IF EXISTS Notifications to DisposeDatabase. One file only.
+✅ TASK-059: In Muffle.Data/Services/SqliteDbService.cs — add CREATE TABLE IF NOT EXISTS Notifications DDL (NotificationId INTEGER PRIMARY KEY AUTOINCREMENT, UserId INTEGER NOT NULL, Title TEXT NOT NULL, Body TEXT, Type INTEGER NOT NULL, IsRead INTEGER NOT NULL DEFAULT 0, CreatedAt DATETIME NOT NULL, RelatedId INTEGER, FK to Users). Also add DROP TABLE IF EXISTS Notifications to DisposeDatabase. One file only.
 On success: no FEATURES.md change needed.
 
-⬜ TASK-060: Create Muffle.Data/Services/NotificationService.cs — static class with CreateNotification(int userId, string title, string body, NotificationType type, int? relatedId), GetUnreadNotifications(int userId) returning List<AppNotification>, MarkAsRead(int notificationId), GetUnreadCount(int userId). Use Dapper. One file only.
+✅ TASK-060: Create Muffle.Data/Services/NotificationService.cs — static class with CreateNotification(int userId, string title, string body, NotificationType type, int? relatedId), GetUnreadNotifications(int userId) returning List<AppNotification>, MarkAsRead(int notificationId), GetUnreadCount(int userId). Use Dapper. One file only.
 On success: update FEATURES.md — feature 5.4 from 📋 to ✅.
 
 ### 5.5 Search through friend messages

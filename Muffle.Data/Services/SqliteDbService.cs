@@ -213,6 +213,22 @@ namespace Muffle.Data.Services
 
             connection.Execute(createChannelPermissionsTableQuery);
 
+            // Create Notifications table
+            var createNotificationsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS Notifications (
+                NotificationId INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserId INTEGER NOT NULL,
+                Title TEXT NOT NULL,
+                Body TEXT,
+                Type INTEGER NOT NULL,
+                IsRead INTEGER NOT NULL DEFAULT 0,
+                CreatedAt DATETIME NOT NULL,
+                RelatedId INTEGER,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createNotificationsTableQuery);
+
             // Seed Users data (password is 'password123' hashed with BCrypt)
             var seedUsersQuery = @"
                 INSERT INTO Users (UserId, Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsActive)
@@ -295,6 +311,16 @@ namespace Muffle.Data.Services
             {
                 using var connection = CreateConnection();
                 connection.Open();
+                try
+                {
+                    var dropNotificationsTable = "DROP TABLE IF EXISTS Notifications";
+                    connection.Execute(dropNotificationsTable);
+                }
+                catch (Exception)
+                {
+                    // Ignore exceptions
+                }
+
                 try
                 {
                     var dropChannelPermissionsTable = "DROP TABLE IF EXISTS ChannelPermissions";
