@@ -303,6 +303,17 @@ namespace Muffle
             MainContentFrame.Content = privacySettingsView;
         }
 
+        private void ConnectedDevicesButton_OnClicked(object sender, EventArgs e)
+        {
+            // Show the Connected Devices view
+            var connectedDevicesViewModel = new ConnectedDevicesViewModel();
+            var connectedDevicesView = new ConnectedDevicesView(connectedDevicesViewModel);
+
+            // Update the main content frame
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = connectedDevicesView;
+        }
+
     }
 
 }

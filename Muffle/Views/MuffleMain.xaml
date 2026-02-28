@@ -56,6 +56,12 @@
                             FontSize="10"
                             Padding="5,2"
                             Clicked="PrivacySettingsButton_OnClicked"/>
+                    <Button Text="Devices"
+                            BackgroundColor="#8E44AD"
+                            TextColor="White"
+                            FontSize="10"
+                            Padding="5,2"
+                            Clicked="ConnectedDevicesButton_OnClicked"/>
                     <Button Text="Settings"
                             BackgroundColor="#43B581" 
                             TextColor="White" 

@@ -97,7 +97,10 @@ namespace Muffle.ViewModels
                     }
 
                     // Generate authentication token
-                    var token = AuthenticationService.GenerateAuthToken(user.UserId);
+                    var deviceName = DeviceInfo.Current.Name;
+                    var platform = DeviceInfo.Current.Platform.ToString();
+                    var token = AuthenticationService.GenerateAuthToken(user.UserId,
+                        deviceName: deviceName, platform: platform);
 
                     if (token != null)
                     {

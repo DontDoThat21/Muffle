@@ -161,8 +161,11 @@ namespace Muffle.Data.Services
         /// </summary>
         /// <param name="userId">The user ID to create a token for</param>
         /// <param name="expirationDays">Number of days until token expires (default 30)</param>
+        /// <param name="deviceName">Name of the device initiating the login</param>
+        /// <param name="platform">Platform identifier (e.g., iOS, Android, WinUI)</param>
         /// <returns>The generated token string, or null if failed</returns>
-        public static string? GenerateAuthToken(int userId, int expirationDays = 30)
+        public static string? GenerateAuthToken(int userId, int expirationDays = 30,
+            string deviceName = "Unknown Device", string platform = "Unknown")
         {
             try
             {
@@ -175,13 +178,15 @@ namespace Muffle.Data.Services
                 var expiresAt = createdAt.AddDays(expirationDays);
 
                 var insertTokenQuery = @"
-                    INSERT INTO AuthTokens (UserId, Token, CreatedAt, ExpiresAt)
-                    VALUES (@UserId, @Token, @CreatedAt, @ExpiresAt);";
+                    INSERT INTO AuthTokens (UserId, Token, DeviceName, Platform, CreatedAt, ExpiresAt)
+                    VALUES (@UserId, @Token, @DeviceName, @Platform, @CreatedAt, @ExpiresAt);";
 
                 connection.Execute(insertTokenQuery, new
                 {
                     UserId = userId,
                     Token = token,
+                    DeviceName = deviceName,
+                    Platform = platform,
                     CreatedAt = createdAt,
                     ExpiresAt = expiresAt
                 });

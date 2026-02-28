@@ -109,12 +109,23 @@ namespace Muffle.Data.Services
             TokenId INT PRIMARY KEY IDENTITY(1,1),
             UserId INT NOT NULL,
             Token NVARCHAR(255) NOT NULL UNIQUE,
+            DeviceName NVARCHAR(255) NOT NULL DEFAULT 'Unknown Device',
+            Platform NVARCHAR(100) NOT NULL DEFAULT 'Unknown',
             CreatedAt DATETIME NOT NULL,
             ExpiresAt DATETIME NOT NULL,
             FOREIGN KEY (UserId) REFERENCES Users(UserId)
         );";
 
             connection.Execute(createAuthTokensTableQuery);
+
+            // Migration: add DeviceName/Platform to existing AuthTokens tables
+            var migrateAuthTokensQuery = @"
+        IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('AuthTokens') AND name = 'DeviceName')
+            ALTER TABLE AuthTokens ADD DeviceName NVARCHAR(255) NOT NULL DEFAULT 'Unknown Device';
+        IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('AuthTokens') AND name = 'Platform')
+            ALTER TABLE AuthTokens ADD Platform NVARCHAR(100) NOT NULL DEFAULT 'Unknown';";
+
+            try { connection.Execute(migrateAuthTokensQuery); } catch { }
 
             // Create FriendRequests table
             var createFriendRequestsTableQuery = @"
