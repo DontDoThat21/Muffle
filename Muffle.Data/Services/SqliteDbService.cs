@@ -44,7 +44,8 @@ namespace Muffle.Data.Services
                 Status INTEGER NOT NULL DEFAULT 0,
                 CustomStatusText TEXT,
                 CustomStatusEmoji TEXT,
-                ShowOnlineStatus INTEGER NOT NULL DEFAULT 1
+                ShowOnlineStatus INTEGER NOT NULL DEFAULT 1,
+                IsEmailVerified INTEGER NOT NULL DEFAULT 1
             );";
 
             connection.Execute(createUsersTableQuery);
@@ -374,8 +375,25 @@ namespace Muffle.Data.Services
 
             connection.Execute(createPasswordResetTokensTableQuery);
 
+            // Create EmailVerificationTokens table
+            var createEmailVerificationTokensTableQuery = @"
+            CREATE TABLE IF NOT EXISTS EmailVerificationTokens (
+                TokenId INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserId INTEGER NOT NULL,
+                Code TEXT NOT NULL,
+                CreatedAt DATETIME NOT NULL,
+                ExpiresAt DATETIME NOT NULL,
+                IsUsed INTEGER NOT NULL DEFAULT 0,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createEmailVerificationTokensTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try { connection.Execute("ALTER TABLE Users ADD COLUMN IsTwoFactorEnabled INTEGER NOT NULL DEFAULT 0;"); } catch { }
+
+            // Migration: add IsEmailVerified column to Users if not present (DEFAULT 1 so existing accounts are treated as verified)
+            try { connection.Execute("ALTER TABLE Users ADD COLUMN IsEmailVerified INTEGER NOT NULL DEFAULT 1;"); } catch { }
 
             // Seed Users data
             var seedUsersQuery = @"

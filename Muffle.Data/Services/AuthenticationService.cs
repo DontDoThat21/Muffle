@@ -74,8 +74,8 @@ namespace Muffle.Data.Services
 
             // Insert new user
             var insertUserQuery = @"
-                INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate, Discriminator)
-                VALUES (@Name, @Email, @PasswordHash, @Description, @CreationDate, @Discriminator);
+                INSERT INTO Users (Name, Email, PasswordHash, Description, CreationDate, Discriminator, IsEmailVerified)
+                VALUES (@Name, @Email, @PasswordHash, @Description, @CreationDate, @Discriminator, 0);
                 SELECT last_insert_rowid();";
 
             try
@@ -98,7 +98,8 @@ namespace Muffle.Data.Services
                     PasswordHash = passwordHash,
                     Description = string.Empty,
                     CreationDate = DateTime.Now,
-                    Discriminator = discriminator
+                    Discriminator = discriminator,
+                    IsEmailVerified = false
                 };
             }
             catch (Exception ex)
@@ -138,10 +139,33 @@ namespace Muffle.Data.Services
                 return null;
             }
 
+            // Check if email has been verified
+            if (!user.IsEmailVerified)
+            {
+                Console.WriteLine("Email not verified");
+                return null;
+            }
+
             // Verify password using BCrypt
             var passwordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 
             return passwordValid ? user : null;
+        }
+
+        /// <summary>
+        /// Returns true if the account exists, is active, but the email has not yet been verified.
+        /// Used to show a specific error message on the login screen.
+        /// </summary>
+        public static bool IsEmailNotVerified(string email)
+        {
+            using var connection = SQLiteDbService.CreateConnection();
+            connection.Open();
+
+            var user = connection.QueryFirstOrDefault<User>(
+                "SELECT IsActive, IsEmailVerified FROM Users WHERE Email = @Email;",
+                new { Email = email });
+
+            return user != null && user.IsActive && !user.IsEmailVerified;
         }
 
         /// <summary>

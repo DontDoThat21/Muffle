@@ -123,7 +123,9 @@ namespace Muffle.ViewModels
 
                     if (user == null)
                     {
-                        ErrorMessage = "Invalid email or password";
+                        ErrorMessage = AuthenticationService.IsEmailNotVerified(Email)
+                            ? "Please verify your email address before logging in."
+                            : "Invalid email or password";
                         return;
                     }
 

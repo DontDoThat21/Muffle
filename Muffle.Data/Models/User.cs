@@ -29,6 +29,7 @@ namespace Muffle.Data.Models
 
         // Security (Phase 8)
         public bool IsTwoFactorEnabled { get; set; } = false;
+        public bool IsEmailVerified { get; set; } = false;
 
         /// <summary>
         /// Gets the full username with discriminator (e.g., "John#1234")

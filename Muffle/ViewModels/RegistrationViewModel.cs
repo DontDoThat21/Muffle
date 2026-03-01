@@ -11,6 +11,12 @@ namespace Muffle.ViewModels
         private string _confirmPassword = string.Empty;
         private string _errorMessage = string.Empty;
         private bool _isLoading = false;
+        private bool _isRegistrationStep = true;
+        private bool _isVerificationStep = false;
+        private string _verificationCode = string.Empty;
+        private string _simulatedCode = string.Empty;
+        private int _pendingUserId = 0;
+        private string _pendingUserEmail = string.Empty;
 
         public string Email
         {
@@ -76,8 +82,42 @@ namespace Muffle.ViewModels
             }
         }
 
+        public bool IsRegistrationStep
+        {
+            get => _isRegistrationStep;
+            set { _isRegistrationStep = value; OnPropertyChanged(); }
+        }
+
+        public bool IsVerificationStep
+        {
+            get => _isVerificationStep;
+            set { _isVerificationStep = value; OnPropertyChanged(); }
+        }
+
+        public string VerificationCode
+        {
+            get => _verificationCode;
+            set { _verificationCode = value; OnPropertyChanged(); ErrorMessage = string.Empty; }
+        }
+
+        /// <summary>
+        /// Simulated email code shown to the user. In production this would be
+        /// sent to the account's registered email address.
+        /// </summary>
+        public string SimulatedCode
+        {
+            get => _simulatedCode;
+            set { _simulatedCode = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasSimulatedCode)); }
+        }
+
+        public bool HasSimulatedCode => !string.IsNullOrEmpty(SimulatedCode);
+
+        public string PendingUserEmail => _pendingUserEmail;
+
         public ICommand RegisterCommand { get; }
         public ICommand NavigateToLoginCommand { get; }
+        public ICommand VerifyEmailCommand { get; }
+        public ICommand ResendCodeCommand { get; }
 
         public event EventHandler? RegistrationSucceeded;
         public event EventHandler? NavigateToLogin;
@@ -86,6 +126,8 @@ namespace Muffle.ViewModels
         {
             RegisterCommand = new Command(async () => await OnRegisterAsync());
             NavigateToLoginCommand = new Command(() => NavigateToLogin?.Invoke(this, EventArgs.Empty));
+            VerifyEmailCommand = new Command(async () => await OnVerifyEmailAsync());
+            ResendCodeCommand = new Command(async () => await OnResendCodeAsync());
         }
 
         private async Task OnRegisterAsync()
@@ -143,9 +185,16 @@ namespace Muffle.ViewModels
                         return;
                     }
 
+                    // Generate email verification code (simulated – in production this would be emailed)
+                    var code = EmailVerificationService.CreateVerificationToken(user.UserId);
+
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
-                        RegistrationSucceeded?.Invoke(this, EventArgs.Empty);
+                        _pendingUserId = user.UserId;
+                        _pendingUserEmail = user.Email;
+                        SimulatedCode = code;
+                        IsRegistrationStep = false;
+                        IsVerificationStep = true;
                     });
                 }
                 catch (Exception ex)
@@ -155,6 +204,85 @@ namespace Muffle.ViewModels
                 finally
                 {
                     IsLoading = false;
+                }
+            });
+        }
+
+        private async Task OnVerifyEmailAsync()
+        {
+            if (string.IsNullOrWhiteSpace(VerificationCode))
+            {
+                ErrorMessage = "Please enter the verification code.";
+                return;
+            }
+
+            IsLoading = true;
+            ErrorMessage = string.Empty;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var success = EmailVerificationService.VerifyEmail(_pendingUserId, VerificationCode);
+
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        IsLoading = false;
+
+                        if (!success)
+                        {
+                            ErrorMessage = "Invalid or expired code. Please try again.";
+                            return;
+                        }
+
+                        RegistrationSucceeded?.Invoke(this, EventArgs.Empty);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        IsLoading = false;
+                        ErrorMessage = $"Verification failed: {ex.Message}";
+                    });
+                }
+            });
+        }
+
+        private async Task OnResendCodeAsync()
+        {
+            if (_pendingUserId == 0) return;
+
+            IsLoading = true;
+            ErrorMessage = string.Empty;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var code = EmailVerificationService.ResendVerificationCode(_pendingUserId);
+
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        IsLoading = false;
+
+                        if (code == null)
+                        {
+                            ErrorMessage = "Could not resend code. Email may already be verified.";
+                            return;
+                        }
+
+                        SimulatedCode = code;
+                        VerificationCode = string.Empty;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        IsLoading = false;
+                        ErrorMessage = $"Failed to resend code: {ex.Message}";
+                    });
                 }
             });
         }

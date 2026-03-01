@@ -147,8 +147,8 @@ Authentication hardening, 2FA, and account safety.
 | ID | Feature | Status | Notes |
 |----|---------|--------|-------|
 | 8.1 | Optional 2FA/MFA | ✅ | TOTP (RFC 6238), self-contained HMAC-SHA1 implementation, otpauth:// URI, BCrypt-hashed backup codes (8 single-use), enable/disable flow with code verification, login challenge step |
-| 8.2 | Password change flow | 📋 | Change password with email verification |
-| 8.3 | Email verification | 📋 | Verify email on signup |
+| 8.2 | Password change flow | ✅ | Change password with current-password verification + 6-digit simulated email code; PasswordResetToken model, PasswordChangeService (InitiatePasswordChange, VerifyAndChangePassword), PasswordChangeViewModel, PasswordChangeView (two-step UI) |
+| 8.3 | Email verification | ✅ | Verify email on signup; EmailVerificationToken model, EmailVerificationService (CreateVerificationToken, VerifyEmail, ResendVerificationCode), IsEmailVerified column on Users (DEFAULT 1 migration for existing accounts), registration two-step flow with simulated code display, login blocked until verified |
 | 8.4 | Password reset (forgot password) | 📋 | Email-based password recovery |
 | 8.5 | Session management | 📋 | View/revoke active sessions |
 

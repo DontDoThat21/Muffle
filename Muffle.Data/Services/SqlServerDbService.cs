@@ -45,7 +45,8 @@ namespace Muffle.Data.Services
             Status INT NOT NULL DEFAULT 0,
             CustomStatusText NVARCHAR(255),
             CustomStatusEmoji NVARCHAR(50),
-            ShowOnlineStatus BIT NOT NULL DEFAULT 1
+            ShowOnlineStatus BIT NOT NULL DEFAULT 1,
+            IsEmailVerified BIT NOT NULL DEFAULT 1
         );";
 
             connection.Execute(createUsersTableQuery);
@@ -286,12 +287,36 @@ namespace Muffle.Data.Services
 
             connection.Execute(createPasswordResetTokensTableQuery);
 
+            // Create EmailVerificationTokens table
+            var createEmailVerificationTokensTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='EmailVerificationTokens' and xtype='U')
+        CREATE TABLE EmailVerificationTokens (
+            TokenId INT PRIMARY KEY IDENTITY(1,1),
+            UserId INT NOT NULL,
+            Code NVARCHAR(10) NOT NULL,
+            CreatedAt DATETIME NOT NULL,
+            ExpiresAt DATETIME NOT NULL,
+            IsUsed BIT NOT NULL DEFAULT 0,
+            FOREIGN KEY (UserId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createEmailVerificationTokensTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try
             {
                 connection.Execute(@"
                     IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = 'IsTwoFactorEnabled' AND Object_ID = Object_ID('Users'))
                     ALTER TABLE Users ADD IsTwoFactorEnabled BIT NOT NULL DEFAULT 0;");
+            }
+            catch { }
+
+            // Migration: add IsEmailVerified column to Users if not present (DEFAULT 1 so existing accounts are treated as verified)
+            try
+            {
+                connection.Execute(@"
+                    IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = 'IsEmailVerified' AND Object_ID = Object_ID('Users'))
+                    ALTER TABLE Users ADD IsEmailVerified BIT NOT NULL DEFAULT 1;");
             }
             catch { }
 
