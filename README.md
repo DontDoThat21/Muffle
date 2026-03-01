@@ -26,6 +26,8 @@ Muffle aims to deliver a familiar, high-quality community chat experience with:
 
 Not affiliated with Discord Inc.
 
+<img width="2557" height="1388" alt="image" src="https://github.com/user-attachments/assets/080aeb70-326b-45b1-a442-4eeb03a957d7" />
+
 ## Roadmap and backlog
 
 All 75 planned features across 9 development phases are now complete. The list below reflects the full implementation history.
