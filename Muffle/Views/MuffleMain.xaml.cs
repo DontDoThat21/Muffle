@@ -11,6 +11,7 @@ namespace Muffle
         //IWebRtc _webRtc;
         private object selectedObject = "friendcategory";
         private FriendDetailsContentViewModel _currentFriendViewModel;
+        private FriendDetailTopBarUIView _currentTopBarView;
 
         public MainPage() // IWebRtc webRtc
         {
@@ -94,7 +95,9 @@ namespace Muffle
                 var friendDetailTopBarUIView = new FriendDetailTopBarUIView(friend);
                 friendDetailTopBarUIView.VoiceCallRequested += FriendDetailTopBarUIView_VoiceCallRequested;
                 friendDetailTopBarUIView.VideoCallRequested += FriendDetailTopBarUIView_VideoCallRequested;
-                SharedTopBarUI.Content = friendDetailTopBarUIView;                
+                friendDetailTopBarUIView.ScreenShareRequested += FriendDetailTopBarUIView_ScreenShareRequested;
+                _currentTopBarView = friendDetailTopBarUIView;
+                SharedTopBarUI.Content = friendDetailTopBarUIView;
             }
             else if (selectedObject is Server server)
             {
@@ -122,6 +125,14 @@ namespace Muffle
             {
                 _currentFriendViewModel = new FriendDetailsContentViewModel();
                 _currentFriendViewModel._friendSelected = friend;
+
+                // Keep the top bar screenshare button in sync with sharing state
+                _currentFriendViewModel.ScreenSharingStateChanged += (_, isSharing) =>
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                        _currentTopBarView?.SetScreenSharingActive(isSharing));
+                };
+
                 MainContentFrame.Content = new FriendDetailsContentView(_currentFriendViewModel);
             }
             else if (selectedObject is Server server)
@@ -195,6 +206,16 @@ namespace Muffle
             {
                 await _currentFriendViewModel.StartVideoCallAsync();
             }
+        }
+
+        private async void FriendDetailTopBarUIView_ScreenShareRequested(object sender, EventArgs e)
+        {
+            if (_currentFriendViewModel == null) return;
+
+            if (_currentFriendViewModel.IsScreenSharing)
+                await _currentFriendViewModel.StopScreenShareAsync();
+            else
+                await _currentFriendViewModel.StartScreenShareAsync();
         }
 
         private async void CreateServerButton_OnClicked(object sender, EventArgs e)

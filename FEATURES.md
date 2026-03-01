@@ -165,7 +165,7 @@ Social features, subscriptions, and mobile-specific views.
 | 9.3 | Subscription gifting | ✅ | SubscriptionGift model (GiftStatus enum, tier/message/sender/recipient), SubscriptionGifts table (SQLite + SQL Server), SubscriptionGiftService (send/accept/decline/cancel/history), GiftSubscriptionView with Send/Inbox/Sent tabs, Gift button in sidebar |
 | 9.4 | Mobile-specific views | ✅ | Bottom tab bar (Servers/Friends/Chat), hamburger settings overlay, single-panel navigation for iOS/Android via `MobileMuffleMainPage`; platform-selected automatically in `AppShell` |
 | 9.5 | Tablet-optimized layouts | ✅ | Two-panel layout (persistent sidebar + main content) for iPad/Android tablets; `TabletMuffleMainPage` selected automatically in `AppShell` via `DeviceIdiom.Tablet` |
-| 9.6 | Screenshare (desktop) | 📋 | Share screen in voice/video calls |
+| 9.6 | Screenshare (desktop) | ✅ | 🖥 toggle button in FriendDetailTopBarUIView; ScreenShareRequested event → MuffleMain toggles StartScreenShareAsync/StopScreenShareAsync; IsScreenSharing property + ScreenSharingStateChanged event on ViewModel keep button colour in sync; ScreenShareStart/Stop signals sent via WebRTC signaling; active indicator shown in chat feed |
 | 9.7 | Picture-in-picture mode (mobile) | 📋 | Minimize video call to overlay |
 
 ---
@@ -182,8 +182,8 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 6: User Profile & Customization | ✅ Complete | 8/8 |
 | Phase 7: Settings & Configuration | ✅ Complete | 8/8 |
 | Phase 8: Security & Account | ✅ Complete | 5/5 |
-| Phase 9: Additional Features | 🔧 In Progress | 5/7 |
-| **Total** | | **62/75** |
+| Phase 9: Additional Features | 🔧 In Progress | 6/7 |
+| **Total** | | **63/75** |
 
 ---
 

@@ -22,7 +22,23 @@ namespace Muffle.ViewModels
         private UsersService _userService;
         private string _messageToSend;
         private WebRTCManager? _webRTCManager;
-        
+
+        private bool _isScreenSharing;
+        public bool IsScreenSharing
+        {
+            get => _isScreenSharing;
+            private set
+            {
+                if (_isScreenSharing == value) return;
+                _isScreenSharing = value;
+                OnPropertyChanged();
+                ScreenSharingStateChanged?.Invoke(this, value);
+            }
+        }
+
+        /// <summary>Raised whenever screen-sharing starts or stops. Arg is the new IsScreenSharing value.</summary>
+        public event EventHandler<bool> ScreenSharingStateChanged;
+
         public ICommand SendImageCommand { get; }
         public ICommand EndCallCommand { get; }
 
@@ -531,6 +547,7 @@ namespace Muffle.ViewModels
 
                 await _webRTCManager.EndCallAsync();
                 _webRTCManager = null;
+                IsScreenSharing = false;
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -572,6 +589,7 @@ namespace Muffle.ViewModels
                 }
 
                 await _webRTCManager.StartScreenShareAsync(_friendSelected?.Id ?? 0);
+                IsScreenSharing = true;
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -607,6 +625,7 @@ namespace Muffle.ViewModels
                 if (_webRTCManager == null) return;
 
                 await _webRTCManager.StopScreenShareAsync();
+                IsScreenSharing = false;
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
