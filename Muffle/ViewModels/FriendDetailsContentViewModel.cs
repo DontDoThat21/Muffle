@@ -36,8 +36,24 @@ namespace Muffle.ViewModels
             }
         }
 
+        private bool _isCallActive;
+        public bool IsCallActive
+        {
+            get => _isCallActive;
+            private set
+            {
+                if (_isCallActive == value) return;
+                _isCallActive = value;
+                OnPropertyChanged();
+                CallStateChanged?.Invoke(this, value);
+            }
+        }
+
         /// <summary>Raised whenever screen-sharing starts or stops. Arg is the new IsScreenSharing value.</summary>
         public event EventHandler<bool> ScreenSharingStateChanged;
+
+        /// <summary>Raised when a call becomes active (true) or ends (false).</summary>
+        public event EventHandler<bool> CallStateChanged;
 
         public ICommand SendImageCommand { get; }
         public ICommand EndCallCommand { get; }
@@ -260,6 +276,8 @@ namespace Muffle.ViewModels
                 _webRTCManager.Cleanup();
                 _webRTCManager = null;
             }
+            IsCallActive = false;
+            IsScreenSharing = false;
 
             Device.BeginInvokeOnMainThread(() =>
             {
@@ -390,6 +408,7 @@ namespace Muffle.ViewModels
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        IsCallActive = state == CallState.Connected;
                         var chatMessage = new ChatMessage
                         {
                             Content = $"📞 Voice call state: {state}",
@@ -470,6 +489,7 @@ namespace Muffle.ViewModels
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        IsCallActive = state == CallState.Connected;
                         var chatMessage = new ChatMessage
                         {
                             Content = $"📹 Video call state: {state}",
@@ -548,6 +568,7 @@ namespace Muffle.ViewModels
                 await _webRTCManager.EndCallAsync();
                 _webRTCManager = null;
                 IsScreenSharing = false;
+                IsCallActive = false;
 
                 Device.BeginInvokeOnMainThread(() =>
                 {

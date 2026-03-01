@@ -7,7 +7,7 @@
     <Grid RowDefinitions="50,*,60" BackgroundColor="#303030">
 
         <!-- ── Top Bar ─────────────────────────────────────────────────────── -->
-        <Grid Grid.Row="0" BackgroundColor="#252525" ColumnDefinitions="*,Auto">
+        <Grid Grid.Row="0" BackgroundColor="#252525" ColumnDefinitions="*,Auto,Auto,Auto">
             <Label x:Name="TopBarTitle"
                    Grid.Column="0"
                    Text="Servers"
@@ -16,8 +16,24 @@
                    FontAttributes="Bold"
                    VerticalOptions="Center"
                    Margin="15,0,0,0"/>
-            <Button x:Name="MenuButton"
+            <Button x:Name="VoiceCallButton"
                     Grid.Column="1"
+                    Text="✆"
+                    IsVisible="False"
+                    BackgroundColor="Transparent"
+                    TextColor="LimeGreen"
+                    FontSize="22"
+                    Clicked="VoiceCallButton_OnClicked"/>
+            <Button x:Name="VideoCallButton"
+                    Grid.Column="2"
+                    Text="🎦"
+                    IsVisible="False"
+                    BackgroundColor="Transparent"
+                    TextColor="LimeGreen"
+                    FontSize="22"
+                    Clicked="VideoCallButton_OnClicked"/>
+            <Button x:Name="MenuButton"
+                    Grid.Column="3"
                     Text="☰"
                     BackgroundColor="Transparent"
                     TextColor="White"
@@ -101,6 +117,53 @@
             <Frame x:Name="MobileMainContentFrame" IsVisible="False"
                    BackgroundColor="#303030" Padding="0" Margin="0"/>
 
+            <!-- ── In-Call Status Banner (last = rendered on top) ────────── -->
+            <Frame x:Name="InCallBanner"
+                   IsVisible="False"
+                   BackgroundColor="#1a3a1a"
+                   BorderColor="#43B581"
+                   CornerRadius="0"
+                   Padding="10,6"
+                   HasShadow="False"
+                   VerticalOptions="Start">
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
+                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="1">
+                        <Label x:Name="InCallFriendLabel"
+                               Text="On Call"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                        <Label x:Name="InCallDurationLabel"
+                               Text="0:00"
+                               FontSize="11"
+                               TextColor="LightGreen"/>
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1"
+                            x:Name="PipMuteButton"
+                            Text="🎤"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontSize="18"
+                            Padding="4"
+                            Clicked="PipMuteButton_OnClicked"/>
+                    <Button Grid.Column="2"
+                            Text="⊡"
+                            BackgroundColor="#2C2C4A"
+                            TextColor="#7289DA"
+                            FontSize="18"
+                            Padding="4"
+                            Clicked="MinimizeToPip_OnClicked"
+                            ToolTipProperties.Text="Picture-in-Picture"/>
+                    <Button Grid.Column="3"
+                            Text="✕"
+                            BackgroundColor="#8B0000"
+                            TextColor="White"
+                            FontSize="18"
+                            Padding="4"
+                            Clicked="InCallEndButton_OnClicked"/>
+                </Grid>
+            </Frame>
+
         </Grid>
 
         <!-- ── Bottom Tab Bar ──────────────────────────────────────────────── -->
@@ -114,6 +177,79 @@
             <Button x:Name="ChatTabButton" Grid.Column="2"
                     Text="💬 Chat" BackgroundColor="#1a1a1a" TextColor="#aaaaaa"
                     FontSize="12" Clicked="ChatTab_OnClicked"/>
+        </Grid>
+
+        <!-- ── PiP Overlay ─────────────────────────────────────────────────── -->
+        <!-- Spans all rows; the panel itself is aligned to the bottom-right corner -->
+        <Grid x:Name="PipOverlayContainer"
+              Grid.Row="0" Grid.RowSpan="3"
+              IsVisible="False"
+              InputTransparent="True">
+            <Frame x:Name="PipPanel"
+                   BackgroundColor="#1a1a2e"
+                   BorderColor="#7289DA"
+                   CornerRadius="14"
+                   Padding="12"
+                   HasShadow="True"
+                   HorizontalOptions="End"
+                   VerticalOptions="End"
+                   Margin="0,0,14,74"
+                   WidthRequest="190"
+                   InputTransparent="False">
+                <VerticalStackLayout Spacing="8">
+
+                    <!-- Live indicator + friend name -->
+                    <Grid ColumnDefinitions="Auto,*">
+                        <Frame Grid.Column="0"
+                               BackgroundColor="#F04747"
+                               CornerRadius="4"
+                               Padding="4,2"
+                               HasShadow="False">
+                            <Label Text="● LIVE"
+                                   FontSize="9"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                        </Frame>
+                        <Label x:Name="PipFriendLabel"
+                               Grid.Column="1"
+                               Text="Call"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               VerticalOptions="Center"
+                               Margin="6,0,0,0"
+                               LineBreakMode="TailTruncation"/>
+                    </Grid>
+
+                    <!-- Duration -->
+                    <Label x:Name="PipDurationLabel"
+                           Text="0:00"
+                           FontSize="12"
+                           TextColor="LightGreen"
+                           HorizontalOptions="Center"/>
+
+                    <!-- Controls -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0"
+                                Text="⤢ Restore"
+                                BackgroundColor="#7289DA"
+                                TextColor="White"
+                                CornerRadius="8"
+                                FontSize="11"
+                                Padding="0,8"
+                                Clicked="PipRestore_OnClicked"/>
+                        <Button Grid.Column="1"
+                                Text="✕ End"
+                                BackgroundColor="#F04747"
+                                TextColor="White"
+                                CornerRadius="8"
+                                FontSize="11"
+                                Padding="0,8"
+                                Clicked="PipEndCall_OnClicked"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
         </Grid>
 
         <!-- ── Settings Overlay ────────────────────────────────────────────── -->

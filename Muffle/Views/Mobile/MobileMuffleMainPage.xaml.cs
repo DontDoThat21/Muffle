@@ -12,6 +12,11 @@ public partial class MobileMuffleMainPage : ContentPage
     private object _selectedObject = "friendcategory";
     private FriendDetailsContentViewModel _currentFriendViewModel;
 
+    // ── PiP / call state ──────────────────────────────────────────────────────
+    private bool _isMuted = false;
+    private System.Timers.Timer _callDurationTimer;
+    private int _callDurationSeconds = 0;
+
     public MobileMuffleMainPage()
     {
         InitializeComponent();
@@ -113,6 +118,121 @@ public partial class MobileMuffleMainPage : ContentPage
         ShowInContentFrame(friendGroupsView, "Groups");
     }
 
+    // ── Top Bar Call Buttons ──────────────────────────────────────────────────
+
+    private async void VoiceCallButton_OnClicked(object sender, EventArgs e)
+    {
+        if (_currentFriendViewModel != null)
+            await _currentFriendViewModel.StartVoiceCallAsync();
+    }
+
+    private async void VideoCallButton_OnClicked(object sender, EventArgs e)
+    {
+        if (_currentFriendViewModel != null)
+            await _currentFriendViewModel.StartVideoCallAsync();
+    }
+
+    // ── Call State ────────────────────────────────────────────────────────────
+
+    private void OnCallStateChanged(object sender, bool isActive)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            if (isActive)
+            {
+                var friendName = (_selectedObject as Friend)?.Name ?? "Call";
+                InCallFriendLabel.Text = friendName;
+                PipFriendLabel.Text = friendName;
+                InCallBanner.IsVisible = true;
+                StartCallDurationTimer();
+            }
+            else
+            {
+                InCallBanner.IsVisible = false;
+                PipOverlayContainer.IsVisible = false;
+                StopCallDurationTimer();
+            }
+        });
+    }
+
+    // ── Call Duration Timer ───────────────────────────────────────────────────
+
+    private void StartCallDurationTimer()
+    {
+        _callDurationSeconds = 0;
+        _callDurationTimer?.Dispose();
+        _callDurationTimer = new System.Timers.Timer(1000);
+        _callDurationTimer.Elapsed += (s, e) =>
+        {
+            _callDurationSeconds++;
+            var display = FormatDuration(_callDurationSeconds);
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                InCallDurationLabel.Text = display;
+                PipDurationLabel.Text = display;
+            });
+        };
+        _callDurationTimer.Start();
+    }
+
+    private void StopCallDurationTimer()
+    {
+        _callDurationTimer?.Stop();
+        _callDurationTimer?.Dispose();
+        _callDurationTimer = null;
+        _callDurationSeconds = 0;
+        InCallDurationLabel.Text = "0:00";
+        PipDurationLabel.Text = "0:00";
+    }
+
+    private static string FormatDuration(int totalSeconds)
+    {
+        var h = totalSeconds / 3600;
+        var m = (totalSeconds % 3600) / 60;
+        var s = totalSeconds % 60;
+        return h > 0 ? $"{h}:{m:D2}:{s:D2}" : $"{m}:{s:D2}";
+    }
+
+    // ── In-Call Banner Buttons ────────────────────────────────────────────────
+
+    private void PipMuteButton_OnClicked(object sender, EventArgs e)
+    {
+        _isMuted = !_isMuted;
+        PipMuteButton.Text = _isMuted ? "🔇" : "🎤";
+        PipMuteButton.TextColor = _isMuted ? Colors.Red : Colors.White;
+    }
+
+    private void MinimizeToPip_OnClicked(object sender, EventArgs e)
+    {
+        InCallBanner.IsVisible = false;
+        PipOverlayContainer.IsVisible = true;
+    }
+
+    private async void InCallEndButton_OnClicked(object sender, EventArgs e)
+    {
+        if (_currentFriendViewModel != null)
+            await _currentFriendViewModel.EndCallAsync();
+        InCallBanner.IsVisible = false;
+        StopCallDurationTimer();
+    }
+
+    // ── PiP Overlay Buttons ───────────────────────────────────────────────────
+
+    private void PipRestore_OnClicked(object sender, EventArgs e)
+    {
+        PipOverlayContainer.IsVisible = false;
+        InCallBanner.IsVisible = true;
+        SwitchToTab(ActiveTab.Chat);
+    }
+
+    private async void PipEndCall_OnClicked(object sender, EventArgs e)
+    {
+        if (_currentFriendViewModel != null)
+            await _currentFriendViewModel.EndCallAsync();
+        PipOverlayContainer.IsVisible = false;
+        StopCallDurationTimer();
+    }
+
     // ── Content Frame Helpers ─────────────────────────────────────────────────
 
     private void UpdateMainContentFrame()
@@ -121,12 +241,17 @@ public partial class MobileMuffleMainPage : ContentPage
         {
             _currentFriendViewModel = new FriendDetailsContentViewModel();
             _currentFriendViewModel._friendSelected = friend;
+            _currentFriendViewModel.CallStateChanged += OnCallStateChanged;
             MobileMainContentFrame.Content = new FriendDetailsContentView(_currentFriendViewModel);
+            VoiceCallButton.IsVisible = true;
+            VideoCallButton.IsVisible = true;
         }
         else if (_selectedObject is Server server)
         {
             _currentFriendViewModel = null;
             MobileMainContentFrame.Content = new ServerDetailsContentView(server);
+            VoiceCallButton.IsVisible = false;
+            VideoCallButton.IsVisible = false;
         }
     }
 
