@@ -17,7 +17,9 @@ namespace Muffle.Data.Models
         CallInvite,
         CallAccept,
         CallReject,
-        CallEnd
+        CallEnd,
+        ScreenShareStart,
+        ScreenShareStop
     }
 
     public class ChatMessage : INotifyPropertyChanged

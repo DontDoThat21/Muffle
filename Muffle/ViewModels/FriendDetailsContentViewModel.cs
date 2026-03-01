@@ -154,6 +154,32 @@ namespace Muffle.ViewModels
                     await HandleCallEndAsync();
                     break;
 
+                case MessageType.ScreenShareStart:
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ChatMessages.Add(new ChatMessage
+                        {
+                            Content = $"🖥️ {messageWrapper.SenderName ?? "Contact"} started sharing their screen",
+                            Sender = _userSelected,
+                            Timestamp = messageWrapper.Timestamp,
+                            Type = MessageType.Text
+                        });
+                    });
+                    break;
+
+                case MessageType.ScreenShareStop:
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ChatMessages.Add(new ChatMessage
+                        {
+                            Content = "🖥️ Screen sharing ended",
+                            Sender = _userSelected,
+                            Timestamp = messageWrapper.Timestamp,
+                            Type = MessageType.Text
+                        });
+                    });
+                    break;
+
                 default:
                     Console.WriteLine($"Unknown message type: {messageWrapper.Type}");
                     break;
@@ -523,6 +549,79 @@ namespace Muffle.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"Error ending call: {ex.Message}");
+            }
+        }
+
+        public async Task StartScreenShareAsync()
+        {
+            try
+            {
+                if (_webRTCManager == null)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ChatMessages.Add(new ChatMessage
+                        {
+                            Content = "❌ Start a voice or video call first before sharing your screen",
+                            Sender = _userSelected,
+                            Timestamp = DateTime.Now,
+                            Type = MessageType.Text
+                        });
+                    });
+                    return;
+                }
+
+                await _webRTCManager.StartScreenShareAsync(_friendSelected?.Id ?? 0);
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ChatMessages.Add(new ChatMessage
+                    {
+                        Content = "🖥️ Screen sharing started",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error starting screen share: {ex.Message}");
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ChatMessages.Add(new ChatMessage
+                    {
+                        Content = $"❌ Failed to share screen: {ex.Message}",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    });
+                });
+            }
+        }
+
+        public async Task StopScreenShareAsync()
+        {
+            try
+            {
+                if (_webRTCManager == null) return;
+
+                await _webRTCManager.StopScreenShareAsync();
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ChatMessages.Add(new ChatMessage
+                    {
+                        Content = "🖥️ Screen sharing stopped",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error stopping screen share: {ex.Message}");
             }
         }
 

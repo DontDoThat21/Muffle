@@ -21,10 +21,13 @@ namespace Muffle.Data.Services
     {
         private IRTCPeerConnection? _peerConnection;
         private IMediaStream? _localStream;
+        private IMediaStream? _screenShareStream;
         private readonly ISignalingService _signalingService;
         private readonly IWindow _window;
         private readonly int _userId;
         private string _callType = "voice";
+
+        public bool IsScreenSharing { get; private set; }
 
         public event Action<IMediaStream>? OnRemoteStreamAdded;
         public event Action<CallState>? OnCallStateChanged;
@@ -290,6 +293,74 @@ namespace Muffle.Data.Services
             }
         }
 
+        public async Task StartScreenShareAsync(int targetUserId)
+        {
+            try
+            {
+                if (_peerConnection == null)
+                    throw new InvalidOperationException("No active call. Start a voice or video call before sharing your screen.");
+
+                var constraints = new MediaStreamConstraints
+                {
+                    Video = new MediaStreamContraintsUnion { Value = true }
+                };
+
+                _screenShareStream = await _window.Navigator().MediaDevices.GetDisplayMedia(constraints);
+
+                foreach (var track in _screenShareStream.GetTracks())
+                {
+                    _peerConnection.AddTrack(track, _screenShareStream);
+                }
+
+                IsScreenSharing = true;
+
+                var message = new MessageWrapper
+                {
+                    Type = MessageType.ScreenShareStart,
+                    SenderId = _userId,
+                    TargetUserId = targetUserId,
+                    Timestamp = DateTime.Now
+                };
+
+                await _signalingService.SendMessageWrapperAsync(message);
+                Console.WriteLine("Screen share started");
+            }
+            catch (Exception ex)
+            {
+                OnError?.Invoke($"Failed to start screen share: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task StopScreenShareAsync()
+        {
+            try
+            {
+                if (_screenShareStream != null)
+                {
+                    foreach (var track in _screenShareStream.GetTracks())
+                        track.Stop();
+                    _screenShareStream = null;
+                }
+
+                IsScreenSharing = false;
+
+                var message = new MessageWrapper
+                {
+                    Type = MessageType.ScreenShareStop,
+                    SenderId = _userId,
+                    Timestamp = DateTime.Now
+                };
+
+                await _signalingService.SendMessageWrapperAsync(message);
+                Console.WriteLine("Screen share stopped");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error stopping screen share: {ex.Message}");
+            }
+        }
+
         public async Task EndCallAsync()
         {
             try
@@ -300,9 +371,9 @@ namespace Muffle.Data.Services
                     SenderId = _userId,
                     Timestamp = DateTime.Now
                 };
-                
+
                 await _signalingService.SendMessageWrapperAsync(endCallWrapper);
-                
+
                 Cleanup();
                 UpdateCallState(CallState.Ended);
                 Console.WriteLine("Call ended");
@@ -317,6 +388,15 @@ namespace Muffle.Data.Services
         {
             try
             {
+                if (_screenShareStream != null)
+                {
+                    foreach (var track in _screenShareStream.GetTracks())
+                        track.Stop();
+                    _screenShareStream = null;
+                }
+
+                IsScreenSharing = false;
+
                 if (_localStream != null)
                 {
                     foreach (var track in _localStream.GetTracks())
@@ -328,7 +408,7 @@ namespace Muffle.Data.Services
 
                 _peerConnection?.Close();
                 _peerConnection = null;
-                
+
                 Console.WriteLine("WebRTC resources cleaned up");
             }
             catch (Exception ex)
