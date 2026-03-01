@@ -125,8 +125,10 @@ namespace Muffle.Data.Services
                 Token TEXT NOT NULL UNIQUE,
                 DeviceName TEXT NOT NULL DEFAULT 'Unknown Device',
                 Platform TEXT NOT NULL DEFAULT 'Unknown',
+                IpAddress TEXT NOT NULL DEFAULT '',
                 CreatedAt DATETIME NOT NULL,
                 ExpiresAt DATETIME NOT NULL,
+                LastUsedAt DATETIME,
                 FOREIGN KEY (UserId) REFERENCES Users(UserId)
             );";
 
@@ -135,6 +137,8 @@ namespace Muffle.Data.Services
             // Migration: add DeviceName/Platform to existing AuthTokens tables
             try { connection.Execute("ALTER TABLE AuthTokens ADD COLUMN DeviceName TEXT NOT NULL DEFAULT 'Unknown Device';"); } catch { }
             try { connection.Execute("ALTER TABLE AuthTokens ADD COLUMN Platform TEXT NOT NULL DEFAULT 'Unknown';"); } catch { }
+            try { connection.Execute("ALTER TABLE AuthTokens ADD COLUMN IpAddress TEXT NOT NULL DEFAULT '';"); } catch { }
+            try { connection.Execute("ALTER TABLE AuthTokens ADD COLUMN LastUsedAt DATETIME;"); } catch { }
 
             // Create FriendRequests table
             var createFriendRequestsTableQuery = @"

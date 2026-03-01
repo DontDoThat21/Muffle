@@ -10,8 +10,10 @@ namespace Muffle.Data.Models
         public string Token { get; set; } = string.Empty;
         public string DeviceName { get; set; } = "Unknown Device";
         public string Platform { get; set; } = "Unknown";
+        public string IpAddress { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime ExpiresAt { get; set; }
+        public DateTime? LastUsedAt { get; set; }
 
         public bool IsExpired => ExpiresAt < DateTime.Now;
 
@@ -20,5 +22,13 @@ namespace Muffle.Data.Models
         /// Not stored in the database.
         /// </summary>
         public bool IsCurrentSession { get; set; }
+
+        public string LastUsedDisplay => LastUsedAt.HasValue
+            ? LastUsedAt.Value.ToString("g")
+            : "Never";
+
+        public string IpAddressDisplay => string.IsNullOrWhiteSpace(IpAddress)
+            ? "Unknown"
+            : IpAddress;
     }
 }

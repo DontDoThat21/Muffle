@@ -215,6 +215,7 @@ namespace Muffle.ViewModels
             {
                 await TokenStorageService.SaveAccountAsync(user.UserId, user.Name, user.Email, token);
                 CurrentUserService.CurrentAuthToken = token;
+                UserSessionService.CleanupExpiredSessions(user.UserId);
             }
 
             MainThread.BeginInvokeOnMainThread(() =>

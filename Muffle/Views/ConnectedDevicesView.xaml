@@ -86,7 +86,13 @@
                                         <Label Text="{Binding Platform}"
                                                FontSize="12"
                                                TextColor="LightGray"/>
+                                        <Label Text="{Binding IpAddressDisplay, StringFormat='IP: {0}'}"
+                                               FontSize="11"
+                                               TextColor="LightGray"/>
                                         <Label Text="{Binding CreatedAt, StringFormat='Logged in: {0:g}'}"
+                                               FontSize="10"
+                                               TextColor="Gray"/>
+                                        <Label Text="{Binding LastUsedDisplay, StringFormat='Last active: {0}'}"
                                                FontSize="10"
                                                TextColor="Gray"/>
                                         <Label Text="{Binding ExpiresAt, StringFormat='Expires: {0:g}'}"

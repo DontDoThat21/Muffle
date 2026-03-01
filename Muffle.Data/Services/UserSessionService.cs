@@ -19,7 +19,7 @@ namespace Muffle.Data.Services
                 connection.Open();
 
                 var query = @"
-                    SELECT TokenId, UserId, Token, DeviceName, Platform, CreatedAt, ExpiresAt
+                    SELECT TokenId, UserId, Token, DeviceName, Platform, IpAddress, CreatedAt, ExpiresAt, LastUsedAt
                     FROM AuthTokens
                     WHERE UserId = @UserId AND ExpiresAt > @Now
                     ORDER BY CreatedAt DESC;";
@@ -71,6 +71,50 @@ namespace Muffle.Data.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Error revoking other sessions: {ex.Message}");
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Records the current time as the last-used timestamp for the given token.
+        /// Called whenever a session token is successfully validated.
+        /// </summary>
+        public static void UpdateLastUsed(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token)) return;
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                connection.Execute(
+                    "UPDATE AuthTokens SET LastUsedAt = @Now WHERE Token = @Token;",
+                    new { Now = DateTime.Now, Token = token });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating last used: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Deletes all expired sessions for a user, keeping the database tidy.
+        /// </summary>
+        /// <returns>Number of sessions removed.</returns>
+        public static int CleanupExpiredSessions(int userId)
+        {
+            try
+            {
+                using var connection = SQLiteDbService.CreateConnection();
+                connection.Open();
+
+                return connection.Execute(
+                    "DELETE FROM AuthTokens WHERE UserId = @UserId AND ExpiresAt <= @Now;",
+                    new { UserId = userId, Now = DateTime.Now });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error cleaning up expired sessions: {ex.Message}");
                 return 0;
             }
         }

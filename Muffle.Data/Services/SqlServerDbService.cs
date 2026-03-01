@@ -112,8 +112,10 @@ namespace Muffle.Data.Services
             Token NVARCHAR(255) NOT NULL UNIQUE,
             DeviceName NVARCHAR(255) NOT NULL DEFAULT 'Unknown Device',
             Platform NVARCHAR(100) NOT NULL DEFAULT 'Unknown',
+            IpAddress NVARCHAR(100) NOT NULL DEFAULT '',
             CreatedAt DATETIME NOT NULL,
             ExpiresAt DATETIME NOT NULL,
+            LastUsedAt DATETIME,
             FOREIGN KEY (UserId) REFERENCES Users(UserId)
         );";
 
@@ -124,7 +126,11 @@ namespace Muffle.Data.Services
         IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('AuthTokens') AND name = 'DeviceName')
             ALTER TABLE AuthTokens ADD DeviceName NVARCHAR(255) NOT NULL DEFAULT 'Unknown Device';
         IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('AuthTokens') AND name = 'Platform')
-            ALTER TABLE AuthTokens ADD Platform NVARCHAR(100) NOT NULL DEFAULT 'Unknown';";
+            ALTER TABLE AuthTokens ADD Platform NVARCHAR(100) NOT NULL DEFAULT 'Unknown';
+        IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('AuthTokens') AND name = 'IpAddress')
+            ALTER TABLE AuthTokens ADD IpAddress NVARCHAR(100) NOT NULL DEFAULT '';
+        IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('AuthTokens') AND name = 'LastUsedAt')
+            ALTER TABLE AuthTokens ADD LastUsedAt DATETIME;";
 
             try { connection.Execute(migrateAuthTokensQuery); } catch { }
 
