@@ -108,6 +108,7 @@ namespace Muffle
                 friendsTopBarUIView.FriendAddButtonClicked += FriendsTopBarUIView_FriendAddButtonClicked;
                 friendsTopBarUIView.PendingButtonClicked += FriendsTopBarUIView_PendingButtonClicked;
                 friendsTopBarUIView.BlockedButtonClicked += FriendsTopBarUIView_BlockedButtonClicked;
+                friendsTopBarUIView.GroupsButtonClicked += FriendsTopBarUIView_GroupsButtonClicked;
                 SharedTopBarUI.Content = friendsTopBarUIView;
 
                 //SharedLeftPanelUI.Content = new FriendDetailLeftPanelUIView();
@@ -157,10 +158,27 @@ namespace Muffle
             // Show the Blocked Users view
             var blockedUsersViewModel = new BlockedUsersViewModel();
             var blockedUsersView = new BlockedUsersView(blockedUsersViewModel);
-            
+
             // Update the main content frame
             MainContentFrame.BackgroundColor = Colors.Transparent;
             MainContentFrame.Content = blockedUsersView;
+        }
+
+        private void FriendsTopBarUIView_GroupsButtonClicked(object sender, EventArgs e)
+        {
+            // Show the Friend Groups view
+            var friendGroupsViewModel = new FriendGroupsViewModel();
+            var friendGroupsView = new FriendGroupsView(friendGroupsViewModel);
+
+            friendGroupsView.GroupCallRequested += (s, group) =>
+            {
+                // A group call uses the group's RoomKey as the WebSocket/RTC room identifier
+                // For now, display the room key so developers can see the separate RTC context
+                DisplayAlert("Group Call", $"Starting group call for \"{group.Name}\"\nRoom: {group.RoomKey}", "OK");
+            };
+
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = friendGroupsView;
         }
 
         private async void FriendDetailTopBarUIView_VoiceCallRequested(object sender, EventArgs e)

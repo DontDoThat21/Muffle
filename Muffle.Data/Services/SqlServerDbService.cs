@@ -308,6 +308,34 @@ namespace Muffle.Data.Services
 
             connection.Execute(createEmailVerificationTokensTableQuery);
 
+            // Create FriendGroups table
+            var createFriendGroupsTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='FriendGroups' and xtype='U')
+        CREATE TABLE FriendGroups (
+            GroupId INT PRIMARY KEY IDENTITY(1,1),
+            OwnerUserId INT NOT NULL,
+            Name NVARCHAR(100) NOT NULL,
+            SortOrder INT NOT NULL DEFAULT 0,
+            RoomKey NVARCHAR(64) NOT NULL UNIQUE,
+            CreatedAt DATETIME NOT NULL,
+            FOREIGN KEY (OwnerUserId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createFriendGroupsTableQuery);
+
+            // Create FriendGroupMembers table
+            var createFriendGroupMembersTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='FriendGroupMembers' and xtype='U')
+        CREATE TABLE FriendGroupMembers (
+            GroupId INT NOT NULL,
+            FriendId INT NOT NULL,
+            AddedAt DATETIME NOT NULL,
+            CONSTRAINT PK_FriendGroupMembers PRIMARY KEY (GroupId, FriendId),
+            FOREIGN KEY (GroupId) REFERENCES FriendGroups(GroupId)
+        );";
+
+            connection.Execute(createFriendGroupMembersTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try
             {

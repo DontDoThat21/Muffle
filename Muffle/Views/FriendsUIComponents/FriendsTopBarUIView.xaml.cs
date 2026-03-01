@@ -5,6 +5,7 @@ public partial class FriendsTopBarUIView : ContentView
     public event EventHandler FriendAddButtonClicked;
     public event EventHandler PendingButtonClicked;
     public event EventHandler BlockedButtonClicked;
+    public event EventHandler GroupsButtonClicked;
 
     public FriendsTopBarUIView()
 	{
@@ -27,5 +28,10 @@ public partial class FriendsTopBarUIView : ContentView
     {
         // Raise the event
         BlockedButtonClicked?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void GroupsButton_OnClicked(object sender, EventArgs e)
+    {
+        GroupsButtonClicked?.Invoke(this, EventArgs.Empty);
     }
 }

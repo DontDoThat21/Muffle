@@ -9,6 +9,6 @@
         <Button BackgroundColor="#303030" TextColor="GhostWhite" Grid.Column="3" Text="Pending" Clicked="PendingButton_OnClicked"/>
         <Button BackgroundColor="#303030" TextColor="GhostWhite" Grid.Column="4" Text="Blocked" Clicked="BlockedButton_OnClicked"/>
         <Button Clicked="FriendAddButton_OnClicked" BackgroundColor="Green" TextColor="GhostWhite" Grid.Column="5" Text="Add Friend"/>
-        <Button BackgroundColor="#303030" TextColor="GhostWhite" Grid.Column="7" Text="New Chat Group"/>
+        <Button BackgroundColor="#303030" TextColor="GhostWhite" Grid.Column="7" Text="Groups" Clicked="GroupsButton_OnClicked"/>
     </Grid>
 </ContentView>
