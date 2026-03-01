@@ -119,24 +119,30 @@ namespace Muffle.ViewModels
             IsProcessing = true;
             StatusMessage = string.Empty;
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 try
                 {
                     var result = PasswordChangeService.InitiateForgotPassword(Email.Trim());
 
+                    if (result != null)
+                    {
+                        _pendingUserId = result.Value.UserId;
+
+                        // Send the code via email
+                        var sent = await EmailService.SendPasswordResetEmailAsync(Email.Trim(), result.Value.Code);
+
+                        if (!sent)
+                        {
+                            // Fall back to showing the code in the UI if email fails
+                            MainThread.BeginInvokeOnMainThread(() => SimulatedCode = result.Value.Code);
+                        }
+                    }
+
+                    // Always advance to step 2 — don't reveal whether the email exists.
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         IsProcessing = false;
-
-                        if (result != null)
-                        {
-                            // In production, this code would be emailed.
-                            SimulatedCode = result.Value.Code;
-                            _pendingUserId = result.Value.UserId;
-                        }
-
-                        // Always advance to step 2 — don't reveal whether the email exists.
                         IsStepOne = false;
                         IsStepTwo = true;
                     });

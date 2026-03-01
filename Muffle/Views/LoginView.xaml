@@ -49,6 +49,14 @@
                        IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
                        HorizontalOptions="Center"/>
 
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="8">
+                    <CheckBox IsChecked="{Binding RememberMe}" Color="#5865f2"/>
+                    <Label Text="Remember Me"
+                           TextColor="#b9bbbe"
+                           VerticalOptions="Center"
+                           FontSize="14"/>
+                </StackLayout>
+
                 <Button Text="Login"
                         Command="{Binding LoginCommand}"
                         BackgroundColor="#5865f2"

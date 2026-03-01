@@ -14,6 +14,7 @@ namespace Muffle.ViewModels
         private bool _isTwoFactorStep = false;
         private string _twoFactorCode = string.Empty;
         private User? _pendingUser;
+        private bool _rememberMe;
 
         public string Email
         {
@@ -73,6 +74,16 @@ namespace Muffle.ViewModels
 
         public bool IsCredentialStep => !IsTwoFactorStep;
 
+        public bool RememberMe
+        {
+            get => _rememberMe;
+            set
+            {
+                _rememberMe = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string TwoFactorCode
         {
             get => _twoFactorCode;
@@ -99,6 +110,19 @@ namespace Muffle.ViewModels
             VerifyTwoFactorCommand = new Command(async () => await OnVerifyTwoFactorAsync());
             NavigateToRegisterCommand = new Command(() => NavigateToRegister?.Invoke(this, EventArgs.Empty));
             NavigateToForgotPasswordCommand = new Command(() => NavigateToForgotPassword?.Invoke(this, EventArgs.Empty));
+
+            _ = LoadRememberMeAsync();
+        }
+
+        private async Task LoadRememberMeAsync()
+        {
+            var (email, password) = await TokenStorageService.GetRememberMeAsync();
+            if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+            {
+                Email = email;
+                Password = password;
+                RememberMe = true;
+            }
         }
 
         private async Task OnLoginAsync()
@@ -217,6 +241,12 @@ namespace Muffle.ViewModels
                 CurrentUserService.CurrentAuthToken = token;
                 UserSessionService.CleanupExpiredSessions(user.UserId);
             }
+
+            // Save or clear remember-me credentials
+            if (RememberMe)
+                await TokenStorageService.SaveRememberMeAsync(Email, Password);
+            else
+                TokenStorageService.ClearRememberMe();
 
             MainThread.BeginInvokeOnMainThread(() =>
             {

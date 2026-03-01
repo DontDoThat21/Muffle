@@ -232,5 +232,62 @@ namespace Muffle.Services
                 Console.WriteLine($"Error clearing all accounts: {ex.Message}");
             }
         }
+
+        // ── Remember Me ─────────────────────────────────────────────────
+
+        private const string RememberMeEmailKey = "muffle_remember_email";
+        private const string RememberMePasswordKey = "muffle_remember_password";
+
+        /// <summary>
+        /// Saves login credentials for the Remember Me feature.
+        /// Email is stored in Preferences; password in SecureStorage.
+        /// </summary>
+        public static async Task SaveRememberMeAsync(string email, string password)
+        {
+            try
+            {
+                Preferences.Set(RememberMeEmailKey, email);
+                await SecureStorage.SetAsync(RememberMePasswordKey, password);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving remember-me credentials: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Retrieves saved Remember Me credentials.
+        /// Returns (email, password) or (null, null) if none saved.
+        /// </summary>
+        public static async Task<(string? Email, string? Password)> GetRememberMeAsync()
+        {
+            try
+            {
+                var email = Preferences.Get(RememberMeEmailKey, null as string);
+                var password = await SecureStorage.GetAsync(RememberMePasswordKey);
+                return (email, password);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving remember-me credentials: {ex.Message}");
+                return (null, null);
+            }
+        }
+
+        /// <summary>
+        /// Clears saved Remember Me credentials.
+        /// </summary>
+        public static void ClearRememberMe()
+        {
+            try
+            {
+                Preferences.Remove(RememberMeEmailKey);
+                SecureStorage.Remove(RememberMePasswordKey);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error clearing remember-me credentials: {ex.Message}");
+            }
+        }
     }
 }
