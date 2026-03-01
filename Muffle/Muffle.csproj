@@ -123,6 +123,9 @@
 	  <MauiXaml Update="Views\LibraryAcknowledgementsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Mobile\MobileMuffleMainPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\PasswordChangeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Muffle.Views.MobileMuffleMainPage"
+             BackgroundColor="#303030">
+
+    <Grid RowDefinitions="50,*,60" BackgroundColor="#303030">
+
+        <!-- ── Top Bar ─────────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" BackgroundColor="#252525" ColumnDefinitions="*,Auto">
+            <Label x:Name="TopBarTitle"
+                   Grid.Column="0"
+                   Text="Servers"
+                   TextColor="White"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   Margin="15,0,0,0"/>
+            <Button x:Name="MenuButton"
+                    Grid.Column="1"
+                    Text="☰"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontSize="22"
+                    Clicked="MenuButton_OnClicked"/>
+        </Grid>
+
+        <!-- ── Content Area ────────────────────────────────────────────────── -->
+        <Grid Grid.Row="1">
+
+            <!-- Servers Panel -->
+            <Grid x:Name="ServersPanel" BackgroundColor="#252525" RowDefinitions="Auto,*">
+                <Frame Grid.Row="0" BackgroundColor="#303030" BorderColor="#303030"
+                       Padding="5" Margin="5,5,5,0">
+                    <Grid ColumnDefinitions="8*,Auto" BackgroundColor="#303030" Padding="0,2,5,2">
+                        <Label HorizontalOptions="Center" VerticalOptions="Center"
+                               Text="Servers" Grid.Column="0" TextColor="GhostWhite"/>
+                        <Button Text="+" Grid.Column="1" BackgroundColor="Black"
+                                TextColor="White" FontSize="24"
+                                Clicked="CreateServerButton_OnClicked"/>
+                    </Grid>
+                </Frame>
+                <CollectionView ItemsSource="{Binding Servers}" Grid.Row="1">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="#252525" BorderColor="#252525" Margin="5,3">
+                                <Button BackgroundColor="#252525" TextColor="GhostWhite"
+                                        Text="{Binding Name}"
+                                        Clicked="ServerButton_OnClicked"/>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- Friends Panel -->
+            <Grid x:Name="FriendsPanel" IsVisible="False" BackgroundColor="#252525"
+                  RowDefinitions="Auto,*">
+                <Frame Grid.Row="0" BackgroundColor="#303030" BorderColor="#303030"
+                       Padding="5" Margin="5,5,5,0">
+                    <Grid RowDefinitions="Auto,Auto" RowSpacing="5">
+                        <Button Grid.Row="0" TextColor="GhostWhite" BackgroundColor="#303030"
+                                Text="Friends" HorizontalOptions="Start"
+                                Clicked="FriendButton_OnClicked"/>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" ColumnSpacing="4">
+                            <Button Grid.Column="0" Text="Pending" TextColor="White"
+                                    BackgroundColor="#7289DA" FontSize="11" Padding="4,3"
+                                    Clicked="PendingButton_OnClicked"/>
+                            <Button Grid.Column="1" Text="Blocked" TextColor="White"
+                                    BackgroundColor="#E74C3C" FontSize="11" Padding="4,3"
+                                    Clicked="BlockedButton_OnClicked"/>
+                            <Button Grid.Column="2" Text="Add" TextColor="White"
+                                    BackgroundColor="#43B581" FontSize="11" Padding="4,3"
+                                    Clicked="AddFriendButton_OnClicked"/>
+                            <Button Grid.Column="3" Text="Groups" TextColor="White"
+                                    BackgroundColor="#9B59B6" FontSize="11" Padding="4,3"
+                                    Clicked="GroupsButton_OnClicked"/>
+                        </Grid>
+                    </Grid>
+                </Frame>
+                <CollectionView ItemsSource="{Binding Friends}" Grid.Row="1">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="#303030" Margin="5,3">
+                                <Grid ColumnDefinitions="50,*">
+                                    <ImageButton CornerRadius="15" Grid.Column="0"
+                                                 Source="{Binding Image}"
+                                                 MaximumWidthRequest="40" MaximumHeightRequest="40"/>
+                                    <Button BackgroundColor="#303030" HorizontalOptions="Start"
+                                            TextColor="GhostWhite" Text="{Binding Name}"
+                                            Grid.Column="1"
+                                            Clicked="FriendIndividualButton_OnClicked"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- Chat / Content Panel -->
+            <Frame x:Name="MobileMainContentFrame" IsVisible="False"
+                   BackgroundColor="#303030" Padding="0" Margin="0"/>
+
+        </Grid>
+
+        <!-- ── Bottom Tab Bar ──────────────────────────────────────────────── -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" BackgroundColor="#1a1a1a">
+            <Button x:Name="ServersTabButton" Grid.Column="0"
+                    Text="⬛ Servers" BackgroundColor="#7289DA" TextColor="White"
+                    FontSize="12" Clicked="ServersTab_OnClicked"/>
+            <Button x:Name="FriendsTabButton" Grid.Column="1"
+                    Text="👥 Friends" BackgroundColor="#1a1a1a" TextColor="#aaaaaa"
+                    FontSize="12" Clicked="FriendsTab_OnClicked"/>
+            <Button x:Name="ChatTabButton" Grid.Column="2"
+                    Text="💬 Chat" BackgroundColor="#1a1a1a" TextColor="#aaaaaa"
+                    FontSize="12" Clicked="ChatTab_OnClicked"/>
+        </Grid>
+
+        <!-- ── Settings Overlay ────────────────────────────────────────────── -->
+        <Grid x:Name="SettingsOverlay" IsVisible="False"
+              Grid.Row="0" Grid.RowSpan="3" BackgroundColor="#EE1a1a1a">
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="8">
+                    <Label Text="Settings" TextColor="White" FontSize="20"
+                           FontAttributes="Bold" HorizontalOptions="Center"
+                           Margin="0,10,0,10"/>
+                    <Button Text="Profile" BackgroundColor="#7289DA" TextColor="White"
+                            Clicked="ProfileButton_OnClicked"/>
+                    <Button Text="Themes" BackgroundColor="#9B59B6" TextColor="White"
+                            Clicked="ThemesButton_OnClicked"/>
+                    <Button Text="Voice" BackgroundColor="#2C9ACE" TextColor="White"
+                            Clicked="VoiceSettingsButton_OnClicked"/>
+                    <Button Text="Video" BackgroundColor="#E74C3C" TextColor="White"
+                            Clicked="VideoSettingsButton_OnClicked"/>
+                    <Button Text="Accessibility" BackgroundColor="#F39C12" TextColor="White"
+                            Clicked="AccessibilitySettingsButton_OnClicked"/>
+                    <Button Text="Developer" BackgroundColor="#1ABC9C" TextColor="White"
+                            Clicked="DeveloperSettingsButton_OnClicked"/>
+                    <Button Text="Privacy" BackgroundColor="#E67E22" TextColor="White"
+                            Clicked="PrivacySettingsButton_OnClicked"/>
+                    <Button Text="Devices" BackgroundColor="#8E44AD" TextColor="White"
+                            Clicked="ConnectedDevicesButton_OnClicked"/>
+                    <Button Text="Patch Notes" BackgroundColor="#16A085" TextColor="White"
+                            Clicked="PatchNotesButton_OnClicked"/>
+                    <Button Text="Credits" BackgroundColor="#2980B9" TextColor="White"
+                            Clicked="LibraryAcknowledgementsButton_OnClicked"/>
+                    <Button Text="2FA" BackgroundColor="#C0392B" TextColor="White"
+                            Clicked="TwoFactorAuthButton_OnClicked"/>
+                    <Button Text="Password" BackgroundColor="#884EA0" TextColor="White"
+                            Clicked="PasswordChangeButton_OnClicked"/>
+                    <Button Text="Premium" BackgroundColor="#F39C12" TextColor="White"
+                            Clicked="PremiumButton_OnClicked"/>
+                    <Button Text="Gift" BackgroundColor="#E91E63" TextColor="White"
+                            Clicked="GiftButton_OnClicked"/>
+                    <Button Text="Account Settings" BackgroundColor="#43B581" TextColor="White"
+                            Clicked="SettingsButton_OnClicked"/>
+                    <Button Text="Switch Account" BackgroundColor="#7289DA" TextColor="White"
+                            Command="{Binding SwitchAccountCommand}"/>
+                    <Button Text="Logout" BackgroundColor="#333333" TextColor="White"
+                            Command="{Binding LogoutCommand}"/>
+                    <Button Text="✕ Close" BackgroundColor="#252525" TextColor="#aaaaaa"
+                            Clicked="CloseMenu_OnClicked" Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+    </Grid>
+</ContentPage>
