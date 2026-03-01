@@ -13,13 +13,19 @@ namespace Muffle
 
             if (isMobile)
             {
+                bool isTablet = DeviceInfo.Current.Idiom == DeviceIdiom.Tablet;
+
                 var shellContent = Items.OfType<ShellItem>()
                     .SelectMany(i => i.Items.OfType<ShellSection>())
                     .SelectMany(s => s.Items.OfType<ShellContent>())
                     .FirstOrDefault();
 
                 if (shellContent != null)
-                    shellContent.ContentTemplate = new DataTemplate(typeof(MobileMuffleMainPage));
+                {
+                    shellContent.ContentTemplate = isTablet
+                        ? new DataTemplate(typeof(TabletMuffleMainPage))
+                        : new DataTemplate(typeof(MobileMuffleMainPage));
+                }
             }
         }
     }

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Muffle.Views.TabletMuffleMainPage"
+             BackgroundColor="#303030">
+
+    <!-- Two-column adaptive layout: sidebar (300) + main content (rest) -->
+    <Grid ColumnDefinitions="300,*" RowDefinitions="50,*" BackgroundColor="#303030">
+
+        <!-- ── Top Bar ─────────────────────────────────────────────────────── -->
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+              BackgroundColor="#252525" ColumnDefinitions="Auto,*,Auto">
+            <Image Grid.Column="0"
+                   Source="mufflelogo.png"
+                   HeightRequest="36" WidthRequest="36"
+                   Margin="10,0,6,0"
+                   VerticalOptions="Center"/>
+            <Label x:Name="TopBarTitle"
+                   Grid.Column="1"
+                   Text="Friends"
+                   TextColor="White"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   Margin="8,0,0,0"/>
+            <Button x:Name="SettingsMenuButton"
+                    Grid.Column="2"
+                    Text="⚙"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontSize="20"
+                    Padding="12,0"
+                    Clicked="SettingsMenuButton_OnClicked"/>
+        </Grid>
+
+        <!-- ── Left Sidebar ────────────────────────────────────────────────── -->
+        <Grid Grid.Row="1" Grid.Column="0"
+              BackgroundColor="#252525"
+              RowDefinitions="Auto,*,Auto">
+
+            <!-- Sidebar toggle buttons -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,*" BackgroundColor="#1e1e1e" Padding="4,4">
+                <Button x:Name="ServersTabButton" Grid.Column="0"
+                        Text="Servers"
+                        BackgroundColor="Transparent" TextColor="#aaaaaa"
+                        FontSize="13" Padding="4,6"
+                        Clicked="ServersTab_OnClicked"/>
+                <Button x:Name="FriendsTabButton" Grid.Column="1"
+                        Text="Friends"
+                        BackgroundColor="#7289DA" TextColor="White"
+                        FontSize="13" Padding="4,6"
+                        Clicked="FriendsTab_OnClicked"/>
+            </Grid>
+
+            <!-- Servers list panel -->
+            <Grid x:Name="ServersPanel" Grid.Row="1" IsVisible="False"
+                  BackgroundColor="#252525" RowDefinitions="Auto,*">
+                <Frame Grid.Row="0" BackgroundColor="#303030" BorderColor="#303030"
+                       Padding="5" Margin="5,5,5,0">
+                    <Grid ColumnDefinitions="8*,Auto" BackgroundColor="#303030" Padding="0,2,5,2">
+                        <Label HorizontalOptions="Center" VerticalOptions="Center"
+                               Text="Servers" Grid.Column="0" TextColor="GhostWhite"/>
+                        <Button Text="+" Grid.Column="1" BackgroundColor="Black"
+                                TextColor="White" FontSize="24"
+                                Clicked="CreateServerButton_OnClicked"/>
+                    </Grid>
+                </Frame>
+                <CollectionView ItemsSource="{Binding Servers}" Grid.Row="1">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="#252525" BorderColor="#252525" Margin="5,3">
+                                <Button BackgroundColor="#252525" TextColor="GhostWhite"
+                                        Text="{Binding Name}"
+                                        Clicked="ServerButton_OnClicked"/>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- Friends list panel -->
+            <Grid x:Name="FriendsPanel" Grid.Row="1" IsVisible="True"
+                  BackgroundColor="#252525" RowDefinitions="Auto,*">
+                <Frame Grid.Row="0" BackgroundColor="#303030" BorderColor="#303030"
+                       Padding="5" Margin="5,5,5,0">
+                    <Grid RowDefinitions="Auto,Auto" RowSpacing="5">
+                        <Button Grid.Row="0" TextColor="GhostWhite" BackgroundColor="#303030"
+                                Text="Friends" HorizontalOptions="Start"
+                                Clicked="FriendButton_OnClicked"/>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" ColumnSpacing="4">
+                            <Button Grid.Column="0" Text="Pending" TextColor="White"
+                                    BackgroundColor="#7289DA" FontSize="11" Padding="4,3"
+                                    Clicked="PendingButton_OnClicked"/>
+                            <Button Grid.Column="1" Text="Blocked" TextColor="White"
+                                    BackgroundColor="#E74C3C" FontSize="11" Padding="4,3"
+                                    Clicked="BlockedButton_OnClicked"/>
+                            <Button Grid.Column="2" Text="Add" TextColor="White"
+                                    BackgroundColor="#43B581" FontSize="11" Padding="4,3"
+                                    Clicked="AddFriendButton_OnClicked"/>
+                            <Button Grid.Column="3" Text="Groups" TextColor="White"
+                                    BackgroundColor="#9B59B6" FontSize="11" Padding="4,3"
+                                    Clicked="GroupsButton_OnClicked"/>
+                        </Grid>
+                    </Grid>
+                </Frame>
+                <CollectionView ItemsSource="{Binding Friends}" Grid.Row="1">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="#303030" Margin="5,3">
+                                <Grid ColumnDefinitions="50,*">
+                                    <ImageButton CornerRadius="15" Grid.Column="0"
+                                                 Source="{Binding Image}"
+                                                 MaximumWidthRequest="40" MaximumHeightRequest="40"/>
+                                    <Button BackgroundColor="#303030" HorizontalOptions="Start"
+                                            TextColor="GhostWhite" Text="{Binding Name}"
+                                            Grid.Column="1"
+                                            Clicked="FriendIndividualButton_OnClicked"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <!-- Sidebar bottom actions (Premium / Gift) -->
+            <Grid Grid.Row="2" ColumnDefinitions="*,*" BackgroundColor="#1e1e1e" Padding="4,4">
+                <Button Grid.Column="0" Text="Premium"
+                        BackgroundColor="#F39C12" TextColor="White"
+                        FontSize="11" Padding="4,6"
+                        Clicked="PremiumButton_OnClicked"/>
+                <Button Grid.Column="1" Text="Gift"
+                        BackgroundColor="#E91E63" TextColor="White"
+                        FontSize="11" Padding="4,6"
+                        Clicked="GiftButton_OnClicked"/>
+            </Grid>
+
+        </Grid>
+
+        <!-- ── Main Content ─────────────────────────────────────────────────── -->
+        <Frame x:Name="MainContentFrame"
+               Grid.Row="1" Grid.Column="1"
+               BackgroundColor="#303030" Padding="0" Margin="0"/>
+
+        <!-- ── Settings Overlay ────────────────────────────────────────────── -->
+        <Grid x:Name="SettingsOverlay" IsVisible="False"
+              Grid.Row="0" Grid.RowSpan="2"
+              Grid.Column="0" Grid.ColumnSpan="2"
+              BackgroundColor="#EE1a1a1a">
+            <ScrollView>
+                <VerticalStackLayout Padding="20" Spacing="8"
+                                     MaximumWidthRequest="500"
+                                     HorizontalOptions="Center">
+                    <Label Text="Settings" TextColor="White" FontSize="20"
+                           FontAttributes="Bold" HorizontalOptions="Center"
+                           Margin="0,10,0,10"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Profile" BackgroundColor="#7289DA" TextColor="White"
+                                Clicked="ProfileButton_OnClicked"/>
+                        <Button Grid.Column="1" Text="Themes" BackgroundColor="#9B59B6" TextColor="White"
+                                Clicked="ThemesButton_OnClicked"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Voice" BackgroundColor="#2C9ACE" TextColor="White"
+                                Clicked="VoiceSettingsButton_OnClicked"/>
+                        <Button Grid.Column="1" Text="Video" BackgroundColor="#E74C3C" TextColor="White"
+                                Clicked="VideoSettingsButton_OnClicked"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Accessibility" BackgroundColor="#F39C12" TextColor="White"
+                                Clicked="AccessibilitySettingsButton_OnClicked"/>
+                        <Button Grid.Column="1" Text="Developer" BackgroundColor="#1ABC9C" TextColor="White"
+                                Clicked="DeveloperSettingsButton_OnClicked"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Privacy" BackgroundColor="#E67E22" TextColor="White"
+                                Clicked="PrivacySettingsButton_OnClicked"/>
+                        <Button Grid.Column="1" Text="Devices" BackgroundColor="#8E44AD" TextColor="White"
+                                Clicked="ConnectedDevicesButton_OnClicked"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Patch Notes" BackgroundColor="#16A085" TextColor="White"
+                                Clicked="PatchNotesButton_OnClicked"/>
+                        <Button Grid.Column="1" Text="Credits" BackgroundColor="#2980B9" TextColor="White"
+                                Clicked="LibraryAcknowledgementsButton_OnClicked"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="2FA" BackgroundColor="#C0392B" TextColor="White"
+                                Clicked="TwoFactorAuthButton_OnClicked"/>
+                        <Button Grid.Column="1" Text="Password" BackgroundColor="#884EA0" TextColor="White"
+                                Clicked="PasswordChangeButton_OnClicked"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button Grid.Column="0" Text="Account Settings" BackgroundColor="#43B581" TextColor="White"
+                                Clicked="SettingsButton_OnClicked"/>
+                        <Button Grid.Column="1" Text="Switch Account" BackgroundColor="#7289DA" TextColor="White"
+                                Command="{Binding SwitchAccountCommand}"/>
+                    </Grid>
+                    <Button Text="Logout" BackgroundColor="#333333" TextColor="White"
+                            Command="{Binding LogoutCommand}"/>
+                    <Button Text="✕ Close" BackgroundColor="#252525" TextColor="#aaaaaa"
+                            Clicked="CloseMenu_OnClicked" Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+    </Grid>
+</ContentPage>
