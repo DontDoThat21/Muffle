@@ -87,15 +87,18 @@ namespace Muffle.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand VerifyTwoFactorCommand { get; }
         public ICommand NavigateToRegisterCommand { get; }
+        public ICommand NavigateToForgotPasswordCommand { get; }
 
         public event EventHandler<User>? LoginSucceeded;
         public event EventHandler? NavigateToRegister;
+        public event EventHandler? NavigateToForgotPassword;
 
         public LoginViewModel()
         {
             LoginCommand = new Command(async () => await OnLoginAsync());
             VerifyTwoFactorCommand = new Command(async () => await OnVerifyTwoFactorAsync());
             NavigateToRegisterCommand = new Command(() => NavigateToRegister?.Invoke(this, EventArgs.Empty));
+            NavigateToForgotPasswordCommand = new Command(() => NavigateToForgotPassword?.Invoke(this, EventArgs.Empty));
         }
 
         private async Task OnLoginAsync()

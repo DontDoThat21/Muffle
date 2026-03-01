@@ -75,6 +75,22 @@
                     </Label>
                 </StackLayout>
 
+                <Label HorizontalOptions="Center"
+                       Margin="0,4,0,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Forgot your password? "
+                                  TextColor="#b9bbbe"/>
+                            <Span Text="Reset it"
+                                  TextColor="#00b0f4">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateToForgotPasswordCommand}"/>
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
             </VerticalStackLayout>
 
             <!-- ── Two-factor step ── -->

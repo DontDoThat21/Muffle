@@ -59,6 +59,49 @@ namespace Muffle.Data.Services
         }
 
         /// <summary>
+        /// Looks up a user by email and generates a password-reset verification code for the
+        /// forgot-password flow (no current password required).
+        /// Returns the code and userId on success, or null if the email is not registered.
+        /// In production the code would be emailed; here it is returned so the UI can display it.
+        /// </summary>
+        public static (string Code, int UserId)? InitiateForgotPassword(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return null;
+
+            using var connection = SQLiteDbService.CreateConnection();
+            connection.Open();
+
+            var user = connection.QueryFirstOrDefault<User>(
+                "SELECT * FROM Users WHERE Email = @Email AND IsActive = 1;",
+                new { Email = email.Trim() });
+
+            if (user == null)
+                return null;
+
+            // Invalidate any existing unused tokens for this user
+            connection.Execute(
+                "UPDATE PasswordResetTokens SET IsUsed = 1 WHERE UserId = @UserId AND IsUsed = 0;",
+                new { UserId = user.UserId });
+
+            var code = Random.Shared.Next(100000, 999999).ToString();
+            var now = DateTime.Now;
+
+            connection.Execute(@"
+                INSERT INTO PasswordResetTokens (UserId, Code, CreatedAt, ExpiresAt, IsUsed)
+                VALUES (@UserId, @Code, @CreatedAt, @ExpiresAt, 0);",
+                new
+                {
+                    UserId = user.UserId,
+                    Code = code,
+                    CreatedAt = now,
+                    ExpiresAt = now.AddMinutes(CodeExpiryMinutes)
+                });
+
+            return (code, user.UserId);
+        }
+
+        /// <summary>
         /// Validates the verification code and, if valid, updates the user's password.
         /// </summary>
         /// <returns>True if the password was changed successfully.</returns>

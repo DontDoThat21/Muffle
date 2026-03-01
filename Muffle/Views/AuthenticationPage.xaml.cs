@@ -6,6 +6,7 @@ namespace Muffle.Views
     {
         private LoginView? _loginView;
         private RegistrationView? _registrationView;
+        private ForgotPasswordView? _forgotPasswordView;
 
         public event EventHandler<User>? AuthenticationSucceeded;
 
@@ -20,6 +21,7 @@ namespace Muffle.Views
             _loginView = new LoginView();
             _loginView.LoginSucceeded += OnLoginSucceeded;
             _loginView.NavigateToRegister += OnNavigateToRegister;
+            _loginView.NavigateToForgotPassword += OnNavigateToForgotPassword;
 
             AuthContentFrame.Content = _loginView;
         }
@@ -31,6 +33,14 @@ namespace Muffle.Views
             _registrationView.NavigateToLogin += OnNavigateToLogin;
 
             AuthContentFrame.Content = _registrationView;
+        }
+
+        private void ShowForgotPassword()
+        {
+            _forgotPasswordView = new ForgotPasswordView();
+            _forgotPasswordView.NavigateToLogin += OnNavigateToLogin;
+
+            AuthContentFrame.Content = _forgotPasswordView;
         }
 
         private void OnLoginSucceeded(object? sender, User user)
@@ -53,6 +63,11 @@ namespace Muffle.Views
         private void OnNavigateToLogin(object? sender, EventArgs e)
         {
             ShowLogin();
+        }
+
+        private void OnNavigateToForgotPassword(object? sender, EventArgs e)
+        {
+            ShowForgotPassword();
         }
     }
 }

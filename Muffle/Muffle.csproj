@@ -111,6 +111,9 @@
 	  <MauiXaml Update="Views\DeveloperSettingsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ForgotPasswordView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\FriendDetailTopBarUIView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
