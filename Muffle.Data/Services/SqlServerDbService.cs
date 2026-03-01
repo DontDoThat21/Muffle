@@ -352,6 +352,24 @@ namespace Muffle.Data.Services
 
             connection.Execute(createUserSubscriptionsTableQuery);
 
+            // Create SubscriptionGifts table
+            var createSubscriptionGiftsTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SubscriptionGifts' and xtype='U')
+        CREATE TABLE SubscriptionGifts (
+            GiftId INT PRIMARY KEY IDENTITY(1,1),
+            SenderId INT NOT NULL,
+            RecipientId INT NOT NULL,
+            Tier INT NOT NULL DEFAULT 1,
+            Status INT NOT NULL DEFAULT 0,
+            Message NVARCHAR(500) NOT NULL DEFAULT '',
+            SentAt DATETIME NOT NULL,
+            RedeemedAt DATETIME,
+            FOREIGN KEY (SenderId) REFERENCES Users(UserId),
+            FOREIGN KEY (RecipientId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createSubscriptionGiftsTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try
             {

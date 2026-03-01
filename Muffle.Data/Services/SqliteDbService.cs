@@ -434,6 +434,23 @@ namespace Muffle.Data.Services
 
             connection.Execute(createUserSubscriptionsTableQuery);
 
+            // Create SubscriptionGifts table
+            var createSubscriptionGiftsTableQuery = @"
+            CREATE TABLE IF NOT EXISTS SubscriptionGifts (
+                GiftId INTEGER PRIMARY KEY AUTOINCREMENT,
+                SenderId INTEGER NOT NULL,
+                RecipientId INTEGER NOT NULL,
+                Tier INTEGER NOT NULL DEFAULT 1,
+                Status INTEGER NOT NULL DEFAULT 0,
+                Message TEXT NOT NULL DEFAULT '',
+                SentAt DATETIME NOT NULL,
+                RedeemedAt DATETIME,
+                FOREIGN KEY (SenderId) REFERENCES Users(UserId),
+                FOREIGN KEY (RecipientId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createSubscriptionGiftsTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try { connection.Execute("ALTER TABLE Users ADD COLUMN IsTwoFactorEnabled INTEGER NOT NULL DEFAULT 0;"); } catch { }
 

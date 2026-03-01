@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Muffle.ViewModels"
+             xmlns:models="clr-namespace:Muffle.Data.Models;assembly=Muffle.Data"
+             x:Class="Muffle.Views.GiftSubscriptionView"
+             x:DataType="viewmodels:GiftSubscriptionViewModel"
+             BackgroundColor="#303030">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="20" RowSpacing="14">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="4">
+            <Label Text="Gift a Subscription"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"/>
+            <Label Text="Share the love — give Premium to a friend"
+                   FontSize="13"
+                   TextColor="LightGray"/>
+        </VerticalStackLayout>
+
+        <!-- Tab Bar -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="6">
+            <Button Grid.Column="0"
+                    Text="Send a Gift"
+                    BackgroundColor="{Binding SelectedTabIndex, Converter={StaticResource TabBackgroundConverter}, ConverterParameter=0}"
+                    TextColor="White"
+                    CornerRadius="6"
+                    Padding="0,10"
+                    FontSize="13"
+                    Clicked="SendTabButton_OnClicked"/>
+            <Button Grid.Column="1"
+                    BackgroundColor="{Binding SelectedTabIndex, Converter={StaticResource TabBackgroundConverter}, ConverterParameter=1}"
+                    TextColor="White"
+                    CornerRadius="6"
+                    Padding="0,10"
+                    FontSize="13"
+                    Clicked="InboxTabButton_OnClicked">
+                <Button.Text>
+                    <MultiBinding StringFormat="Inbox ({0})">
+                        <Binding Path="PendingInboxCount"/>
+                    </MultiBinding>
+                </Button.Text>
+            </Button>
+            <Button Grid.Column="2"
+                    Text="Sent"
+                    BackgroundColor="{Binding SelectedTabIndex, Converter={StaticResource TabBackgroundConverter}, ConverterParameter=2}"
+                    TextColor="White"
+                    CornerRadius="6"
+                    Padding="0,10"
+                    FontSize="13"
+                    Clicked="SentTabButton_OnClicked"/>
+        </Grid>
+
+        <!-- Loading & Status -->
+        <ActivityIndicator Grid.Row="2"
+                           IsVisible="{Binding IsLoading}"
+                           IsRunning="{Binding IsLoading}"
+                           Color="White"
+                           HorizontalOptions="Center"/>
+
+        <Frame Grid.Row="3"
+               IsVisible="{Binding HasStatusMessage}"
+               BackgroundColor="#3A3A3A"
+               BorderColor="#555"
+               CornerRadius="6"
+               Padding="12,8"
+               HasShadow="False">
+            <Label Text="{Binding StatusMessage}"
+                   TextColor="LightGreen"
+                   FontSize="13"
+                   HorizontalOptions="Center"/>
+        </Frame>
+
+        <!-- ── SEND TAB ─────────────────────────────────────────────────── -->
+        <ScrollView Grid.Row="4"
+                    IsVisible="{Binding SelectedTabIndex, Converter={StaticResource TabVisibilityConverter}, ConverterParameter=0}">
+            <VerticalStackLayout Spacing="14">
+
+                <!-- Recipient Picker -->
+                <Frame BackgroundColor="#252525" BorderColor="#424242" CornerRadius="8" Padding="14" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Choose a Friend" FontSize="15" FontAttributes="Bold" TextColor="White"/>
+                        <Label Text="{Binding SelectedFriend.Name, FallbackValue='No friend selected', TargetNullValue='No friend selected'}"
+                               FontSize="13"
+                               TextColor="{Binding SelectedFriend, Converter={StaticResource NotNullConverter}, ConverterParameter=selected}"
+                               Padding="10,6"
+                               BackgroundColor="#3A3A3A"/>
+                        <CollectionView ItemsSource="{Binding Friends}" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Friend">
+                                    <Frame Padding="10,8"
+                                           Margin="0,2"
+                                           BackgroundColor="#2A2A2A"
+                                           BorderColor="#424242"
+                                           CornerRadius="6"
+                                           HasShadow="False">
+                                        <Grid ColumnDefinitions="Auto,*">
+                                            <Frame Grid.Column="0"
+                                                   WidthRequest="32"
+                                                   HeightRequest="32"
+                                                   CornerRadius="16"
+                                                   Padding="0"
+                                                   HasShadow="False"
+                                                   BackgroundColor="#7289DA">
+                                                <Label Text="{Binding Name, StringFormat='{0:C1}'}"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       TextColor="White"/>
+                                            </Frame>
+                                            <Button Grid.Column="1"
+                                                    Text="{Binding Name}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="White"
+                                                    HorizontalOptions="Start"
+                                                    FontSize="13"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GiftSubscriptionViewModel}}, Path=SelectFriendCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Tier Picker -->
+                <Frame BackgroundColor="#252525" BorderColor="#424242" CornerRadius="8" Padding="14" HasShadow="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Choose a Tier" FontSize="15" FontAttributes="Bold" TextColor="White"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Frame Grid.Column="0"
+                                   BackgroundColor="{Binding SelectedTierIndex, Converter={StaticResource TabBackgroundConverter}, ConverterParameter=0}"
+                                   BorderColor="#7289DA"
+                                   CornerRadius="8"
+                                   Padding="12"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Premium" FontSize="15" FontAttributes="Bold" TextColor="#7289DA" HorizontalOptions="Center"/>
+                                    <Label Text="$4.99/mo" FontSize="13" TextColor="LightGray" HorizontalOptions="Center"/>
+                                    <Button Text="Select"
+                                            BackgroundColor="#7289DA"
+                                            TextColor="White"
+                                            CornerRadius="4"
+                                            Padding="0,8"
+                                            FontSize="12"
+                                            Clicked="SelectPremiumTier_OnClicked"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame Grid.Column="1"
+                                   BackgroundColor="{Binding SelectedTierIndex, Converter={StaticResource TabBackgroundConverter}, ConverterParameter=1}"
+                                   BorderColor="#F39C12"
+                                   CornerRadius="8"
+                                   Padding="12"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Premium+" FontSize="15" FontAttributes="Bold" TextColor="#F39C12" HorizontalOptions="Center"/>
+                                    <Label Text="$9.99/mo" FontSize="13" TextColor="LightGray" HorizontalOptions="Center"/>
+                                    <Button Text="Select"
+                                            BackgroundColor="#F39C12"
+                                            TextColor="White"
+                                            CornerRadius="4"
+                                            Padding="0,8"
+                                            FontSize="12"
+                                            Clicked="SelectPremiumPlusTier_OnClicked"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Personal Message -->
+                <Frame BackgroundColor="#252525" BorderColor="#424242" CornerRadius="8" Padding="14" HasShadow="False">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Personal Message (optional)" FontSize="15" FontAttributes="Bold" TextColor="White"/>
+                        <Editor Text="{Binding GiftMessage}"
+                                Placeholder="Write a message to go with your gift..."
+                                PlaceholderColor="Gray"
+                                TextColor="White"
+                                BackgroundColor="#3A3A3A"
+                                HeightRequest="80"
+                                MaxLength="200"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Gift Summary & Send -->
+                <Frame BackgroundColor="#252525" BorderColor="#424242" CornerRadius="8" Padding="14" HasShadow="False">
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Gift Summary" FontSize="14" FontAttributes="Bold" TextColor="White"/>
+                                <Label FontSize="12" TextColor="LightGray">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="To: {0}  ·  {1} ({2}/mo)">
+                                            <Binding Path="SelectedFriend.Name" FallbackValue="—" TargetNullValue="—"/>
+                                            <Binding Path="SelectedTierLabel"/>
+                                            <Binding Path="SelectedTierPrice"/>
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1"
+                                    Text="Send Gift"
+                                    Command="{Binding SendGiftCommand}"
+                                    IsEnabled="{Binding CanSend}"
+                                    BackgroundColor="#43B581"
+                                    TextColor="White"
+                                    CornerRadius="6"
+                                    Padding="20,10"
+                                    VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Label Text="&#x26A0; Simulated gift — no real payment is processed."
+                       FontSize="11"
+                       TextColor="Gray"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── INBOX TAB ────────────────────────────────────────────────── -->
+        <ScrollView Grid.Row="4"
+                    IsVisible="{Binding SelectedTabIndex, Converter={StaticResource TabVisibilityConverter}, ConverterParameter=1}">
+            <VerticalStackLayout Spacing="10">
+
+                <Label Text="No gifts in your inbox."
+                       IsVisible="{Binding HasReceivedGifts, Converter={StaticResource InverseBoolConverter}}"
+                       TextColor="Gray"
+                       FontSize="14"
+                       HorizontalOptions="Center"
+                       Margin="0,30,0,0"/>
+
+                <CollectionView ItemsSource="{Binding ReceivedGifts}" IsVisible="{Binding HasReceivedGifts}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:SubscriptionGift">
+                            <Frame Padding="14"
+                                   Margin="0,0,0,10"
+                                   BackgroundColor="#252525"
+                                   BorderColor="#424242"
+                                   CornerRadius="8"
+                                   HasShadow="False">
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                            <Label Text="{Binding TierDisplayName}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"/>
+                                            <Label FontSize="12" TextColor="LightGray">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="From {0}  ·  {1}">
+                                                        <Binding Path="SenderName"/>
+                                                        <Binding Path="SentAt" StringFormat="{}{0:MMM d, yyyy}"/>
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding StatusDisplayName}"
+                                               TextColor="{Binding StatusColor}"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+
+                                    <!-- Message -->
+                                    <Label Text="{Binding Message}"
+                                           IsVisible="{Binding Message, Converter={StaticResource NotNullConverter}}"
+                                           FontSize="13"
+                                           TextColor="LightGray"
+                                           FontAttributes="Italic"/>
+
+                                    <!-- Accept / Decline (pending only) -->
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8" IsVisible="{Binding IsPending}">
+                                        <Button Grid.Column="0"
+                                                Text="Accept"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GiftSubscriptionViewModel}}, Path=AcceptGiftCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#43B581"
+                                                TextColor="White"
+                                                CornerRadius="4"
+                                                Padding="0,10"/>
+                                        <Button Grid.Column="1"
+                                                Text="Decline"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GiftSubscriptionViewModel}}, Path=DeclineGiftCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#F04747"
+                                                TextColor="White"
+                                                CornerRadius="4"
+                                                Padding="0,10"/>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Text="Refresh"
+                        Command="{Binding RefreshCommand}"
+                        BackgroundColor="#7289DA"
+                        TextColor="White"
+                        CornerRadius="4"
+                        Padding="0,12"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── SENT TAB ─────────────────────────────────────────────────── -->
+        <ScrollView Grid.Row="4"
+                    IsVisible="{Binding SelectedTabIndex, Converter={StaticResource TabVisibilityConverter}, ConverterParameter=2}">
+            <VerticalStackLayout Spacing="10">
+
+                <Label Text="You haven't sent any gifts yet."
+                       IsVisible="{Binding HasSentGifts, Converter={StaticResource InverseBoolConverter}}"
+                       TextColor="Gray"
+                       FontSize="14"
+                       HorizontalOptions="Center"
+                       Margin="0,30,0,0"/>
+
+                <CollectionView ItemsSource="{Binding SentGifts}" IsVisible="{Binding HasSentGifts}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:SubscriptionGift">
+                            <Frame Padding="14"
+                                   Margin="0,0,0,10"
+                                   BackgroundColor="#252525"
+                                   BorderColor="#424242"
+                                   CornerRadius="8"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="4">
+                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="3">
+                                        <Label Text="{Binding TierDisplayName}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="White"/>
+                                        <Label FontSize="12" TextColor="LightGray">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="To {0}  ·  {1}">
+                                                    <Binding Path="RecipientName"/>
+                                                    <Binding Path="SentAt" StringFormat="{}{0:MMM d, yyyy}"/>
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1"
+                                           Grid.Row="0"
+                                           Text="{Binding StatusDisplayName}"
+                                           TextColor="{Binding StatusColor}"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Start"/>
+                                    <Label Grid.Column="0"
+                                           Grid.Row="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Message}"
+                                           IsVisible="{Binding Message, Converter={StaticResource NotNullConverter}}"
+                                           FontSize="13"
+                                           TextColor="LightGray"
+                                           FontAttributes="Italic"/>
+                                    <Button Grid.Column="0"
+                                            Grid.Row="2"
+                                            Grid.ColumnSpan="2"
+                                            Text="Cancel Gift"
+                                            IsVisible="{Binding IsPending}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GiftSubscriptionViewModel}}, Path=CancelSentGiftCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#424242"
+                                            TextColor="LightGray"
+                                            CornerRadius="4"
+                                            Padding="0,8"
+                                            FontSize="12"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Text="Refresh"
+                        Command="{Binding RefreshCommand}"
+                        BackgroundColor="#7289DA"
+                        TextColor="White"
+                        CornerRadius="4"
+                        Padding="0,12"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentView>

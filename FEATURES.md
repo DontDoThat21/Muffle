@@ -162,7 +162,7 @@ Social features, subscriptions, and mobile-specific views.
 |----|---------|--------|-------|
 | 9.1 | Friend groups | ✅ | FriendGroup model + FriendGroupService (CRUD, RoomKey per group), FriendGroupsView/ViewModel, Groups button in top bar, group voice call stub with per-group RTC RoomKey |
 | 9.2 | Subscription model (premium) | ✅ | UserSubscription model (Free/Premium/Premium+ tiers), UserSubscriptions table (SQLite + SQL Server), SubscriptionService (subscribe/cancel/feature comparison), SubscriptionView with tier cards + feature table, Premium button in sidebar |
-| 9.3 | Subscription gifting | 📋 | Gift premium to other users |
+| 9.3 | Subscription gifting | ✅ | SubscriptionGift model (GiftStatus enum, tier/message/sender/recipient), SubscriptionGifts table (SQLite + SQL Server), SubscriptionGiftService (send/accept/decline/cancel/history), GiftSubscriptionView with Send/Inbox/Sent tabs, Gift button in sidebar |
 | 9.4 | Mobile-specific views | 📋 | Optimized layouts for iOS/Android |
 | 9.5 | Tablet-optimized layouts | 📋 | Adaptive UI for tablet form factors |
 | 9.6 | Screenshare (desktop) | 📋 | Share screen in voice/video calls |
@@ -182,8 +182,8 @@ Social features, subscriptions, and mobile-specific views.
 | Phase 6: User Profile & Customization | ✅ Complete | 8/8 |
 | Phase 7: Settings & Configuration | ✅ Complete | 8/8 |
 | Phase 8: Security & Account | ✅ Complete | 5/5 |
-| Phase 9: Additional Features | 🔧 In Progress | 2/7 |
-| **Total** | | **59/75** |
+| Phase 9: Additional Features | 🔧 In Progress | 3/7 |
+| **Total** | | **60/75** |
 
 ---
 

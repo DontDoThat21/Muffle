@@ -381,6 +381,15 @@ namespace Muffle
             MainContentFrame.Content = subscriptionView;
         }
 
+        private void GiftButton_OnClicked(object sender, EventArgs e)
+        {
+            var giftViewModel = new GiftSubscriptionViewModel();
+            var giftView = new GiftSubscriptionView(giftViewModel);
+
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = giftView;
+        }
+
     }
 
 }

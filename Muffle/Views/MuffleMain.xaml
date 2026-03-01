@@ -92,6 +92,12 @@
                             FontSize="10"
                             Padding="5,2"
                             Clicked="PremiumButton_OnClicked"/>
+                    <Button Text="Gift"
+                            BackgroundColor="#E91E63"
+                            TextColor="White"
+                            FontSize="10"
+                            Padding="5,2"
+                            Clicked="GiftButton_OnClicked"/>
                     <Button Text="Settings"
                             BackgroundColor="#43B581" 
                             TextColor="White" 
