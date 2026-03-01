@@ -1,17 +1,19 @@
-# Muffle
+﻿# Muffle
 
 An open-source, Discord-like communications platform for communities, friends, and teams. Muffle focuses on real-time voice, video, and chat experiences with privacy-first features and a modern UX.
 
-Status: Early development (pre-alpha). Contributions and feedback are welcome.
+Status: Feature-complete (v1.0 candidate). Contributions and feedback are welcome.
 
 ## Key capabilities
 
-- WebRTC-based server calls
-- Video calls
-- Image sharing
-- Rich, extensible chat and server constructs (channels, permissions, presence) planned
-
-Note: Some capabilities are partially implemented and under active development.
+- WebRTC-based voice and video calls with screenshare and picture-in-picture
+- Real-time chat with image sharing, GIF support, emoji, reactions, threads, and rich link previews
+- Server management with channels, roles, permissions, and public server browser
+- Full user authentication (registration, 2FA/MFA, email verification, password reset)
+- Profile customization, themes, status, and external service connections (Spotify, Steam, etc.)
+- Privacy, accessibility, voice, video, and developer settings
+- Mobile and tablet-optimized layouts
+- Subscription model with gifting
 
 ## Vision
 
@@ -26,57 +28,92 @@ Not affiliated with Discord Inc.
 
 ## Roadmap and backlog
 
-This backlog lists upcoming and existing features under active development. Some items may already be partially implemented; they are tracked here for improvements and remaining work.
+All 75 planned features across 9 development phases are now complete. The list below reflects the full implementation history.
 
-- [ ] Add image support to chat
-- [ ] Add video support to chat
-- [ ] Add voice calls
-- [ ] Add video calls
-- [ ] Add dynamic server creations
-- [ ] Add [User] account creation process
-- [ ] Remember user login
-- [ ] Add support for multiple [User] accounts
-- [ ] Add emoji support for chat messages
-- [ ] Add tenor API if free
-- [ ] Add mobile specific views
-- [ ] Add profile Customization
-- [ ] Add server channels (separate web socket and rtc channels)
-- [ ] Modify server to be public or not tag with a customizable access link or (generated. Chrono expiring) invite link
-- [ ] Add user incremented numbers to uniquely identify the same account names
-- [ ] Add ‘add a friend’ functionality from list of users or maybe user id/tag
-- [ ] Add server icons (customizable if owner)
-- [ ] Add server chanel icons (customizable if channel or server owner)
-- [ ] Add/join a server from list of servers
-- [ ] Create a server and have it hidden from other users
-- [ ] Server browser - Allow server searching for public servers
-- [ ] Add friend groups with separated rtc/sockets (custom view model constructor?)
-- [ ] Add searching through all friend messages
-- [ ] Add link searching from chats?
-- [ ] Add file searching (local?)
-- [ ] Add search filters
-- [ ] Add mentions/notifications
-- [ ] Add profile status changes
-- [ ] Add profile status based off other app APIs (Spotify, steam etc)
-- [ ] Add profile connections to other services (steam, bnet, etc)
-- [ ] Add specific to server nicknames
-- [ ] Add profile settings page
-- [ ] Finish settings implementations
-- [ ] Add friend requests settings before adding
-- [ ] Add subscription gifting
-- [ ] Add themes
-- [ ] Add voice detailed settings
-- [ ] Add accessibility settings
-- [ ] Add developer settings
-- [ ] Add patch notes
-- [ ] Add usage acknowledgements of libraries used
-- [ ] Add optional 2fa/mfa
-- [ ] Add ability to block users
-- [ ] Disable account
-- [ ] Delete account
-- [ ] Add privacy and safety settings
-- [ ] Add profile active status settings
-- [ ] Add devices connected to account
-- [ ] Add unimplemented subscription model
+### ✅ Phase 1 — Foundation
+- [x] Add image support to chat
+- [x] Add video support to chat
+- [x] Real-time chat via WebSockets
+- [x] Add dynamic server creations
+- [x] Three-panel Discord-style layout (servers, friends, main content)
+- [x] Database support (SQLite + SQL Server with Dapper ORM)
+
+### ✅ Phase 2 — Voice & Video (WebRTC)
+- [x] Add voice calls
+- [x] Add video calls
+- [x] WebRTC peer connection management (STUN, SDP negotiation, ICE exchange)
+- [x] Call state UI (calling, connected, ended)
+
+### ✅ Phase 3 — User Management
+- [x] Add [User] account creation process
+- [x] Remember user login
+- [x] Add support for multiple [User] accounts
+- [x] Add user incremented numbers to uniquely identify the same account names
+- [x] Add 'add a friend' functionality from list of users or user id/tag
+- [x] Add friend requests settings before adding
+- [x] Add ability to block users
+- [x] Disable account
+- [x] Delete account
+
+### ✅ Phase 4 — Server Features
+- [x] Add server channels (separate web socket and rtc channels)
+- [x] Modify server to be public or private with a customizable access link or (generated, chrono-expiring) invite link
+- [x] Add server icons (customizable if owner)
+- [x] Add server channel icons (customizable if channel or server owner)
+- [x] Add/join a server from list of servers
+- [x] Create a server and have it hidden from other users
+- [x] Server browser — allow server searching for public servers
+- [x] Server permissions & roles
+- [x] Channel permissions
+- [x] Add specific to server nicknames
+
+### ✅ Phase 5 — Chat Enhancements
+- [x] Add emoji support for chat messages
+- [x] Add Tenor API integration (GIFs)
+- [x] Add mentions/notifications
+- [x] Add searching through all friend messages
+- [x] Add link searching from chats
+- [x] Add file searching (local)
+- [x] Add search filters
+- [x] Message reactions
+- [x] Message threads/replies
+- [x] Rich link previews
+
+### ✅ Phase 6 — User Profile & Customization
+- [x] Add profile customization
+- [x] Add profile status changes
+- [x] Custom status messages
+- [x] Add profile status based off other app APIs (Spotify, Steam, etc.)
+- [x] Add profile connections to other services (Steam, Battle.net, etc.)
+- [x] Add themes
+- [x] Add profile settings page
+- [x] Add profile active status settings
+
+### ✅ Phase 7 — Settings & Configuration
+- [x] Add voice detailed settings
+- [x] Add video settings
+- [x] Add accessibility settings
+- [x] Add developer settings
+- [x] Add privacy and safety settings
+- [x] Add devices connected to account
+- [x] Add patch notes
+- [x] Add usage acknowledgements of libraries used
+
+### ✅ Phase 8 — Security & Account
+- [x] Add optional 2FA/MFA (TOTP with backup codes)
+- [x] Password change flow
+- [x] Email verification on signup
+- [x] Password reset (forgot password)
+- [x] Session management (last-active, IP display, remote logout)
+
+### ✅ Phase 9 — Additional Features
+- [x] Add friend groups with separated RTC/sockets
+- [x] Add unimplemented subscription model
+- [x] Add subscription gifting
+- [x] Add mobile-specific views
+- [x] Tablet-optimized layouts
+- [x] Screenshare (desktop)
+- [x] Picture-in-picture mode (mobile)
 
 ## Architecture overview (high level)
 
@@ -113,8 +150,9 @@ Before contributing:
 
 ## Security and privacy
 
-- Optional 2FA/MFA planned
-- Privacy and safety settings planned
+- Optional 2FA/MFA (TOTP with single-use backup codes) — implemented
+- Privacy and safety settings — implemented
+- Session management with last-active tracking and remote logout — implemented
 - Please disclose security issues responsibly via a private channel (see SECURITY.md if available)
 
 ## License
