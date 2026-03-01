@@ -345,6 +345,15 @@ namespace Muffle
             MainContentFrame.Content = twoFactorAuthView;
         }
 
+        private void PasswordChangeButton_OnClicked(object sender, EventArgs e)
+        {
+            var passwordChangeViewModel = new PasswordChangeViewModel();
+            var passwordChangeView = new PasswordChangeView(passwordChangeViewModel);
+
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = passwordChangeView;
+        }
+
     }
 
 }

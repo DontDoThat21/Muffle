@@ -360,6 +360,20 @@ namespace Muffle.Data.Services
 
             connection.Execute(createTwoFactorAuthTableQuery);
 
+            // Create PasswordResetTokens table
+            var createPasswordResetTokensTableQuery = @"
+            CREATE TABLE IF NOT EXISTS PasswordResetTokens (
+                TokenId INTEGER PRIMARY KEY AUTOINCREMENT,
+                UserId INTEGER NOT NULL,
+                Code TEXT NOT NULL,
+                CreatedAt DATETIME NOT NULL,
+                ExpiresAt DATETIME NOT NULL,
+                IsUsed INTEGER NOT NULL DEFAULT 0,
+                FOREIGN KEY (UserId) REFERENCES Users(UserId)
+            );";
+
+            connection.Execute(createPasswordResetTokensTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try { connection.Execute("ALTER TABLE Users ADD COLUMN IsTwoFactorEnabled INTEGER NOT NULL DEFAULT 0;"); } catch { }
 

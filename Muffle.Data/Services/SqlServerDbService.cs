@@ -271,6 +271,21 @@ namespace Muffle.Data.Services
 
             connection.Execute(createTwoFactorAuthTableQuery);
 
+            // Create PasswordResetTokens table
+            var createPasswordResetTokensTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PasswordResetTokens' and xtype='U')
+        CREATE TABLE PasswordResetTokens (
+            TokenId INT PRIMARY KEY IDENTITY(1,1),
+            UserId INT NOT NULL,
+            Code NVARCHAR(10) NOT NULL,
+            CreatedAt DATETIME NOT NULL,
+            ExpiresAt DATETIME NOT NULL,
+            IsUsed BIT NOT NULL DEFAULT 0,
+            FOREIGN KEY (UserId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createPasswordResetTokensTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try
             {
