@@ -21,6 +21,10 @@
             <converters:TabVisibilityConverter x:Key="TabVisibilityConverter" />
             <converters:BoolToTabBackgroundConverter x:Key="BoolToTabBackgroundConverter" />
             <converters:EntryTypeToBadgeColorConverter x:Key="EntryTypeToBadgeColorConverter" />
+            <converters:NotNullConverter x:Key="NotNullConverter" />
+            <converters:BoolToSelectedBgConverter x:Key="BoolToSelectedBgConverter" />
+            <converters:BoolToSelectedBorderConverter x:Key="BoolToSelectedBorderConverter" />
+            <converters:BoolToCurrentPlanTextConverter x:Key="BoolToCurrentPlanTextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

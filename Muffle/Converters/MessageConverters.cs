@@ -186,6 +186,42 @@ namespace Muffle.Converters
     }
 
     /// <summary>
+    /// Returns a highlighted background color when true (used to indicate the active subscription tier card).
+    /// </summary>
+    public class BoolToSelectedBgConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => value is true ? Color.FromArgb("#3A3A3A") : Color.FromArgb("#252525");
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Returns a highlighted border color when true (used to indicate the active subscription tier card).
+    /// </summary>
+    public class BoolToSelectedBorderConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => value is true ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#424242");
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Returns "Current Plan" when true, "Subscribe" when false.
+    /// </summary>
+    public class BoolToCurrentPlanTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => value is true ? "Current Plan" : "Subscribe";
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// Maps a PatchNoteEntry.EntryType string to a badge background color.
     /// </summary>
     public class EntryTypeToBadgeColorConverter : IValueConverter

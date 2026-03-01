@@ -372,6 +372,15 @@ namespace Muffle
             MainContentFrame.Content = passwordChangeView;
         }
 
+        private void PremiumButton_OnClicked(object sender, EventArgs e)
+        {
+            var subscriptionViewModel = new SubscriptionViewModel();
+            var subscriptionView = new SubscriptionView(subscriptionViewModel);
+
+            MainContentFrame.BackgroundColor = Colors.Transparent;
+            MainContentFrame.Content = subscriptionView;
+        }
+
     }
 
 }

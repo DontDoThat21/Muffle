@@ -336,6 +336,22 @@ namespace Muffle.Data.Services
 
             connection.Execute(createFriendGroupMembersTableQuery);
 
+            // Create UserSubscriptions table
+            var createUserSubscriptionsTableQuery = @"
+        IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserSubscriptions' and xtype='U')
+        CREATE TABLE UserSubscriptions (
+            SubscriptionId INT PRIMARY KEY IDENTITY(1,1),
+            UserId INT NOT NULL,
+            Tier INT NOT NULL DEFAULT 0,
+            Status INT NOT NULL DEFAULT 0,
+            StartedAt DATETIME NOT NULL,
+            ExpiresAt DATETIME NOT NULL,
+            CancelledAt DATETIME,
+            FOREIGN KEY (UserId) REFERENCES Users(UserId)
+        );";
+
+            connection.Execute(createUserSubscriptionsTableQuery);
+
             // Migration: add IsTwoFactorEnabled column to Users if not present
             try
             {
