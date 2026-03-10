@@ -26,6 +26,7 @@ namespace Muffle.Data.Services
         private readonly IWindow _window;
         private readonly int _userId;
         private string _callType = "voice";
+        private int _targetUserId;
 
         public bool IsScreenSharing { get; private set; }
 
@@ -62,18 +63,7 @@ namespace Muffle.Data.Services
                 _peerConnection.OnTrack += OnTrackHandler;
                 _peerConnection.OnIceConnectionStateChange += OnIceConnectionStateChangeHandler;
 
-                var constraints = new MediaStreamConstraints
-                {
-                    Audio = new MediaStreamContraintsUnion { Value = true },
-                    Video = includeVideo ? new MediaStreamContraintsUnion { Value = true } : null
-                };
-
-                _localStream = await _window.Navigator().MediaDevices.GetUserMedia(constraints);
-
-                foreach (var track in _localStream.GetTracks())
-                {
-                    _peerConnection.AddTrack(track, _localStream);
-                }
+                await AttachLocalMediaIfSupportedAsync(includeVideo);
 
                 Console.WriteLine($"WebRTC initialized for {_callType} call");
             }
@@ -100,6 +90,7 @@ namespace Muffle.Data.Services
                             sdpMLineIndex = evt.Candidate.SdpMLineIndex
                         }),
                         SenderId = _userId,
+                        TargetUserId = _targetUserId,
                         Timestamp = DateTime.Now
                     };
                     
@@ -161,6 +152,7 @@ namespace Muffle.Data.Services
         {
             try
             {
+                _targetUserId = targetUserId;
                 await InitializeAsync(includeVideo);
                 UpdateCallState(CallState.Calling);
 
@@ -199,12 +191,13 @@ namespace Muffle.Data.Services
             }
         }
 
-        public async Task AcceptCallAsync(string sdpOffer, bool includeVideo)
+        public async Task AcceptCallAsync(string sdpOffer, bool includeVideo, int targetUserId)
         {
             try
             {
+                _targetUserId = targetUserId;
                 await InitializeAsync(includeVideo);
-                UpdateCallState(CallState.Connected);
+                UpdateCallState(CallState.Ringing);
 
                 var description = new RTCSessionDescriptionInit
                 {
@@ -221,11 +214,14 @@ namespace Muffle.Data.Services
                 {
                     Type = MessageType.WebRtcAnswer,
                     SdpAnswer = answer.Sdp,
+                    CallType = _callType,
                     SenderId = _userId,
+                    TargetUserId = _targetUserId,
                     Timestamp = DateTime.Now
                 };
 
                 await _signalingService.SendMessageWrapperAsync(answerWrapper);
+                UpdateCallState(CallState.Connected);
                 Console.WriteLine("Call accepted, answer sent");
             }
             catch (Exception ex)
@@ -300,12 +296,21 @@ namespace Muffle.Data.Services
                 if (_peerConnection == null)
                     throw new InvalidOperationException("No active call. Start a voice or video call before sharing your screen.");
 
+                _targetUserId = targetUserId;
+
                 var constraints = new MediaStreamConstraints
                 {
                     Video = new MediaStreamContraintsUnion { Value = true }
                 };
 
-                _screenShareStream = await _window.Navigator().MediaDevices.GetDisplayMedia(constraints);
+                try
+                {
+                    _screenShareStream = await _window.Navigator().MediaDevices.GetDisplayMedia(constraints);
+                }
+                catch (NotImplementedException)
+                {
+                    throw new PlatformNotSupportedException("Screen sharing is not supported by the current WebRTC platform implementation.");
+                }
 
                 foreach (var track in _screenShareStream.GetTracks())
                 {
@@ -349,6 +354,7 @@ namespace Muffle.Data.Services
                 {
                     Type = MessageType.ScreenShareStop,
                     SenderId = _userId,
+                    TargetUserId = _targetUserId,
                     Timestamp = DateTime.Now
                 };
 
@@ -369,6 +375,7 @@ namespace Muffle.Data.Services
                 {
                     Type = MessageType.CallEnd,
                     SenderId = _userId,
+                    TargetUserId = _targetUserId,
                     Timestamp = DateTime.Now
                 };
 
@@ -408,6 +415,7 @@ namespace Muffle.Data.Services
 
                 _peerConnection?.Close();
                 _peerConnection = null;
+                _targetUserId = 0;
 
                 Console.WriteLine("WebRTC resources cleaned up");
             }
@@ -421,6 +429,29 @@ namespace Muffle.Data.Services
         {
             CurrentCallState = newState;
             OnCallStateChanged?.Invoke(newState);
+        }
+
+        private async Task AttachLocalMediaIfSupportedAsync(bool includeVideo)
+        {
+            var constraints = new MediaStreamConstraints
+            {
+                Audio = new MediaStreamContraintsUnion { Value = true },
+                Video = includeVideo ? new MediaStreamContraintsUnion { Value = true } : null
+            };
+
+            try
+            {
+                _localStream = await _window.Navigator().MediaDevices.GetUserMedia(constraints);
+
+                foreach (var track in _localStream.GetTracks())
+                {
+                    _peerConnection?.AddTrack(track, _localStream);
+                }
+            }
+            catch (NotImplementedException)
+            {
+                Console.WriteLine("Local media capture is not implemented by the current WebRTC platform. Continuing with signaling only.");
+            }
         }
     }
 }

@@ -145,6 +145,11 @@ namespace Muffle.ViewModels
 
         private async Task HandleMessageWrapperAsync(MessageWrapper messageWrapper)
         {
+            if (ShouldIgnoreOwnSignalingMessage(messageWrapper))
+            {
+                return;
+            }
+
             switch (messageWrapper.Type)
             {
                 case MessageType.Text:
@@ -220,6 +225,8 @@ namespace Muffle.ViewModels
 
         private async Task HandleIncomingCallInviteAsync(MessageWrapper messageWrapper)
         {
+            EnsureWebRtcManager();
+
             Device.BeginInvokeOnMainThread(() =>
             {
                 var chatMessage = new ChatMessage
@@ -237,14 +244,16 @@ namespace Muffle.ViewModels
 
         private async Task HandleWebRtcOfferAsync(MessageWrapper messageWrapper)
         {
-            if (_webRTCManager == null || string.IsNullOrEmpty(messageWrapper.SdpOffer))
+            if (string.IsNullOrEmpty(messageWrapper.SdpOffer))
             {
-                Console.WriteLine("Cannot handle offer: no WebRTC manager or missing SDP");
+                Console.WriteLine("Cannot handle offer: missing SDP");
                 return;
             }
 
+            EnsureWebRtcManager();
+
             bool includeVideo = messageWrapper.CallType == "video";
-            await _webRTCManager.AcceptCallAsync(messageWrapper.SdpOffer, includeVideo);
+            await _webRTCManager!.AcceptCallAsync(messageWrapper.SdpOffer, includeVideo, messageWrapper.SenderId);
         }
 
         private async Task HandleWebRtcAnswerAsync(MessageWrapper messageWrapper)
@@ -399,44 +408,9 @@ namespace Muffle.ViewModels
                 }
 
                 Console.WriteLine("Starting voice call...");
-                
-                var userId = _userSelected?.UserId ?? 0;
-                var window = CrossWebRtc.Current.Window(null);
-                _webRTCManager = new WebRTCManager(_signalingService, userId, window);
 
-                _webRTCManager.OnCallStateChanged += (state) =>
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        IsCallActive = state == CallState.Connected;
-                        var chatMessage = new ChatMessage
-                        {
-                            Content = $"📞 Voice call state: {state}",
-                            Sender = _userSelected,
-                            Timestamp = DateTime.Now,
-                            Type = MessageType.Text
-                        };
-                        ChatMessages.Add(chatMessage);
-                    });
-                };
-
-                _webRTCManager.OnError += (error) =>
-                {
-                    Console.WriteLine($"WebRTC Error: {error}");
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var chatMessage = new ChatMessage
-                        {
-                            Content = $"❌ Call error: {error}",
-                            Sender = _userSelected,
-                            Timestamp = DateTime.Now,
-                            Type = MessageType.Text
-                        };
-                        ChatMessages.Add(chatMessage);
-                    });
-                };
-
-                await _webRTCManager.StartCallAsync(_friendSelected.Id, includeVideo: false);
+                EnsureWebRtcManager();
+                await _webRTCManager!.StartCallAsync(GetTargetUserId(), includeVideo: false);
                 
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -480,49 +454,9 @@ namespace Muffle.ViewModels
                 }
 
                 Console.WriteLine("Starting video call...");
-                
-                var userId = _userSelected?.UserId ?? 0;
-                var window = CrossWebRtc.Current.Window(null);
-                _webRTCManager = new WebRTCManager(_signalingService, userId, window);
 
-                _webRTCManager.OnCallStateChanged += (state) =>
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        IsCallActive = state == CallState.Connected;
-                        var chatMessage = new ChatMessage
-                        {
-                            Content = $"📹 Video call state: {state}",
-                            Sender = _userSelected,
-                            Timestamp = DateTime.Now,
-                            Type = MessageType.Text
-                        };
-                        ChatMessages.Add(chatMessage);
-                    });
-                };
-
-                _webRTCManager.OnError += (error) =>
-                {
-                    Console.WriteLine($"WebRTC Error: {error}");
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var chatMessage = new ChatMessage
-                        {
-                            Content = $"❌ Call error: {error}",
-                            Sender = _userSelected,
-                            Timestamp = DateTime.Now,
-                            Type = MessageType.Text
-                        };
-                        ChatMessages.Add(chatMessage);
-                    });
-                };
-
-                _webRTCManager.OnRemoteStreamAdded += (stream) =>
-                {
-                    Console.WriteLine("Remote video stream received");
-                };
-
-                await _webRTCManager.StartCallAsync(_friendSelected.Id, includeVideo: true);
+                EnsureWebRtcManager();
+                await _webRTCManager!.StartCallAsync(GetTargetUserId(), includeVideo: true);
                 
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -609,7 +543,7 @@ namespace Muffle.ViewModels
                     return;
                 }
 
-                await _webRTCManager.StartScreenShareAsync(_friendSelected?.Id ?? 0);
+                await _webRTCManager.StartScreenShareAsync(GetTargetUserId());
                 IsScreenSharing = true;
 
                 Device.BeginInvokeOnMainThread(() =>
@@ -663,6 +597,73 @@ namespace Muffle.ViewModels
             {
                 Console.WriteLine($"Error stopping screen share: {ex.Message}");
             }
+        }
+
+        private void EnsureWebRtcManager()
+        {
+            if (_webRTCManager != null)
+            {
+                return;
+            }
+
+            var window = CrossWebRtc.Current.Window(null);
+            _webRTCManager = new WebRTCManager(_signalingService, GetCurrentUserId(), window);
+
+            _webRTCManager.OnCallStateChanged += state =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    IsCallActive = state is CallState.Calling or CallState.Ringing or CallState.Connected;
+
+                    ChatMessages.Add(new ChatMessage
+                    {
+                        Content = $"📞 Call state: {state}",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    });
+                });
+            };
+
+            _webRTCManager.OnError += error =>
+            {
+                Console.WriteLine($"WebRTC Error: {error}");
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ChatMessages.Add(new ChatMessage
+                    {
+                        Content = $"❌ Call error: {error}",
+                        Sender = _userSelected,
+                        Timestamp = DateTime.Now,
+                        Type = MessageType.Text
+                    });
+                });
+            };
+
+            _webRTCManager.OnRemoteStreamAdded += stream =>
+            {
+                Console.WriteLine("Remote media stream received");
+            };
+        }
+
+        private int GetCurrentUserId() => _userSelected?.UserId ?? 0;
+
+        private int GetTargetUserId() => _friendSelected?.UserId > 0 ? _friendSelected.UserId : _friendSelected?.Id ?? 0;
+
+        private bool ShouldIgnoreOwnSignalingMessage(MessageWrapper messageWrapper)
+        {
+            if (messageWrapper.SenderId != GetCurrentUserId())
+            {
+                return false;
+            }
+
+            return messageWrapper.Type is MessageType.WebRtcOffer
+                or MessageType.WebRtcAnswer
+                or MessageType.IceCandidate
+                or MessageType.CallInvite
+                or MessageType.CallEnd
+                or MessageType.ScreenShareStart
+                or MessageType.ScreenShareStop;
         }
 
     }
